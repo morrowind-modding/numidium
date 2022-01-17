@@ -81,7 +81,6 @@ class ConfigurationStepOneWidget(StepperItem):
                 # Not a workspace. Warn user and prevent progression.
                 self.set_valid(False, "Sorry, that directory does not contain a valid Morrowind.ini file. Please choose a Morrowind installation with a Morrowind.ini file.")
 
-# TODO: Implement Completed step widget.
 class ConfigurationStepTwoWidget(StepperItem):
     label_description: TextBlockLabel
     def __init__(self) -> None:
