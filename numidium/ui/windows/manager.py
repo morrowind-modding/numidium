@@ -17,6 +17,8 @@ class ManagerWindow(QMainWindow):
         self._setup_theme(AppSettings().enable_dark_mode)
         if AppSettings().show_welcome_window == True or AppSettings().setup_completed == False:
             self._setup_windows((AppSettings().show_welcome_window))
+        else:
+            self._setup_windows(False)
 
         AppSettings().workspace_changed.connect(self._workspace_changed)
         AppSettings().enable_dark_mode_changed.connect(self._setup_theme)
