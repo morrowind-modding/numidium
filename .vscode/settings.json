@@ -1,0 +1,25 @@
+{
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "python.formatting.provider": "black",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        "numidium/ui/**/*.py",
+    ],
+    "python.linting.mypyEnabled": true,
+    // "python.linting.mypyArgs": [
+    //     "--explicit-package-bases",
+    //     "--follow-imports=silent",
+    //     "--ignore-missing-imports",
+    //     "--namespace-packages",
+    //     "--no-pretty",
+    //     "--show-column-numbers"
+    // ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    }
+}

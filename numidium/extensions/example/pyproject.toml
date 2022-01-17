@@ -1,0 +1,5 @@
+[tool.numidium]
+name = "example"
+version = "0.1.0"
+description = "An example plugin."
+authors = ["Greatness7 <Greatness7@gmail.com>"]

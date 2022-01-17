@@ -5,10 +5,74 @@ description = ""
 authors = ["Greatness7 <Greatness7@gmail.com>", "OperatorJack <ThePaladinOf@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.11"
+PySide6 = "^6.2.2"
+pyqtdarktheme = "^1.0.2"
+tomlkit = "^0.8.0"
+loguru = "^0.5.3"
 
 [tool.poetry.dev-dependencies]
+black = "^21.12b0"
+isort = "^5.10.1"
+pytest = "^6.2.5"
+mypy = "^0.931"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+target-version = ["py310"]
+line-length = 120
+
+[tool.mypy]
+# Some settings have been tweaked to be more/less strict
+# https://mypy.readthedocs.io/en/stable/config_file.html
+
+# Section: Import Discovery
+exclude = ['numidium/ui/']
+namespace_packages = true
+explicit_package_bases = true
+follow_imports = "silent"
+ignore_missing_imports = true
+
+# Section: Disallow Dynamic Typing
+disallow_any_unimported = true
+# disallow_any_expr = true
+# disallow_any_decorated = true
+# disallow_any_explicit = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+
+# Section: Untyped Definitions And Calls
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+# check_untyped_defs = true
+disallow_untyped_decorators = true
+
+# Section: None And Optional Handling
+no_implicit_optional = true
+
+# Section: Configuring Warnings
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+
+# Section: Miscellaneous Strictness Flags
+# implicit_reexport = false
+allow_redefinition = true
+strict_equality = true
+
+# Section: Configuring error messages
+show_error_context = true
+show_column_numbers = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.numidium.ui]]
+# ignore_errors = true
