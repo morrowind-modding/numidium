@@ -100,7 +100,6 @@ class ApplicationWindow(AbstractMainWindow):
             # Add the tool button to the activity bar. This lets us show the text within the bar.
             self.activity_bar.addWidget(button)
 
-
         # Finally add the activity bar to the main window.
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.activity_bar)
 

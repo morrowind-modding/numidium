@@ -79,10 +79,15 @@ class ConfigurationStepOneWidget(StepperItem):
                 self.set_valid()
             else:
                 # Not a workspace. Warn user and prevent progression.
-                self.set_valid(False, "Sorry, that directory does not contain a valid Morrowind.ini file. Please choose a Morrowind installation with a Morrowind.ini file.")
+                self.set_valid(
+                    False,
+                    "Sorry, that directory does not contain a valid Morrowind.ini file. Please choose a Morrowind installation with a Morrowind.ini file.",
+                )
+
 
 class ConfigurationStepTwoWidget(StepperItem):
     label_description: TextBlockLabel
+
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout()
@@ -94,6 +99,7 @@ class ConfigurationStepTwoWidget(StepperItem):
         layout.addWidget(self.label_description)
         self.setLayout(layout)
         self.set_valid()
+
 
 class ConfigurationWidget(QWidget):
     stepper: Stepper

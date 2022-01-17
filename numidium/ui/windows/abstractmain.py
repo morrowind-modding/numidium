@@ -86,7 +86,7 @@ class AbstractMainWindow(QMainWindow):
         self._load_state_recent_workspaces()
 
     def _change_workspace(self) -> None:
-        path: str = self.sender().text()  # type: QAction
+        path = self.sender().text()
         AppSettings().workspace = path
         AppSettings().add_recent_workspace(AppSettings().workspace)
 
