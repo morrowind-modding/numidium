@@ -9,10 +9,10 @@ from PySide6.QtWidgets import (
     QToolButton,
     QWidget,
 )
-from ui.state import AppSettings
 from ui.editordock import EditorDock
 from ui.modsdock import ModsDock
 from ui.settingsdock import SettingsDock
+from ui.state import AppSettings
 from ui.windows.about import AboutWindow
 from ui.windows.abstractmain import AbstractMainWindow
 
@@ -88,10 +88,14 @@ class ApplicationWindow(AbstractMainWindow):
             action = QAction(QIcon(icon), text)
             action.setCheckable(True)
             action.triggered.connect(self._change_page)
+            button = QToolButton()
+            button.setDefaultAction(action)
+            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
             self.activity_bar_action_group.addAction(action)
 
-        # Add the group's actions to the activity bar.
-        self.activity_bar.addActions(self.activity_bar_action_group.actions())
+            # Add the tool button to the activity bar. This lets us show the text within the bar.
+            self.activity_bar.addWidget(button)
+
 
         # Finally add the activity bar to the main window.
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.activity_bar)
