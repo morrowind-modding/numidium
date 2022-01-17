@@ -240,7 +240,7 @@ class WelcomeWindow(AbstractMainWindow):
 
     def _setup_title_panel(self):
         # Setup widgets
-        self.title_label = TitleLabel("> PYTHON CS")
+        self.title_label = TitleLabel("> Numidium")
         self.title_subtext_label = QLabel("Mod Manager & Editor")
 
         subtext_font = self.title_subtext_label.font()
