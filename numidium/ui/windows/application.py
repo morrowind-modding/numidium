@@ -1,3 +1,5 @@
+from json import tool
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QActionGroup, QIcon
 from PySide6.QtWidgets import (
@@ -80,13 +82,14 @@ class ApplicationWindow(AbstractMainWindow):
         # Create an action group for the different mode switches.
         self.activity_bar_action_group = QActionGroup(self.activity_bar)
 
-        for icon, text in (
-            ("icons:widgets_24dp.svg", "Move to Mods"),
-            ("icons:flip_to_front_24dp.svg", "Move to Editor"),
-            ("icons:settings_24dp.svg", "Move to Settings"),
+        for icon, text, tooltip in (
+            ("icons:widgets_24dp.svg", "Mods", "Move to Mods"),
+            ("icons:flip_to_front_24dp.svg", "Editor", "Move to Editor"),
+            ("icons:settings_24dp.svg", "Settings", "Move to Settings"),
         ):
             action = QAction(QIcon(icon), text)
             action.setCheckable(True)
+            action.setToolTip(tooltip)
             action.triggered.connect(self._change_page)
             button = QToolButton()
             button.setDefaultAction(action)
