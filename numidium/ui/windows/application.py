@@ -82,6 +82,7 @@ class ApplicationWindow(AbstractMainWindow):
         # Create an action group for the different mode switches.
         self.activity_bar_action_group = QActionGroup(self.activity_bar)
 
+        # TODO: Add ability to collapse acitivity panel and hide text.
         for icon, text, tooltip in (
             ("icons:widgets_24dp.svg", "Mods", "Move to Mods"),
             ("icons:flip_to_front_24dp.svg", "Editor", "Move to Editor"),
