@@ -64,9 +64,9 @@ class ConfigurationStepOneWidget(StepperItem):
 
         self.setLayout(layout)
 
-        self.workspace_open_button.clicked.connect(self._workspace_selected)
+        self.workspace_open_button.clicked.connect(self._handle_workspace_selected)
 
-    def _workspace_selected(self):
+    def _handle_workspace_selected(self):
         # First, open a supposed workspace.
         workspace = QFileDialog.getExistingDirectory(
             self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog
@@ -122,9 +122,9 @@ class ConfigurationWidget(QWidget):
         layout.addWidget(self.stepper)
         self.setLayout(layout)
 
-        self.stepper.stepper_finish_clicked.connect(self._complete_steps)
+        self.stepper.stepper_finish_clicked.connect(self._handle_complete_steps)
 
-    def _complete_steps(self):
+    def _handle_complete_steps(self):
         workspace = self.config_step_one.workspace_line.text()
         AppSettings().workspace = workspace
         AppSettings().add_recent_workspace(workspace)
@@ -204,18 +204,18 @@ class StartupWidget(QWidget):
         self.container_getting_started.setLayout(layout)
 
     def _setup_state(self):
-        self.list.currentItemChanged.connect(self._welcome_screen_select_workspace)
+        self.list.currentItemChanged.connect(self._handle_welcome_screen_select_workspace)
 
         self.open_welcome_on_startup_checkbox.setChecked(AppSettings().show_welcome_window)
-        self.open_welcome_on_startup_checkbox.stateChanged.connect(self._welcome_screen_startup_checked)
+        self.open_welcome_on_startup_checkbox.stateChanged.connect(self._handle_welcome_screen_startup_checked)
 
-    def _welcome_screen_select_workspace(self, current: QListWidgetItem, previous: QListWidgetItem):
+    def _handle_welcome_screen_select_workspace(self, current: QListWidgetItem, previous: QListWidgetItem):
         if previous:
             data = current.data(Qt.UserRole)
             AppSettings().workspace = data
             AppSettings().add_recent_workspace(data)
 
-    def _welcome_screen_startup_checked(self):
+    def _handle_welcome_screen_startup_checked(self):
         checked = self.sender().isChecked()
         AppSettings().show_welcome_window = checked
 

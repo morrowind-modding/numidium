@@ -37,7 +37,7 @@ class AbstractMainWindow(QMainWindow):
         self.action_open_workspace = OpenWorkspaceAction(parent=self)
 
         self.action_about = QAction(parent=self, text="About")
-        self.action_about.triggered.connect(self._show_about_window)
+        self.action_about.triggered.connect(self._handle_show_about_window)
 
         self.action_exit = QAction(parent=self, text="E&xit", shortcut="Ctrl+Q")
         self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
@@ -66,24 +66,24 @@ class AbstractMainWindow(QMainWindow):
         self._load_state_recent_workspaces()
 
         # Connect to State signals to handle changes. Only connect once.
-        AppSettings().recent_workspaces_changed.connect(self._recent_workspaces_changed)
+        AppSettings().recent_workspaces_changed.connect(self._handle_recent_workspaces_changed)
 
     def _load_state_recent_workspaces(self):
         self.menu_bar_recent_workspaces.clear()
         for recent_workspace in AppSettings().recent_workspaces:
             action = QAction(text=recent_workspace, parent=self)
-            action.triggered.connect(self._change_workspace)
+            action.triggered.connect(self._handle_change_workspace)
             self.menu_bar_recent_workspaces.addAction(action)
 
-    def _recent_workspaces_changed(self, workspace) -> None:
+    def _handle_recent_workspaces_changed(self, workspace) -> None:
         self._load_state_recent_workspaces()
 
-    def _change_workspace(self) -> None:
+    def _handle_change_workspace(self) -> None:
         path = self.sender().text()
         AppSettings().workspace = path
         AppSettings().add_recent_workspace(AppSettings().workspace)
 
-    def _show_about_window(self) -> None:
+    def _handle_show_about_window(self) -> None:
         if self.about_window is None:
             self.about_window = AboutWindow()
         self.about_window.show()

@@ -44,7 +44,7 @@ class OpenWorkspaceObject(QWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
-    def _open_workspace(self) -> None:
+    def _handle_open_workspace(self) -> None:
         workspace = QFileDialog.getExistingDirectory(
             self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog
         )
@@ -59,7 +59,7 @@ class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
             parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace", shortcut="Ctrl+Shift+O"
         )
 
-        self.triggered.connect(self._open_workspace)
+        self.triggered.connect(self._handle_open_workspace)
 
 
 class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
@@ -68,7 +68,7 @@ class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.clicked.connect(self._open_workspace)
+        self.clicked.connect(self._handle_open_workspace)
 
 
 class OpenGithubButton(QPushButton):
@@ -77,9 +77,9 @@ class OpenGithubButton(QPushButton):
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.clicked.connect(self._open_github)
+        self.clicked.connect(self._handle_open_github)
 
-    def _open_github(self):
+    def _handle_open_github(self):
         QDesktopServices.openUrl("https://github.com/morrowind-modding/numidium")
 
 class ChangeDarkModeButton(QPushButton):
@@ -88,10 +88,10 @@ class ChangeDarkModeButton(QPushButton):
         self.setIcon(QIcon("icons:contrast_24dp.svg"))
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.clicked.connect(self._change_theme)
+        self.clicked.connect(self._handle_change_theme)
         self.setChecked(AppSettings().enable_dark_mode)
 
-    def _change_theme(self) -> None:
+    def _handle_change_theme(self) -> None:
         AppSettings().enable_dark_mode = self.sender().isChecked()
 
 class DockToolbar(QToolBar):
@@ -162,7 +162,7 @@ class Stepper(QWidget):
         self.container_layout = QVBoxLayout()
         for item in self.items:
             self.container_layout.addWidget(item)
-            item.valid_changed.connect(self._item_valid_changed)
+            item.valid_changed.connect(self._handle_item_valid_changed)
         self.container.setLayout(self.container_layout)
         self.setLayout(self.layout)
 
@@ -193,28 +193,28 @@ class Stepper(QWidget):
 
         self.container_stepper.setLayout(layout)
 
-        self.button_left.clicked.connect(self._open_previous_step)
-        self.button_right.clicked.connect(self._open_next_step)
-        self.button_finish.clicked.connect(self._complete_stepper)
+        self.button_left.clicked.connect(self._handle_open_previous_step)
+        self.button_right.clicked.connect(self._handle_open_next_step)
+        self.button_finish.clicked.connect(self._handle_complete_stepper)
 
-    def _item_valid_changed(self, valid):
+    def _handle_item_valid_changed(self, valid):
         if self.current_step == self.last_step:
             self.button_finish.setEnabled(valid)
         else:
             self.button_right.setEnabled(valid)
         self._update_active_step()
 
-    def _open_previous_step(self):
+    def _handle_open_previous_step(self):
         if self.current_step > 1:
             self.current_step -= 1
             self._update_active_step()
 
-    def _open_next_step(self):
+    def _handle_open_next_step(self):
         if self.current_step < self.last_step:
             self.current_step += 1
             self._update_active_step()
 
-    def _complete_stepper(self):
+    def _handle_complete_stepper(self):
         self.stepper_finish_clicked.emit()
 
     def _update_stepper(self):

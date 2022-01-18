@@ -15,21 +15,21 @@ class ManagerWindow(QMainWindow):
         self.welcome_window = None
         self.application_window = None
 
-        self._setup_theme(AppSettings().enable_dark_mode)
+        self._handle_setup_theme(AppSettings().enable_dark_mode)
         if AppSettings().show_welcome_window == True or AppSettings().setup_completed == False:
             self._setup_windows((AppSettings().show_welcome_window))
         else:
             self._setup_windows(False)
 
-        AppSettings().workspace_changed.connect(self._workspace_changed)
-        AppSettings().enable_dark_mode_changed.connect(self._setup_theme)
-        AppSettings().setup_completed_changed.connect(self._setup_completed_changed)
+        AppSettings().workspace_changed.connect(self._handle_workspace_changed)
+        AppSettings().enable_dark_mode_changed.connect(self._handle_setup_theme)
+        AppSettings().setup_completed_changed.connect(self._handle_setup_completed_changed)
 
-    def _workspace_changed(self) -> None:
+    def _handle_workspace_changed(self) -> None:
         if self.welcome_window is not None:
             self._setup_windows(show_welcome=False)
 
-    def _setup_theme(self, enabled: bool) -> None:
+    def _handle_setup_theme(self, enabled: bool) -> None:
         theme = "dark"
         if enabled == False:
             theme = "light"
@@ -37,7 +37,7 @@ class ManagerWindow(QMainWindow):
         if app := QApplication.instance():
             app.setStyleSheet(stylesheet)
 
-    def _setup_completed_changed(self, completed: bool) -> None:
+    def _handle_setup_completed_changed(self, completed: bool) -> None:
         self._setup_windows(not completed)
 
     def _setup_windows(self, show_welcome: bool) -> None:

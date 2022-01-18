@@ -15,13 +15,13 @@ class Explorer(QWidget):
         self.update_ui(AppSettings().workspace)
         self.setLayout(layout)
 
-        AppSettings().workspace_changed.connect(self._update_workspace)
-        self.treeview.clicked.connect(self._select_file)
+        AppSettings().workspace_changed.connect(self._handle_update_workspace)
+        self.treeview.clicked.connect(self._handle_select_file)
 
-    def _update_workspace(self, workspace: str) -> None:
+    def _handle_update_workspace(self, workspace: str) -> None:
         self.update_ui(workspace)
 
-    def _select_file(self, item: str) -> None:
+    def _handle_select_file(self, item: str) -> None:
         index = self.treeview.selectedIndexes()[0]
         AppSettings().active_file = self.filesystem.filePath(index)  # type: ignore[arg-type]
 

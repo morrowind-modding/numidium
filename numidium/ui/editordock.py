@@ -34,9 +34,9 @@ class FileViewer(QWidget):
         layout.addWidget(self.editor)
         self.setLayout(layout)
 
-        AppSettings().active_file_changed.connect(self._update_active_file)
+        AppSettings().active_file_changed.connect(self._handle_update_active_file)
 
-    def _update_active_file(self, file):
+    def _handle_update_active_file(self, file):
         self.update_ui(file)
 
     def update_ui(self, file):
@@ -322,14 +322,14 @@ class PluginViewer(QWidget):
         layout.addWidget(self.object_table)
         self.setLayout(layout)
 
-        AppSettings().active_file_changed.connect(self._update_active_file)
-        self.object_type_list.currentItemChanged.connect(self._object_type_changed)
+        AppSettings().active_file_changed.connect(self._handle_update_active_file)
+        self.object_type_list.currentItemChanged.connect(self._handle_object_type_changed)
 
-    def _update_active_file(self, file):
+    def _handle_update_active_file(self, file):
         self._load_file(file)
         self._update_ui()
 
-    def _object_type_changed(self):
+    def _handle_object_type_changed(self):
         self._update_ui()
 
     def _load_file(self, file):
@@ -365,9 +365,9 @@ class Viewer(QWidget):
         self.update_ui(AppSettings().active_file)
         self.setLayout(layout)
 
-        AppSettings().active_file_changed.connect(self._update_active_file)
+        AppSettings().active_file_changed.connect(self._handle_update_active_file)
 
-    def _update_active_file(self, file):
+    def _handle_update_active_file(self, file):
         self.update_ui(file)
 
     def update_ui(self, file):

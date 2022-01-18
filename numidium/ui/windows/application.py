@@ -53,7 +53,7 @@ class ApplicationWindow(AbstractMainWindow):
             action = QAction(QIcon(icon), text)
             action.setCheckable(True)
             action.setToolTip(tooltip)
-            action.triggered.connect(self._change_page)
+            action.triggered.connect(self._handle_change_page)
             button = QToolButton()
             button.setDefaultAction(action)
             button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
@@ -75,7 +75,7 @@ class ApplicationWindow(AbstractMainWindow):
             self.about_window = AboutWindow()
         self.about_window.show()
 
-    def _change_page(self) -> None:
+    def _handle_change_page(self) -> None:
         action_name: str = self.sender().text()  # type: ignore
         if "Mods" in action_name:
             AppSettings().dock_index = 0
