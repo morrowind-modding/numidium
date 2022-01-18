@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSettings, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -67,9 +67,17 @@ class ConfigurationStepOneWidget(StepperItem):
         self.workspace_open_button.clicked.connect(self._handle_workspace_selected)
 
     def _handle_workspace_selected(self):
+        # Default to the value of Morrowind's registry entry for "Installed Path".
+        # TODO: Move this stuff to dedicated class for handling Morrowind registry settings.
+        morrowind_registry = "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Bethesda Softworks\Morrowind"
+        morrowind_settings = QSettings(morrowind_registry, QSettings.Format.NativeFormat)
+        morrowind_directory = morrowind_settings.value("Installed Path", "")
+
         # First, open a supposed workspace.
-        workspace = QFileDialog.getExistingDirectory(
-            self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog
+        workspace = QFileDialog(directory=morrowind_directory).getExistingDirectory(
+            self.parent(),
+            "Open Directory",
+            options=QFileDialog.Option.DontUseNativeDialog,
         )
         if workspace != "":
             # Confirm that Morrowind.ini exists in the folder - otherwise it is invalid.
