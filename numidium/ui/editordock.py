@@ -16,9 +16,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from tes3.esp.plugin import Plugin
-from ui.explorer import Explorer
-from ui.state import AppSettings
+
+from numidium.tes3.esp.plugin import Plugin
+from numidium.ui.explorer import Explorer
+from numidium.ui.state import AppSettings
 
 
 class FileViewer(QWidget):

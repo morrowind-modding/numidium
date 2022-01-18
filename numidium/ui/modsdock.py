@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from ui.explorer import Explorer
+from numidium.ui.explorer import Explorer
 
 
 class ModsDock:

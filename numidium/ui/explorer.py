@@ -1,6 +1,6 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QTreeView, QVBoxLayout, QWidget
-from ui.state import AppSettings
+from numidium.ui.state import AppSettings
 
 
 class Explorer(QWidget):

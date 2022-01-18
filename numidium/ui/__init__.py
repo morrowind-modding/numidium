@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QDir, Qt
 from PySide6.QtWidgets import QApplication
-from ui.windows.manager import ManagerWindow
+from numidium.ui.windows.manager import ManagerWindow
 
 
 def exec() -> None:

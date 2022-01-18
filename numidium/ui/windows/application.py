@@ -11,12 +11,12 @@ from PySide6.QtWidgets import (
     QToolButton,
     QWidget,
 )
-from ui.editordock import EditorDock
-from ui.modsdock import ModsDock
-from ui.settingsdock import SettingsDock
-from ui.state import AppSettings
-from ui.windows.about import AboutWindow
-from ui.windows.abstractmain import AbstractMainWindow
+from numidium.ui.editordock import EditorDock
+from numidium.ui.modsdock import ModsDock
+from numidium.ui.settingsdock import SettingsDock
+from numidium.ui.state import AppSettings
+from numidium.ui.windows.about import AboutWindow
+from numidium.ui.windows.abstractmain import AbstractMainWindow
 
 
 class ApplicationWindow(AbstractMainWindow):

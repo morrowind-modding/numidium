@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from ui.state import AppSettings
+from numidium.ui.state import AppSettings
 
 
 class TextBlockLabel(QLabel):

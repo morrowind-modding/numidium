@@ -19,8 +19,9 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from ui.state import AppSettings
-from ui.widgets import (
+
+from numidium.ui.state import AppSettings
+from numidium.ui.widgets import (
     OpenGithubButton,
     OpenWorkspaceButton,
     Stepper,
@@ -29,7 +30,7 @@ from ui.widgets import (
     TextBlockLabel,
     TitleLabel,
 )
-from ui.windows.abstractmain import AbstractMainWindow
+from numidium.ui.windows.abstractmain import AbstractMainWindow
 
 
 class ConfigurationStepOneWidget(StepperItem):

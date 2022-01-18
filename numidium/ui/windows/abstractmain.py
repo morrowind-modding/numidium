@@ -8,9 +8,9 @@ from PySide6.QtWidgets import (
     QMenuBar,
     QStatusBar,
 )
-from ui.state import AppSettings
-from ui.widgets import OpenWorkspaceAction
-from ui.windows.about import AboutWindow
+from numidium.ui.state import AppSettings
+from numidium.ui.widgets import OpenWorkspaceAction
+from numidium.ui.windows.about import AboutWindow
 
 
 class AbstractMainWindow(QMainWindow):
