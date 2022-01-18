@@ -1,16 +1,16 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDockWidget,
-    QLabel,
-    QMainWindow,
-    QTextEdit,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDockWidget, QMainWindow, QTextEdit, QVBoxLayout, QWidget
+
 from numidium.ui.explorer import Explorer
+from numidium.ui.widgets import DockToolbar
 
 
-class ModsDock:
+class ModsDock(QWidget):
+    toolbar: DockToolbar
+    main_win: QMainWindow
+    left_dock: QDockWidget
+    bottom_dock: QDockWidget
+
     def __init__(self) -> None:
         super().__init__()
         self.workspaceDirectory = None
@@ -35,11 +35,21 @@ class ModsDock:
             )
 
         # Layout
-        main_win = QMainWindow()
-        main_win.setCentralWidget(QWidget())
-        main_win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.left_dock)
-        main_win.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.bottom_dock)
+        self.main_win = QMainWindow()
+        self.main_win.setCentralWidget(QWidget())
+        self.main_win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.left_dock)
+        self.main_win.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.bottom_dock)
 
         layout = QVBoxLayout(win)
-        layout.addWidget(main_win)
+        layout.addWidget(self.main_win)
         layout.setContentsMargins(0, 0, 0, 0)
+
+        self._setup_toolbar()
+
+
+    def _setup_toolbar(self):
+        self.toolbar = DockToolbar()
+
+        # TODO: Add custom actions.
+
+        self.main_win.addToolBar(self.toolbar)

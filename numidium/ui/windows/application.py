@@ -1,16 +1,7 @@
-from json import tool
-
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QActionGroup, QIcon
-from PySide6.QtWidgets import (
-    QFileDialog,
-    QPushButton,
-    QSizePolicy,
-    QStackedWidget,
-    QToolBar,
-    QToolButton,
-    QWidget,
-)
+from PySide6.QtWidgets import QStackedWidget, QToolBar, QToolButton, QWidget
+
 from numidium.ui.editordock import EditorDock
 from numidium.ui.modsdock import ModsDock
 from numidium.ui.settingsdock import SettingsDock
@@ -25,9 +16,6 @@ class ApplicationWindow(AbstractMainWindow):
     activity_bar: QToolBar
     activity_bar_action_group: QActionGroup
 
-    toolbar: QToolBar
-    toolbar_dark_mode_button: QPushButton
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -41,34 +29,8 @@ class ApplicationWindow(AbstractMainWindow):
         self.stack_widget.setCurrentIndex(AppSettings().dock_index)
         self.central_window.setCentralWidget(self.stack_widget)
 
-        self._setup_toolbar()
         self._setup_activity_bar()
-
         self._load_application_state()
-
-    def _setup_toolbar(self):
-        self.toolbar = QToolBar(parent=self)
-
-        # Setup Widgets
-        self.toolbar.addAction(self.action_open_workspace)
-        self.toolbar.addSeparator()
-
-        # Fill the rest with a spacer.
-        spacer = QToolButton(parent=self.toolbar)
-        spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        spacer.setEnabled(False)
-        self.toolbar.addWidget(spacer)
-
-        # Add dark mode toggle at the end.
-        self.toolbar_dark_mode_button = QPushButton(parent=self.toolbar)
-        self.toolbar_dark_mode_button.setIcon(QIcon("icons:contrast_24dp.svg"))
-        self.toolbar_dark_mode_button.setText("Dark Mode ")  # extra space because idk how to set spacing :(
-        self.toolbar_dark_mode_button.setCheckable(True)
-        self.toolbar_dark_mode_button.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.toolbar_dark_mode_button.clicked.connect(self._change_theme)
-        self.toolbar.addWidget(self.toolbar_dark_mode_button)
-
-        self.central_window.addToolBar(self.toolbar)
 
     def _setup_activity_bar(self):
         """Setup the main window's activity bar.
@@ -107,8 +69,6 @@ class ApplicationWindow(AbstractMainWindow):
         # Restore the users previously active selection.
         actions = self.activity_bar_action_group.actions()
         actions[AppSettings().dock_index].setChecked(True)
-
-        self.toolbar_dark_mode_button.setChecked(AppSettings().enable_dark_mode)
 
     def _show_about_window(self) -> None:
         if self.about_window is None:

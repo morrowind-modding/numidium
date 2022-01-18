@@ -1,13 +1,6 @@
-import qdarktheme
 from PySide6.QtGui import QAction, QIcon
-from PySide6.QtWidgets import (
-    QApplication,
-    QFileDialog,
-    QMainWindow,
-    QMenu,
-    QMenuBar,
-    QStatusBar,
-)
+from PySide6.QtWidgets import QApplication, QMainWindow, QMenu, QMenuBar, QStatusBar
+
 from numidium.ui.state import AppSettings
 from numidium.ui.widgets import OpenWorkspaceAction
 from numidium.ui.windows.about import AboutWindow
@@ -94,6 +87,3 @@ class AbstractMainWindow(QMainWindow):
         if self.about_window is None:
             self.about_window = AboutWindow()
         self.about_window.show()
-
-    def _change_theme(self) -> None:
-        AppSettings().enable_dark_mode = self.sender().isChecked()

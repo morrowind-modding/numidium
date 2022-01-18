@@ -1,17 +1,17 @@
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QAction, QActionGroup, QDesktopServices, QIcon
+from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QLabel,
     QPushButton,
     QSizePolicy,
-    QStackedWidget,
     QToolBar,
     QToolButton,
     QVBoxLayout,
     QWidget,
 )
+
 from numidium.ui.state import AppSettings
 
 
@@ -82,6 +82,44 @@ class OpenGithubButton(QPushButton):
     def _open_github(self):
         QDesktopServices.openUrl("https://github.com/morrowind-modding/numidium")
 
+class ChangeDarkModeButton(QPushButton):
+    def __init__(self, parent=None) -> None:
+        super().__init__(text ="Dark Mode", parent=parent)
+        self.setIcon(QIcon("icons:contrast_24dp.svg"))
+        self.setCheckable(True)
+        self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.clicked.connect(self._change_theme)
+        self.setChecked(AppSettings().enable_dark_mode)
+
+    def _change_theme(self) -> None:
+        AppSettings().enable_dark_mode = self.sender().isChecked()
+
+class DockToolbar(QToolBar):
+    action_open_workspace: OpenWorkspaceAction
+    button_dark_mode: ChangeDarkModeButton
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent=parent)
+
+        self.actions = []
+        self.widgets = []
+
+        # Setup Widgets
+        self.action_open_workspace = OpenWorkspaceAction(parent=self)
+        self.addAction(self.action_open_workspace)
+        self.addSeparator()
+
+        # TODO: Implement ability to add custom actions and widgets here.
+
+        # Fill the rest with a spacer.
+        spacer = QToolButton(parent=self)
+        spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        spacer.setEnabled(False)
+        self.addWidget(spacer)
+
+        # Add dark mode toggle at the end.
+        self.button_dark_mode = ChangeDarkModeButton(parent=self)
+        self.addWidget(self.button_dark_mode)
 
 class StepperItem(QWidget):
     valid_changed = Signal(bool)
