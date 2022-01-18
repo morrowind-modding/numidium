@@ -107,11 +107,6 @@ class AppSettings(QSettings):
     def recent_workspaces(self) -> dict[str, int]:
         return self.get_value("recent_workspaces", {})
 
-    @recent_workspaces.setter
-    def _recent_workspaces(self, recent_workspaces: dict[str, int]) -> None:
-        self.setValue("recent_workspaces", recent_workspaces)
-        self.recent_workspaces_changed.emit(recent_workspaces)
-
     def add_recent_workspace(self, workspace: str) -> None:
         workspaces = self.recent_workspaces
 
@@ -126,7 +121,8 @@ class AppSettings(QSettings):
                 workspaces.update(items[:4])
 
         workspaces[workspace] = int(datetime.now().timestamp())
-        self._recent_workspaces = workspaces
+        self.setValue("recent_workspaces", workspaces)
+        self.recent_workspaces_changed.emit(workspaces)
 
     def get_value(self, key: str, default: T) -> T:
         # Qt bugs if `dict` is supplied as the type
