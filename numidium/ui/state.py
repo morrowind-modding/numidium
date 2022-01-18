@@ -12,6 +12,13 @@ T = TypeVar("T")
 
 
 class AppSettings(QSettings):
+    """The user's application settings.
+
+    Application settings can be accessed from anywhere in the application. Setting attributes will emit change events through Signals.
+
+    TODO: Add attributes.
+
+    """
     org_name = "Morrowind Modding Community"
     app_name = "Numidium"
 
