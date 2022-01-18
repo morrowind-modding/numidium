@@ -6,6 +6,8 @@ from typing import TypeVar, cast
 
 from PySide6.QtCore import QSettings, Signal, SignalInstance
 
+from numidium.logger import logger
+
 T = TypeVar("T")
 
 
@@ -27,16 +29,19 @@ class AppSettings(QSettings):
         super(cls, obj).__init__(cls.org_name, cls.app_name)
 
         # quick hack to clear settings if any of them were unreadable
+        logger.info("Loading Settings...")
         try:
-            obj.workspace
-            obj.dock_index
-            obj.active_file
-            obj.recent_workspaces
-            obj.show_welcome_window
-            obj.setup_completed
-            obj.enable_dark_mode
+            logger.info("Workspace: {}", obj.workspace)
+            logger.info("Dock Index: {}", obj.dock_index)
+            logger.info("Active File: {}", obj.active_file)
+            logger.info("Recent Workspaces: {}", obj.recent_workspaces)
+            logger.info("Show Welcome Window: {}", obj.show_welcome_window)
+            logger.info("Setup Completed: {}", obj.setup_completed)
+            logger.info("Enable Dark Mode: {}", obj.enable_dark_mode)
+            logger.info("Settings validated!")
         except:
             obj.clear()
+            logger.info("Settings cleared!")
 
         return obj
 
