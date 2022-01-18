@@ -228,7 +228,7 @@ class Stepper(QWidget):
         self._layout = QVBoxLayout()
         self._container = QWidget()
         self._container_layout = QVBoxLayout()
-        for item in self.items:
+        for item in self._items:
             self._container_layout.addWidget(item)
             item.valid_changed.connect(self._handle_item_valid_changed)
         self._container.setLayout(self._container_layout)
@@ -305,7 +305,7 @@ class Stepper(QWidget):
         for i in range(layout.count()):
             layout.itemAt(i).widget().setVisible(False)
 
-        self.active_item = self.items[self._current_step - 1]
+        self.active_item = self._items[self._current_step - 1]
         self.active_item.setVisible(True)
         if self.active_item.valid == False:
             self._label_validation_message.setText(self.active_item.validation_message)

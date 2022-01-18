@@ -4,14 +4,17 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QMenu, QMenuBar, QStatu
 from numidium.ui.state import AppSettings
 from numidium.ui.widgets import OpenWorkspaceAction
 from numidium.ui.windows.about import AboutWindow
+from numidium.ui.windows.debug import DebugWindow
 
 
 class AbstractMainWindow(QMainWindow):
     central_window: QMainWindow
     about_window: AboutWindow
+    debug_window: DebugWindow
 
     action_open_workspace: QAction
     action_about: QAction
+    action_debug: QAction
     action_exit: QAction
 
     menu_bar: QMenuBar
@@ -24,6 +27,7 @@ class AbstractMainWindow(QMainWindow):
 
         self.central_window = QMainWindow()
         self.about_window = AboutWindow()
+        self.debug_window = DebugWindow()
 
         self.setCentralWidget(self.central_window)
 
@@ -38,6 +42,9 @@ class AbstractMainWindow(QMainWindow):
 
         self.action_about = QAction(parent=self, text="About")
         self.action_about.triggered.connect(self._handle_show_about_window)
+
+        self.action_debug = QAction(parent=self, text="Debug", shortcut="Ctrl+Shift+D")
+        self.action_debug.triggered.connect(self._handle_show_debug_window)
 
         self.action_exit = QAction(parent=self, text="E&xit", shortcut="Ctrl+Q")
         self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
@@ -55,6 +62,7 @@ class AbstractMainWindow(QMainWindow):
         # About Menu
         menu_about = self.menu_bar.addMenu("&About")
         menu_about.addAction(self.action_about)
+        menu_about.addAction(self.action_debug)
         self.setMenuBar(self.menu_bar)
 
     def _setup_status_bar(self):
@@ -86,3 +94,8 @@ class AbstractMainWindow(QMainWindow):
         if self.about_window is None:
             self.about_window = AboutWindow()
         self.about_window.show()
+
+    def _handle_show_debug_window(self) -> None:
+        if self.debug_window is None:
+            self.debug_window = DebugWindow()
+        self.debug_window.show()
