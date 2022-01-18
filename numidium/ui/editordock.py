@@ -3,7 +3,7 @@ import pathlib
 from operator import attrgetter
 
 import tes3
-from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal, Slot
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDockWidget,
     QHBoxLayout,
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 from numidium.tes3.esp.plugin import Plugin
 from numidium.ui.explorer import Explorer
 from numidium.ui.state import AppSettings
+from numidium.ui.widgets import ObjectTableModel
 
 
 class FileViewer(QWidget):
@@ -51,42 +52,6 @@ class FileViewer(QWidget):
 
         self.editor.setPlainText(text)
         self.editor.update()
-
-
-class ObjectTableModel(QAbstractTableModel):
-    def __init__(self, parent, list, header, *args):
-        QAbstractTableModel.__init__(self, parent, *args)
-        self.list = list
-        self.header = header
-
-    def rowCount(self, parent):
-        return len(self.list)
-
-    def columnCount(self, parent):
-        if self.list:
-            return len(self.list[0])
-        else:
-            return 0
-
-    def data(self, index, role):
-        if not index.isValid():
-            return None
-        elif role != Qt.DisplayRole:
-            return None
-        return self.list[index.row()][index.column()]
-
-    def headerData(self, col, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self.header[col]
-        return None
-
-    def sort(self, col, order):
-        """sort table by given column number col"""
-        if col < len(self.list):
-            self.list = sorted(self.list, key=operator.itemgetter(col))
-            if order == Qt.DescendingOrder:
-                self.list.reverse()
-            self.dataChanged.emit(QModelIndex(), QModelIndex())
 
 
 class TableInfo:

@@ -19,6 +19,7 @@ class AppSettings(QSettings):
     TODO: Add attributes.
 
     """
+
     org_name = "Morrowind Modding Community"
     app_name = "Numidium"
 

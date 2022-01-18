@@ -1,4 +1,6 @@
-from PySide6.QtCore import Qt, Signal
+import operator
+
+from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal
 from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import (
     QFileDialog,
@@ -20,6 +22,7 @@ class TextBlockLabel(QLabel):
 
     Subclasses `QLabel` and sets properties to allow for auto-expanding long text blocks.
     """
+
     def __init__(self, text) -> None:
         super().__init__(text)
         self.setWordWrap(True)
@@ -31,6 +34,7 @@ class TitleLabel(QLabel):
 
     Subclasses `QLabel` and sets properties for text type 'Title.'
     """
+
     def __init__(self, text) -> None:
         super().__init__(text)
         font = self.font()
@@ -44,6 +48,7 @@ class SubtitleLabel(QLabel):
 
     Subclasses `QLabel` and sets properties for text type 'Subtitle.'
     """
+
     def __init__(self, text) -> None:
         super().__init__(text)
         font = self.font()
@@ -57,6 +62,7 @@ class OpenWorkspaceObject(QWidget):
 
     Base object that provides an 'open workspace' shared event handler for subclassing classes. Event handler selects Directory using a file dialog and updates application state.
     """
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
@@ -73,6 +79,7 @@ class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
 
     `QAction` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
+
     def __init__(self, parent=None) -> None:
         super().__init__(
             parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace", shortcut="Ctrl+Shift+O"
@@ -86,6 +93,7 @@ class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
 
     `QPushButton` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
 
@@ -99,6 +107,7 @@ class OpenGithubButton(QPushButton):
 
     `QPushButton` with default text, icon, that opens the project source code on GitHub when clicked.
     """
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent, text="Open Source Code")
 
@@ -109,13 +118,15 @@ class OpenGithubButton(QPushButton):
     def _handle_open_github(self):
         QDesktopServices.openUrl("https://github.com/morrowind-modding/numidium")
 
+
 class ChangeDarkModeButton(QPushButton):
     """Convenience subclass for `QPushButton` for the Change Dark Mode button.
 
     `QPushButton` with default text, icon, that updates Dark Mode setting in application state when clicked.
     """
+
     def __init__(self, parent=None) -> None:
-        super().__init__(text ="Dark Mode", parent=parent)
+        super().__init__(text="Dark Mode", parent=parent)
         self.setIcon(QIcon("icons:contrast_24dp.svg"))
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
@@ -124,6 +135,7 @@ class ChangeDarkModeButton(QPushButton):
 
     def _handle_change_theme(self) -> None:
         AppSettings().enable_dark_mode = self.sender().isChecked()
+
 
 class DockToolbar(QToolBar):
     """Convenience subclass for `QToolBar` for the Dock toolbars.
@@ -137,6 +149,7 @@ class DockToolbar(QToolBar):
     button_dark_mode : ChangeDarkModeButton
         A button for changing current dark mode setting.
     """
+
     action_open_workspace: OpenWorkspaceAction
     button_dark_mode: ChangeDarkModeButton
 
@@ -160,6 +173,7 @@ class DockToolbar(QToolBar):
         self.button_dark_mode = ChangeDarkModeButton(parent=self)
         self.addWidget(self.button_dark_mode)
 
+
 class StepperItem(QWidget):
     """Convenience subclass for use in conjunction with `Stepper`. Represents a step in a multi-step widget.
 
@@ -174,6 +188,7 @@ class StepperItem(QWidget):
     validation_message : str
         The current validation message.
     """
+
     valid_changed = Signal(bool)
     valid: bool
     validation_message: str
@@ -313,3 +328,41 @@ class Stepper(QWidget):
             self._label_validation_message.setText("")
 
         self._update_stepper()
+
+
+class ObjectTableModel(QAbstractTableModel):
+    """Convienence class for `QAbstractTableModel` that allows for managing data with an `QTableView` object.
+    """
+    def __init__(self, parent, list, header, *args):
+        QAbstractTableModel.__init__(self, parent, *args)
+        self.list = list
+        self.header = header
+
+    def rowCount(self, parent):
+        return len(self.list)
+
+    def columnCount(self, parent):
+        if self.list:
+            return len(self.list[0])
+        else:
+            return 0
+
+    def data(self, index, role):
+        if not index.isValid():
+            return None
+        elif role != Qt.DisplayRole:
+            return None
+        return self.list[index.row()][index.column()]
+
+    def headerData(self, col, orientation, role):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self.header[col]
+        return None
+
+    def sort(self, col, order):
+        """sort table by given column number col"""
+        if col < len(self.list):
+            self.list = sorted(self.list, key=operator.itemgetter(col))
+            if order == Qt.DescendingOrder:
+                self.list.reverse()
+            self.dataChanged.emit(QModelIndex(), QModelIndex())
