@@ -46,7 +46,7 @@
         {
             "label": "check",
             "type": "shell",
-            "command": "poetry run mypy numidium",
+            "command": "poetry run mypy -p numidium",
             "presentation": {
                 "clear": true,
                 "focus": true

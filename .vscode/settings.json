@@ -9,14 +9,6 @@
         "numidium/ui/**/*.py",
     ],
     "python.linting.mypyEnabled": true,
-    // "python.linting.mypyArgs": [
-    //     "--explicit-package-bases",
-    //     "--follow-imports=silent",
-    //     "--ignore-missing-imports",
-    //     "--namespace-packages",
-    //     "--no-pretty",
-    //     "--show-column-numbers"
-    // ],
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": true

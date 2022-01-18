@@ -1,8 +1,9 @@
-import qdarktheme
+import qdarktheme  # type: ignore
 from PySide6.QtWidgets import QApplication, QMainWindow
-from ui.state import AppSettings
-from ui.windows.application import ApplicationWindow
-from ui.windows.welcome import WelcomeWindow
+
+from numidium.ui.state import AppSettings
+from numidium.ui.windows.application import ApplicationWindow
+from numidium.ui.windows.welcome import WelcomeWindow
 
 
 class ManagerWindow(QMainWindow):
@@ -24,21 +25,22 @@ class ManagerWindow(QMainWindow):
         AppSettings().enable_dark_mode_changed.connect(self._setup_theme)
         AppSettings().setup_completed_changed.connect(self._setup_completed_changed)
 
-    def _workspace_changed(self):
+    def _workspace_changed(self) -> None:
         if self.welcome_window is not None:
             self._setup_windows(show_welcome=False)
 
-    def _setup_theme(self, enabled):
+    def _setup_theme(self, enabled: bool) -> None:
         theme = "dark"
         if enabled == False:
             theme = "light"
         stylesheet = qdarktheme.load_stylesheet(theme)
-        QApplication.instance().setStyleSheet(stylesheet)
+        if app := QApplication.instance():
+            app.setStyleSheet(stylesheet)
 
-    def _setup_completed_changed(self, completed):
+    def _setup_completed_changed(self, completed: bool) -> None:
         self._setup_windows(not completed)
 
-    def _setup_windows(self, show_welcome):
+    def _setup_windows(self, show_welcome: bool) -> None:
         if show_welcome == True:
             if self.application_window is not None:
                 self.application_window.deleteLater()

@@ -1,6 +1,6 @@
 import sys
 
-from logger import logger
+from numidium.logger import logger
 
 if __name__ == "__main__":
     logger.info(f"{sys.argv=}")
@@ -8,6 +8,6 @@ if __name__ == "__main__":
     if "--headless" in sys.argv:
         print("Headless Mode!")
     else:
-        import ui
+        from numidium import ui
 
         ui.exec()

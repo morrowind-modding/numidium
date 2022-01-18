@@ -63,7 +63,7 @@ class AppSettings(QSettings):
 
     @property
     def enable_dark_mode(self) -> bool:
-        return self.get_value("enable_dark_mode", True, type=bool)
+        return self.get_value("enable_dark_mode", True)
 
     @enable_dark_mode.setter
     def enable_dark_mode(self, enable: bool) -> None:
@@ -81,7 +81,7 @@ class AppSettings(QSettings):
 
     @property
     def show_welcome_window(self) -> bool:
-        return self.get_value("show_welcome_window", True, type=bool)
+        return self.get_value("show_welcome_window", True)
 
     @show_welcome_window.setter
     def show_welcome_window(self, show_welcome_window: bool) -> None:
@@ -90,7 +90,7 @@ class AppSettings(QSettings):
 
     @property
     def setup_completed(self) -> bool:
-        return self.get_value("setup_completed", False, type=bool)
+        return self.get_value("setup_completed", False)
 
     @setup_completed.setter
     def setup_completed(self, setup_completed: bool) -> None:
@@ -122,5 +122,8 @@ class AppSettings(QSettings):
         workspaces[workspace] = int(datetime.now().timestamp())
         self.recent_workspaces = workspaces
 
-    def get_value(self, key: str, default: T, **kwargs) -> T:
-        return cast(T, self.value(key, default, **kwargs))
+    def get_value(self, key: str, default: T) -> T:
+        # Qt bugs if `dict` is supplied as the type
+        t = type(default)
+        t = () if t is dict else (t,)
+        return cast(T, self.value(key, default, *t))
