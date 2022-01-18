@@ -13,7 +13,7 @@ T = TypeVar("T")
 
 class AppSettings(QSettings):
     org_name = "Morrowind Modding Community"
-    app_name = "Python CS"
+    app_name = "Numidium"
 
     active_file_changed = cast(SignalInstance, Signal(str))
     dock_index_changed = cast(SignalInstance, Signal(int))
