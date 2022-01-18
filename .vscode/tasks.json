@@ -52,5 +52,15 @@
                 "focus": true
             }
         },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "poetry run pyinstaller numidium.spec --noconfirm --upx-dir tools",
+            "presentation": {
+                "showReuseMessage": false,
+                "clear": true,
+                "focus": true
+            }
+        }
     ]
 }

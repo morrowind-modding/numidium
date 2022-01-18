@@ -14,8 +14,10 @@ loguru = "^0.5.3"
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
 isort = "^5.10.1"
-pytest = "^6.2.5"
 mypy = "^0.931"
+py7zr = "^0.17.2"
+pyinstaller = "^4.8"
+pytest = "^6.2.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
