@@ -46,18 +46,6 @@ class SettingItem:
             self.input = input
 
 
-class PluginsTab(QWidget):
-    def __init__(self) -> None:
-        super().__init__()
-
-        ####### Plugins
-        formLayout = QFormLayout()
-
-        formLayout.addRow(QLabel("This is a placeholder for our plugins information."))
-
-        self.setLayout(formLayout)
-
-
 class SettingsTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -90,7 +78,6 @@ class SettingsDock(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-    def setup_ui(self, win: QWidget) -> None:
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignHCenter)
 
@@ -98,10 +85,7 @@ class SettingsDock(QWidget):
         tab_container.setTabPosition(QTabWidget.TabPosition.West)
 
         tab_settings = SettingsTab()
-        tab_plugins = PluginsTab()
-
         tab_container.addTab(tab_settings, "Settings")
-        tab_container.addTab(tab_plugins, "Plugins")
 
         layout.addWidget(tab_container)
-        win.setLayout(layout)
+        self.setLayout(layout)

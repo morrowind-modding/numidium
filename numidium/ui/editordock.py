@@ -355,8 +355,6 @@ class EditorDock(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-    def setup_ui(self, win: QWidget) -> None:
-        """Set up ui."""
         # Widgets
         self.left_dock = QDockWidget("Editor")
         self.bottom_dock = QDockWidget("Bottom dock")
@@ -380,6 +378,6 @@ class EditorDock(QWidget):
         main_win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.left_dock)
         main_win.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.bottom_dock)
 
-        layout = QVBoxLayout(win)
+        layout = QVBoxLayout(self)
         layout.addWidget(main_win)
         layout.setContentsMargins(0, 0, 0, 0)

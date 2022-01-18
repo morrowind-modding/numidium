@@ -133,8 +133,6 @@ class ModsDock(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
-    def setup_ui(self, win: QWidget) -> None:
-        """Set up ui."""
         self._container = QWidget()
         self._layout = QHBoxLayout()
         self._layout.setAlignment(Qt.AlignHCenter)
@@ -152,7 +150,7 @@ class ModsDock(QMainWindow):
         self.setCentralWidget(self._container)
 
         # Child `self` into the higher-level parent window.
-        layout = QVBoxLayout(win)
+        layout = QVBoxLayout()
         layout.addWidget(self)
         layout.setContentsMargins(0, 0, 0, 0)
 

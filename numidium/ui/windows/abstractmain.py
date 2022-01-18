@@ -63,6 +63,8 @@ class AbstractMainWindow(QMainWindow):
         menu_about = self.menu_bar.addMenu("&About")
         menu_about.addAction(self.action_about)
         menu_about.addAction(self.action_debug)
+
+        # Finished
         self.setMenuBar(self.menu_bar)
 
     def _setup_status_bar(self):

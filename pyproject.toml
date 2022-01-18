@@ -6,10 +6,10 @@ authors = ["Greatness7 <Greatness7@gmail.com>", "OperatorJack <ThePaladinOf@gmai
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-PySide6 = "^6.2.2"
-pyqtdarktheme = "^1.0.2"
-tomlkit = "^0.8.0"
 loguru = "^0.5.3"
+pyqtdarktheme = "^1.0.2"
+PySide6 = "^6.2.2"
+tomlkit = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
@@ -97,5 +97,6 @@ module = [
     "numidium.ui.state",
     "numidium.ui.explorer",
     "numidium.ui.windows.manager",
+    "numidium.ui.activity_bar",
 ]
 ignore_errors = false

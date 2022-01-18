@@ -15,7 +15,7 @@ GET_TOML_ITEMS = itemgetter("name", "version", "description", "authors")
 
 
 class ExtensionProtocol(Protocol):
-    """Interface that extensions must conform to."""
+    """Interface that extension modules must conform to."""
 
     @staticmethod
     def register() -> None:
@@ -37,7 +37,7 @@ class Extension:
     name : str
         The extension name, may differ from the directory name.
     version : str
-        The extension version, semantic versioning recommended (e.g. '1.0.0`).
+        The extension version, semantic versioning recommended (e.g. '1.0.0').
     description : str
         The extension description.
     authors : list[str]
@@ -45,7 +45,7 @@ class Extension:
     active : bool = False
         Is the extension currently active.
     module : ExtensionProtocol | None = None
-        The (python) module created from importing the extension.
+        The python module created from importing the extension.
         Expected to contain `register` and `unregister` methods.
     """
 
