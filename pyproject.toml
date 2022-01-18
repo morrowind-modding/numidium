@@ -95,6 +95,7 @@ ignore_errors = true
 [[tool.mypy.overrides]]
 module = [
     "numidium.ui.state",
+    "numidium.ui.explorer",
     "numidium.ui.windows.manager",
 ]
 ignore_errors = false

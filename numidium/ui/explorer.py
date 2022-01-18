@@ -1,10 +1,10 @@
-from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileSystemModel, QLabel, QTreeView, QVBoxLayout, QWidget
+
 from numidium.ui.state import AppSettings
 
 
 class Explorer(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout(self)
 
@@ -18,14 +18,14 @@ class Explorer(QWidget):
         AppSettings().workspace_changed.connect(self._update_workspace)
         self.treeview.clicked.connect(self._select_file)
 
-    def _update_workspace(self, workspace):
+    def _update_workspace(self, workspace: str) -> None:
         self.update_ui(workspace)
 
-    def _select_file(self, item):
+    def _select_file(self, item: str) -> None:
         index = self.treeview.selectedIndexes()[0]
-        AppSettings().active_file = self.filesystem.filePath(index)
+        AppSettings().active_file = self.filesystem.filePath(index)  # type: ignore[arg-type]
 
-    def update_ui(self, workspace):
+    def update_ui(self, workspace: str) -> None:
         layout = self.layout()
         for i in range(layout.count()):
             layout.removeWidget(layout.itemAt(i).widget())
