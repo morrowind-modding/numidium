@@ -81,7 +81,6 @@ class AbstractMainWindow(QMainWindow):
     def _handle_change_workspace(self) -> None:
         path = self.sender().text()
         AppSettings().workspace = path
-        AppSettings().add_recent_workspace(AppSettings().workspace)
 
     def _handle_show_about_window(self) -> None:
         if self.about_window is None:

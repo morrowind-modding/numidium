@@ -127,7 +127,6 @@ class ConfigurationWidget(QWidget):
     def _handle_complete_steps(self):
         workspace = self.config_step_one.workspace_line.text()
         AppSettings().workspace = workspace
-        AppSettings().add_recent_workspace(workspace)
         AppSettings().setup_completed = True
 
 
@@ -213,7 +212,6 @@ class StartupWidget(QWidget):
         if previous:
             data = current.data(Qt.UserRole)
             AppSettings().workspace = data
-            AppSettings().add_recent_workspace(data)
 
     def _handle_welcome_screen_startup_checked(self):
         checked = self.sender().isChecked()

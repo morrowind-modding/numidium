@@ -50,7 +50,6 @@ class OpenWorkspaceObject(QWidget):
         )
         if workspace != "":
             AppSettings().workspace = workspace
-            AppSettings().add_recent_workspace(AppSettings().workspace)
 
 
 class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
