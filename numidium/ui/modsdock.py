@@ -1,6 +1,4 @@
-import operator
-
-from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
     QDockWidget,
@@ -8,6 +6,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QHeaderView,
     QMainWindow,
+    QPushButton,
     QTableView,
     QTabWidget,
     QTextEdit,
@@ -15,7 +14,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from numidium.ui.explorer import Explorer
 from numidium.ui.widgets import DockToolbar, ObjectTableModel
 
 
@@ -26,8 +24,11 @@ class ModsDockToolbar(DockToolbar):
     def __init__(self) -> None:
         super().__init__()
 
+
 # TODO: Connect to real data. Implement literally any part of it.
 dummy_installer_data = [[1, "Morrowind"], [2, "Bloodmoon"]]
+
+
 class InstallersFrame(QFrame):
     """Widget that builds and shows the workspace's installer files in a `QTableView`, as well as does formatting and event handling."""
 
@@ -47,6 +48,55 @@ class InstallersFrame(QFrame):
         self.setLayout(container_layout)
 
 
+# TODO: Connect engine to launcher button. Launch EXE.
+# TODO: Load default engine from settings.
+# TODO: Possibly allow user to add other programs, like Construction set or Mash.
+class Launcher(QWidget):
+    """Widget to allow user to select a game-engine or other executable from a dropdown and launch it for the current environment."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        container_layout = QHBoxLayout()
+        container_layout.setContentsMargins(0, 0, 0, 0)
+
+        combobox_engine = QComboBox()
+        combobox_engine.addItems(["Morrowind.exe", "OpenMW"])
+        button_launch = QPushButton("Launch")
+
+        container_layout.addWidget(combobox_engine)
+        container_layout.addWidget(button_launch)
+        self.setLayout(container_layout)
+
+
+# TODO: Replace tab contents with implementations.
+# TODO: Connect to extensions system, possibly.
+class Tabs(QTabWidget):
+    """Convenience class for Tab container of Mod tools tabs."""
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        # Add Load Order / Plugin tab.
+        self._plugins_tab = QWidget()
+        self.addTab(self._plugins_tab, "  Plugins  ")
+
+        # Add INI tab.
+        self._ini_tab = QWidget()
+        self.addTab(self._ini_tab, "  INI  ")
+
+        # Add Archives tab.
+        self._archives_tab = QWidget()
+        self.addTab(self._archives_tab, "  Archives  ")
+
+        # Add Saves tab.
+        self._saves_tab = QWidget()
+        self.addTab(self._saves_tab, "  Saves  ")
+
+        # Add Screenshots tab.
+        self._screenshots_tab = QWidget()
+        self.addTab(self._screenshots_tab, "  Screenshots  ")
+
+
 class TabsFrame(QFrame):
     """Widget that builds and shows the workspace's mod management options, including the current game engine. Mod management options are shown in a `QTabWidget` depending on the selected game engine."""
 
@@ -57,12 +107,12 @@ class TabsFrame(QFrame):
         container_layout = QVBoxLayout()
         container_layout.setAlignment(Qt.AlignLeft)
 
-        # TODO: Implement game engine selector.
-        combobox_engine = QComboBox()
-        container_layout.addWidget(combobox_engine)
+        # TODO: Implement handling for game engine launcher change.
+        self.launcher = Launcher()
+        container_layout.addWidget(self.launcher)
 
         # TODO: Implement tabs classes.
-        tabs = QTabWidget()
+        tabs = Tabs()
         container_layout.addWidget(tabs)
 
         self.setLayout(container_layout)

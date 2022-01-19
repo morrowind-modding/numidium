@@ -331,8 +331,8 @@ class Stepper(QWidget):
 
 
 class ObjectTableModel(QAbstractTableModel):
-    """Convienence class for `QAbstractTableModel` that allows for managing data with an `QTableView` object.
-    """
+    """Convienence class for `QAbstractTableModel` that allows for managing data with an `QTableView` object."""
+
     def __init__(self, parent, list, header, *args):
         QAbstractTableModel.__init__(self, parent, *args)
         self.list = list
