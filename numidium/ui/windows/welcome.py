@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QImage, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
@@ -265,6 +265,7 @@ class WelcomeWindow(AbstractMainWindow):
         line.setFrameShadow(QFrame.Shadow.Plain)
         line.setFixedHeight(1)
 
+        self.title_label.setPixmap(QPixmap("./numidium/ui/images/banner.png"))
         self.layout.addWidget(self.title_label)
         self.layout.addWidget(self.title_subtext_label)
         self.layout.addWidget(line)
