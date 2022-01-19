@@ -94,8 +94,9 @@ print("Creating Archive...")
 
 project = tomlkit.load(open("pyproject.toml", "rb"))
 version = project.item("tool")["poetry"]["version"]
+archive =  f"dist/numidium.{version}.zip"
 
 shutil.make_archive("build/numidium", "zip", "dist")
-shutil.move("build/numidium.zip", f"dist/numidium.{version}.zip")
+shutil.move("build/numidium.zip", archive)
 
-print("Finished!")
+print(f"Finished: {archive}")
