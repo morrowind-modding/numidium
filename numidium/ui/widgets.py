@@ -17,6 +17,15 @@ from PySide6.QtWidgets import (
 from numidium.ui.state import AppSettings
 
 
+class PlaceholderWidget(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("This is a placeholder widget! TODO: Replace it."))
+        self.setLayout(layout)
+
+
+
 class TextBlockLabel(QLabel):
     """Convenience subclass for `QLabel`.
 

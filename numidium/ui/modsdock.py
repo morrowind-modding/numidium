@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from numidium.ui.widgets import DockToolbar, ObjectTableModel
+from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
 
 # TODO: Add custom actions.
@@ -77,23 +77,23 @@ class Tabs(QTabWidget):
         super().__init__()
 
         # Add Load Order / Plugin tab.
-        self._plugins_tab = QWidget()
+        self._plugins_tab = PlaceholderWidget()
         self.addTab(self._plugins_tab, "  Plugins  ")
 
         # Add INI tab.
-        self._ini_tab = QWidget()
+        self._ini_tab = PlaceholderWidget()
         self.addTab(self._ini_tab, "  INI  ")
 
         # Add Archives tab.
-        self._archives_tab = QWidget()
+        self._archives_tab = PlaceholderWidget()
         self.addTab(self._archives_tab, "  Archives  ")
 
         # Add Saves tab.
-        self._saves_tab = QWidget()
+        self._saves_tab = PlaceholderWidget()
         self.addTab(self._saves_tab, "  Saves  ")
 
         # Add Screenshots tab.
-        self._screenshots_tab = QWidget()
+        self._screenshots_tab = PlaceholderWidget()
         self.addTab(self._screenshots_tab, "  Screenshots  ")
 
 
