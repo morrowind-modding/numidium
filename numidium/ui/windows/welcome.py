@@ -265,7 +265,8 @@ class WelcomeWindow(AbstractMainWindow):
         line.setFrameShadow(QFrame.Shadow.Plain)
         line.setFixedHeight(1)
 
-        self.title_label.setPixmap(QPixmap("./numidium/ui/images/banner.png"))
+        banner = QPixmap("./numidium/ui/images/banner.png")
+        self.title_label.setPixmap(banner.scaledToWidth(750, Qt.SmoothTransformation))
         self.layout.addWidget(self.title_label)
         self.layout.addWidget(self.title_subtext_label)
         self.layout.addWidget(line)
