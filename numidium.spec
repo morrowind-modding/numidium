@@ -37,6 +37,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name="numidium",
+    icon='numidium/ui/icons/icon.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
