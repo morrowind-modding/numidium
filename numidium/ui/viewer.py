@@ -348,6 +348,7 @@ class PluginViewer(ViewerItem):
     def get_supported_file_types(cls) -> tuple[str, ...]:
         return (".esm", ".esp")
 
+
 class ImageViewport(QGraphicsView):
     """An image viewer that supports panning and zooming."""
 
@@ -357,7 +358,7 @@ class ImageViewport(QGraphicsView):
     supported_formats: list[str] = [fmt.data().decode() for fmt in QImageReader().supportedImageFormats()]
     supported_formats += ["dds"]
 
-    def __init__(self, parent) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
 
         self.item = QGraphicsPixmapItem()
@@ -392,6 +393,7 @@ class ImageViewport(QGraphicsView):
             else:
                 self.zoom -= 1
                 self.scale(0.80, 0.80)
+
 
 class ImageViewer(ViewerItem):
     name: str = "Image Viewer"

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
@@ -14,6 +16,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.tes3.core import MorrowindInstall
+from numidium.ui.explorer import Explorer
+from numidium.ui.state import AppSettings
+from numidium.ui.viewer import Viewer
 from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
 
@@ -68,6 +74,32 @@ class Launcher(QWidget):
         self.setLayout(container_layout)
 
 
+class ScreenshotTab(QWidget):
+    """Widget that shows the screenshots folder for the current workspace, with the ability to select and view a screenshot."""
+
+    _viewer: Viewer
+    _explorer: Explorer
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._viewer = Viewer()
+        self._explorer = Explorer()
+        self._explorer.set_advanced_view(True)
+        self._explorer.setMaximumHeight(200)
+
+        container_layout = QVBoxLayout()
+        container_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # type: ignore[call-overload]
+        container_layout.addWidget(self._explorer)
+        container_layout.addWidget(self._viewer)
+        self.setLayout(container_layout)
+
+        # Connect widgets together.
+        self._explorer.selected_filepath_changed.connect(self._viewer.handle_update_filepath)
+
+    def load_screenshots_directory(self, directory: Path) -> None:
+        self._explorer.update_ui(str(directory))
+
+
 # TODO: Replace tab contents with implementations.
 # TODO: Connect to extensions system, possibly.
 class Tabs(QTabWidget):
@@ -93,8 +125,12 @@ class Tabs(QTabWidget):
         self.addTab(self._saves_tab, "  Saves  ")
 
         # Add Screenshots tab.
-        self._screenshots_tab = PlaceholderWidget()
+        self._screenshots_tab = ScreenshotTab()
         self.addTab(self._screenshots_tab, "  Screenshots  ")
+
+    def load_workspace(self, install: MorrowindInstall) -> None:
+        # TODO: Update other tabs.
+        self._screenshots_tab.load_screenshots_directory(install.directory_screenshots)
 
 
 class TabsFrame(QFrame):
@@ -112,14 +148,20 @@ class TabsFrame(QFrame):
         container_layout.addWidget(self.launcher)
 
         # TODO: Implement tabs classes.
-        tabs = Tabs()
-        container_layout.addWidget(tabs)
+        self.tabs = Tabs()
+        container_layout.addWidget(self.tabs)
 
         self.setLayout(container_layout)
+
+    def load_workspace(self, install: MorrowindInstall) -> None:
+        # TODO: Update launcher.
+        self.tabs.load_workspace(install)
 
 
 class ModsDock(QMainWindow):
     """The Mods dock window. Contains tools for managing a mod installation."""
+
+    morrowind_install: MorrowindInstall
 
     _toolbar: ModsDockToolbar
     _container: QWidget
@@ -133,6 +175,7 @@ class ModsDock(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
+        # Configure UI
         self._container = QWidget()
         self._layout = QHBoxLayout()
         self._layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
@@ -154,9 +197,25 @@ class ModsDock(QMainWindow):
         layout.addWidget(self)
         layout.setContentsMargins(0, 0, 0, 0)
 
+        # Load up Morrowind directory files.
+        self.morrowind_install = MorrowindInstall()
+        self.load_workspace(AppSettings().workspace)
+        AppSettings().workspace_changed.connect(self._handle_workspace_changed)
+
         # Wrap up with toolbar and bottom dock.
         self._setup_toolbar()
         self._setup_bottom_dock()
+
+    def _handle_workspace_changed(self, workspace: str) -> None:
+        self.load_workspace(workspace)
+
+    def load_workspace(self, workspace: str) -> None:
+        # Reload directory information.
+        self.morrowind_install.load(workspace)
+
+        # Update children if needed.
+        # TODO: Update installers
+        self._tabs_frame.load_workspace(self.morrowind_install)
 
     def _setup_toolbar(self) -> None:
         self._toolbar = ModsDockToolbar()

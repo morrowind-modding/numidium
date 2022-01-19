@@ -1,4 +1,4 @@
-from os import path
+import os
 from pathlib import Path
 
 from PySide6.QtCore import QFile, QPoint, Qt, Signal
@@ -33,13 +33,17 @@ class Explorer(QWidget):
     treeview: QTreeView
     message: QLabel
 
+    show_advanced_view: bool
+
+    current_directory: str
     selected_filepath: str
     context_filepath: str
 
     def __init__(self) -> None:
         super().__init__()
-        layout = QVBoxLayout(self)
+        self.show_advanced_view = False
 
+        layout = QVBoxLayout(self)
         self.os_utility = OperatingSystemUtility()
         self.filesystem = QFileSystemModel()
         self.treeview = QTreeView()
@@ -49,13 +53,9 @@ class Explorer(QWidget):
         self.treeview.setDropIndicatorShown(True)
         self.treeview.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
         self.treeview.setAcceptDrops(True)
-
-        self.message = QLabel("Open a workspace to begin.")
-
-        self.update_ui(AppSettings().workspace)
+        self.message = QLabel("Open a directory to begin.")
         self.setLayout(layout)
 
-        AppSettings().workspace_changed.connect(self._handle_update_workspace)
         self.treeview.clicked.connect(self._handle_select_file)
 
         # Setup custom context menu for tree view.
@@ -72,9 +72,9 @@ class Explorer(QWidget):
         menu = QMenu()
 
         # Application actions.
-        action_view = QAction("View", self)
+        action_view = QAction("Select", self)
         menu.addAction(action_view)
-        action_view.triggered.connect(self._handle_context_view)
+        action_view.triggered.connect(self._handle_select_file)
 
         menu.addSeparator()
 
@@ -119,9 +119,6 @@ class Explorer(QWidget):
 
         menu.exec_(self.treeview.viewport().mapToGlobal(position))
 
-    def _handle_context_view(self) -> None:
-        self._handle_select_file()
-
     def _handle_context_open_filepath(self) -> None:
         self.os_utility.open_filepath_with_default_application(self.context_filepath)
 
@@ -135,8 +132,7 @@ class Explorer(QWidget):
     # TODO: Replace os.path with something else?
     def _handle_context_copy_relative_path(self) -> None:
         clipboard: QClipboard = QGuiApplication.clipboard()
-        workspace: str = AppSettings().workspace
-        relative_filepath: str = path.relpath(self.context_filepath, workspace)
+        relative_filepath: str = os.path.relpath(self.context_filepath, self.current_directory)
         clipboard.setText(relative_filepath)
 
     def _handle_context_rename(self) -> None:
@@ -171,25 +167,34 @@ class Explorer(QWidget):
             # should never be reached
             raise Exception("Invalid message box result when deleting file.")
 
-    def _handle_update_workspace(self, workspace: str) -> None:
-        self.update_ui(workspace)
-
     def _handle_select_file(self) -> None:
         index = self.treeview.selectedIndexes()[0]
         self.selected_filepath = self.filesystem.filePath(index)  # type: ignore[arg-type]
         self.selected_filepath_changed.emit(self.selected_filepath)
 
-    def update_ui(self, workspace: str) -> None:
+    def set_advanced_view(self, enabled: bool, update_ui: bool = False) -> None:
+        """Enables 'advanced view' for the Explorer widget. This includes showing additional columns like file type and last modified date. Optional parameter also updates UI to reflect the change."""
+        self.show_advanced_view = enabled
+        if update_ui:
+            if self.show_advanced_view:
+                for i in range(1, self.filesystem.columnCount()):
+                    self.treeview.showColumn(i)
+            else:
+                for i in range(1, self.filesystem.columnCount()):
+                    self.treeview.hideColumn(i)
+
+    def update_ui(self, directory: str) -> None:
+        """Loads the given directory into the Explorer widget and refreshes the UI."""
         layout = self.layout()
         for i in range(layout.count()):
             layout.removeWidget(layout.itemAt(i).widget())
 
-        if workspace:
-            self.filesystem.setRootPath(workspace)
+        if directory:
+            self.current_directory = directory
+            self.filesystem.setRootPath(directory)
             self.treeview.setModel(self.filesystem)
-            self.treeview.setRootIndex(self.filesystem.index(workspace))
-            for i in range(1, self.filesystem.columnCount()):
-                self.treeview.hideColumn(i)
+            self.treeview.setRootIndex(self.filesystem.index(directory))
+            self.set_advanced_view(self.show_advanced_view, True)
             layout.addWidget(self.treeview)
         else:
             layout.addWidget(self.message)
