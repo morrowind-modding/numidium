@@ -1,3 +1,11 @@
+import shutil
+import tomlkit
+
+print("Cleaning dist directory...")
+shutil.rmtree("dist", ignore_errors=True)
+
+# -- Begin PyInstaller --
+
 block_cipher = None
 
 a = Analysis(
@@ -33,7 +41,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,
@@ -79,20 +87,14 @@ coll = COLLECT(
     name="numidium",
 )
 
+# -- End PyInstaller --
+
 print("Creating Archive...")
-
-import platform
-import shutil
-
-import py7zr
-import tomlkit
-
-with py7zr.SevenZipFile("build/numidium.7z", "w") as f:
-    f.writeall("dist/numidium", "numidium")
 
 project = tomlkit.load(open("pyproject.toml", "rb"))
 version = project.item("tool")["poetry"]["version"]
-pform = platform.platform(aliased=True, terse=True).lower()
-shutil.move("build/numidium.7z", f"dist/numidium.{version}.{pform}.7z")
+
+shutil.make_archive("build/numidium", "zip", "dist")
+shutil.move("build/numidium.zip", f"dist/numidium.{version}.zip")
 
 print("Finished!")
