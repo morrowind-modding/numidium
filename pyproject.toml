@@ -15,7 +15,6 @@ tomlkit = "^0.8.0"
 black = "^21.12b0"
 isort = "^5.10.1"
 mypy = "^0.931"
-py7zr = "^0.17.2"
 pyinstaller = "^4.8"
 pytest = "^6.2.5"
 
