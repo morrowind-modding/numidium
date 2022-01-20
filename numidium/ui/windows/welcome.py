@@ -229,7 +229,6 @@ class WelcomeWindow(AbstractMainWindow):
     layout: QVBoxLayout
 
     title_label: QLabel
-    title_subtext_label: QLabel
 
     configuration_widget: ConfigurationWidget
     startup_widget: StartupWidget
@@ -252,11 +251,8 @@ class WelcomeWindow(AbstractMainWindow):
     def _setup_title_panel(self):
         # Setup widgets
         self.title_label = TitleLabel("> Numidium")
-        self.title_subtext_label = QLabel("Mod Manager & Editor")
-
-        subtext_font = self.title_subtext_label.font()
-        subtext_font.setPointSize(8)
-        self.title_subtext_label.setFont(subtext_font)
+        banner = QPixmap("./numidium/ui/images/banner.png")
+        self.title_label.setPixmap(banner.scaledToWidth(750, Qt.SmoothTransformation))
 
         # Create a horizontal divider line.
         line = QFrame()
@@ -264,10 +260,7 @@ class WelcomeWindow(AbstractMainWindow):
         line.setFrameShadow(QFrame.Shadow.Plain)
         line.setFixedHeight(1)
 
-        banner = QPixmap("./numidium/ui/images/banner.png")
-        self.title_label.setPixmap(banner.scaledToWidth(750, Qt.SmoothTransformation))
         self.layout.addWidget(self.title_label)
-        self.layout.addWidget(self.title_subtext_label)
         self.layout.addWidget(line)
 
     def _setup_center_panel(self):
