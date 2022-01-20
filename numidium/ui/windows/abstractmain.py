@@ -23,7 +23,7 @@ class AbstractMainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle("Python CS")
+        self.setWindowTitle("Numidium")
 
         self.central_window = QMainWindow()
         self.about_window = AboutWindow()
