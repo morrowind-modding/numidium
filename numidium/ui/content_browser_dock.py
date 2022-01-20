@@ -351,12 +351,12 @@ class Viewer(QWidget):
                 layout.addWidget(self.widget)
 
 
-class EditorDock(QWidget):
+class ContentBrowserDock(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
         # Widgets
-        self.left_dock = QDockWidget("Editor")
+        self.left_dock = QDockWidget("Explorer")
         self.bottom_dock = QDockWidget("Bottom dock")
 
         # Setup widgets

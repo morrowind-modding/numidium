@@ -13,10 +13,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from numidium.ui.editordock import EditorDock
+from numidium.ui.content_browser_dock import ContentBrowserDock
 from numidium.ui.extensions_dock import ExtensionsDock
 from numidium.ui.modsdock import ModsDock
-from numidium.ui.settingsdock import SettingsDock
+from numidium.ui.settings_dock import SettingsDock
 
 
 class ActivityBarItem(QListWidgetItem):
@@ -99,9 +99,9 @@ class ActivityBar(QDockWidget):
         )
         self.add_item(
             ActivityBarItem(
-                widget=EditorDock(),
+                widget=ContentBrowserDock(),
                 icon="icons:flip_to_front_24dp.svg",
-                text="Editor",
+                text="Content Browser",
             )
         )
         self.add_item(
