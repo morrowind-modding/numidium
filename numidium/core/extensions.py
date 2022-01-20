@@ -35,7 +35,7 @@ class Extension:
     path : Path
         The (absolute) path to the extension directory.
     name : str
-        The extension name, may differ from the directory name.
+        The extension name, which may differ from the directory name.
     version : str
         The extension version, semantic versioning recommended (e.g. '1.0.0').
     description : str

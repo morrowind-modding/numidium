@@ -58,7 +58,7 @@ class ActivityBarItem(QListWidgetItem):
 
 
 class ActivityBar(QDockWidget):
-    """The application window's activity bar.
+    """The application's activity bar.
 
     This is the left-most area of the application window. It contains a list of
     `ActivityBarItem` objects that when selected will display their associated
