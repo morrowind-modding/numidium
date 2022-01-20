@@ -211,15 +211,14 @@ class StartupWidget(QWidget):
         self.container_getting_started.setLayout(layout)
 
     def _setup_state(self):
-        self.list.currentItemChanged.connect(self._handle_welcome_screen_select_workspace)
+        self.list.itemClicked.connect(self._handle_welcome_screen_select_workspace)
 
         self.open_welcome_on_startup_checkbox.setChecked(AppSettings().show_welcome_window)
         self.open_welcome_on_startup_checkbox.stateChanged.connect(self._handle_welcome_screen_startup_checked)
 
-    def _handle_welcome_screen_select_workspace(self, current: QListWidgetItem, previous: QListWidgetItem):
-        if previous:
-            data = current.data(Qt.UserRole)
-            AppSettings().workspace = data
+    def _handle_welcome_screen_select_workspace(self, current: QListWidgetItem):
+        data = current.data(Qt.UserRole)
+        AppSettings().workspace = data
 
     def _handle_welcome_screen_startup_checked(self):
         checked = self.sender().isChecked()
