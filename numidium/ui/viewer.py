@@ -1,0 +1,426 @@
+from operator import attrgetter
+from pathlib import Path
+from typing import Any
+
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import (
+    QDockWidget,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QListWidget,
+    QMainWindow,
+    QTableView,
+    QTabWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
+
+from numidium.logger import logger
+from numidium.tes3 import Plugin
+from numidium.tes3.esp.object import TES3Object
+from numidium.ui.state import AppSettings
+from numidium.ui.widgets import ObjectTableModel
+
+
+class ViewerItem(QWidget):
+    name: str
+    filepath: str
+    def __init__(self, name: str, filepath: str) -> None:
+        super().__init__()
+        self.name = name or "Unknown"
+        self.filepath = filepath
+
+    @classmethod
+    def get_supported_file_types(cls) -> list[str]:
+        logger.error("Method should be overriden.")
+        raise NotImplementedError()
+
+class TextFileViewer(ViewerItem):
+    editor: QTextEdit
+
+    def __init__(self, filepath: str) -> None:
+        super().__init__("Text Viewer", filepath)
+        self.filepath = filepath
+        layout = QVBoxLayout(self)
+
+        self.editor = QTextEdit()
+        self.editor.setReadOnly(True)
+
+        layout.addWidget(self.editor)
+        self.setLayout(layout)
+        self.update_ui()
+
+    def set_filepath(self, filepath: str, update_ui: bool = True) -> None:
+        self.filepath = filepath
+        if update_ui:
+            self.update_ui()
+
+    def update_ui(self) -> None:
+        text = ""
+
+        path = Path(self.filepath)
+        if path.is_file() and path.exists():
+            try:
+                text = path.read_text()
+            except UnicodeError:
+                pass
+
+        suffix = path.suffix.lower()
+        if suffix in (".txt", ".log"):
+            self.editor.setPlainText(text)
+        elif suffix == ".md":
+            self.editor.setMarkdown(text)
+        else:
+            logger.warning("Invalid file detected. Suffix {suffix}", suffix=path.suffix)
+
+        self.editor.update()
+
+    @classmethod
+    def get_supported_file_types(cls) -> list[str]:
+        return [".txt", ".log", ".md"]
+
+
+class TableInfo:
+    header: list[str]
+    fields: list[str]
+
+    def __init__(self, header: list[str], fields: list[str]) -> None:
+        self.header = header
+        self.fields = fields
+
+    def get_field_values(self, obj: TES3Object) -> list[Any]:
+        return [getter(obj) for getter in map(attrgetter, self.fields)]
+
+
+# fmt: off
+TABLE_INFO = {
+    "Activator": TableInfo(
+        header=["Id", "Name", "Mesh", "Script"],
+        fields=["id", "name", "mesh", "script"]
+    ),
+    "Alchemy": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Apparatus": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Armor": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script", "Enchanting"],
+        fields=["id", "name", "mesh", "icon", "script", "enchanting"],
+    ),
+    "Birthsign": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "Bodypart": TableInfo(
+        header=["Id", "Name", "Mesh"],
+        fields=["id", "name", "mesh"]
+    ),
+    "Book": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script", "Enchanting"],
+        fields=["id", "name", "mesh", "icon", "script", "enchanting"],
+    ),
+    "Cell": TableInfo(
+        header=["Name"],
+        fields=["name"]
+    ),
+    "Class": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "Clothing": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script", "Enchanting"],
+        fields=["id", "name", "mesh", "icon", "script", "enchanting"],
+    ),
+    "Container": TableInfo(
+        header=["Id", "Name", "Mesh", "Script"],
+        fields=["id", "name", "mesh", "script"]
+    ),
+    "Creature": TableInfo(
+        header=["Id", "Name", "Mesh", "Script"],
+        fields=["id", "name", "mesh", "script"]
+    ),
+    "Dialogue": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Door": TableInfo(
+        header=["Id", "Name", "Mesh", "Script"],
+        fields=["id", "name", "mesh", "script"]
+    ),
+    "Enchantment": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Faction": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "GameSetting": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "GlobalVariable": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Header": TableInfo(
+        header=[],
+        fields=[]
+    ),
+    "Info": TableInfo(
+        header=[],
+        fields=[]
+    ),
+    "Ingredient": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Landscape": TableInfo(
+        header=[],
+        fields=[]
+    ),
+    "LandscapeTexture": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "LevelledCreature": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "LevelledItem": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Light": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Lockpick": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "MagicEffect": TableInfo(
+        header=["Icon"],
+        fields=["icon"]
+    ),
+    "MiscItem": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Npc": TableInfo(
+        header=["Id", "Name", "Mesh", "Script"],
+        fields=["id", "name", "mesh", "script"]
+    ),
+    "PathGrid": TableInfo(
+        header=[],
+        fields=[]
+    ),
+    "Probe": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Race": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "Reference": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Region": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "RepairTool": TableInfo(
+        header=["Id", "Name", "Mesh", "Icon", "Script"],
+        fields=["id", "name", "mesh", "icon", "script"]
+    ),
+    "Script": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Skill": TableInfo(
+        header=[],
+        fields=[]
+    ),
+    "Sound": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "SoundGen": TableInfo(
+        header=["Id"],
+        fields=["id"]
+    ),
+    "Spell": TableInfo(
+        header=["Id", "Name"],
+        fields=["id", "name"]
+    ),
+    "StartScript": TableInfo(
+        header=["Id", "Script"],
+        fields=["id", "script"]
+    ),
+    "Static": TableInfo(
+        header=["Id", "Mesh"],
+        fields=["id", "mesh"]
+    ),
+    "Weapon": TableInfo(
+        header=["ID", "Name", "Weight", "Value", "Icon", "Mesh"],
+        fields=["id", "name", "data.weight", "data.value", "icon", "mesh"],
+    ),
+}
+# fmt: on
+
+class PluginViewer(ViewerItem):
+    object_type_list: QListWidget
+    object_table: QTableView
+
+    plugin: Plugin
+
+    def __init__(self, filepath: str) -> None:
+        super().__init__("Plugin Viewer", filepath)
+        # Setup Object Type List
+        self.object_type_list = QListWidget()
+        self.object_type_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
+        self.object_type_list.setSelectionBehavior(QListWidget.SelectionBehavior.SelectRows)
+        self.object_type_list.addItems(TABLE_INFO.keys()) # type: ignore
+
+        self.object_type_list.setCurrentRow(0)
+        self.object_type_list.setMaximumWidth(self.object_type_list.sizeHintForColumn(0) + 15)
+
+        # Setup Object Table
+        self.object_table = QTableView()
+        self.object_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.object_table.setSelectionBehavior(QTableView.SelectRows)
+        self.object_table.setSelectionMode(QTableView.SelectionMode.SingleSelection)
+
+        self.load_plugin(filepath)
+        self.update_ui()
+
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.object_type_list)
+        layout.addWidget(self.object_table)
+        self.setLayout(layout)
+        self.object_type_list.currentItemChanged.connect(self._handle_object_type_changed)
+
+    def _handle_object_type_changed(self) -> None:
+        self.update_ui()
+
+    def load_plugin(self, file: str, update_ui: bool = True) -> None:
+        self.plugin = Plugin.load(file)
+        if update_ui:
+            self.update_ui()
+
+    def update_ui(self) -> None:
+        if not self.plugin:
+            logger.warning("No plugin currently loaded.")
+            return
+
+        header = []
+        values = []
+
+        object_type = self.object_type_list.currentItem().text()
+        object_type_info = TABLE_INFO.get(object_type)
+
+        if object_type_info:
+            header = object_type_info.header
+            values = [
+                object_type_info.get_field_values(obj) for obj in self.plugin.objects if obj.type_name == object_type
+            ]
+
+        self.model = ObjectTableModel(self, values, header) # type: ignore
+        self.object_table.setModel(self.model)
+        self.object_table.setSortingEnabled(True)
+
+    @classmethod
+    def get_supported_file_types(cls) -> list[str]:
+        return [".esm", ".esp"]
+
+class ImageViewer(ViewerItem):
+    def __init__(self, filepath: str) -> None:
+        super().__init__("Image Viewer", filepath)
+
+        self.label = QLabel()
+        self.pixmap = QPixmap(filepath).scaled(QSize(1000,1000), Qt.KeepAspectRatio, Qt.FastTransformation)
+        self.label.setPixmap(self.pixmap)
+
+        layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignHCenter) # type: ignore[call-overload]
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
+    @classmethod
+    def get_supported_file_types(cls) -> list[str]:
+        # Accepted files taken from: https://doc.qt.io/qt-5/qpixmap.html
+        return [".jpg", ".png", ".gif", ".bmp", ".jpeg", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm"]
+
+class UnsupportedFileViewer(ViewerItem):
+    def __init__(self, filepath: str) -> None:
+        super().__init__("Unsupported File", filepath)
+        layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignHCenter) # type: ignore[call-overload]
+        layout.addWidget(QLabel("This file type is not currently supported."))
+        self.setLayout(layout)
+
+# TODO: Allow extensions to register their own viewers.
+class Viewer(QWidget):
+    type_list: dict[str, list[type[ViewerItem]]]
+
+    def __init__(self) -> None:
+        super().__init__()
+        layout = QVBoxLayout(self)
+        self.type_list = {}
+
+        viewer_item: type[object]
+        for viewer_item in (PluginViewer, TextFileViewer, ImageViewer):
+            if not issubclass(viewer_item, ViewerItem):
+                logger.error("Invalid type. Object must subclass ViewerItem.")
+                raise TypeError(viewer_item)
+
+            suffix:str
+            for suffix in viewer_item.get_supported_file_types():
+                if suffix not in self.type_list:
+                    self.type_list[suffix] = []
+                self.type_list[suffix].append(viewer_item)
+
+        self.update_ui(AppSettings().active_file)
+        self.setLayout(layout)
+
+        AppSettings().active_file_changed.connect(self._handle_update_active_file)
+
+    def _handle_update_active_file(self, filepath: str) -> None:
+        self.update_ui(filepath)
+
+    def update_ui(self, filepath: str) -> None:
+        layout = self.layout()
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+        if filepath:
+            path = Path(filepath)
+            if path.exists():
+                suffix = path.suffix.lower()
+                if suffix in self.type_list:
+                    widget_types: list[type[ViewerItem]] = self.type_list[suffix]
+                    if len(widget_types) > 1:
+                        tabs = QTabWidget()
+                        widget_type: type[ViewerItem]
+                        for widget_type in widget_types:
+                            widget = widget_type(filepath)
+                            tabs.addTab(widget, widget.name)
+                        self.widget = tabs
+                    else:
+                        self.widget = widget_types[0](filepath)
+                    layout.addWidget(self.widget)
+                else:
+                    self.widget = UnsupportedFileViewer(filepath)
+                    layout.addWidget(self.widget)
+            else:
+                logger.warning("File not found: {filepath}", filepath=filepath)

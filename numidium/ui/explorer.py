@@ -34,6 +34,8 @@ class Explorer(QWidget):
             self.filesystem.setRootPath(workspace)
             self.treeview.setModel(self.filesystem)
             self.treeview.setRootIndex(self.filesystem.index(workspace))
+            for i in range(1, self.filesystem.columnCount()):
+                self.treeview.hideColumn(i)
             layout.addWidget(self.treeview)
         else:
             layout.addWidget(self.message)

@@ -98,5 +98,6 @@ module = [
     "numidium.ui.windows.manager",
     "numidium.ui.activity_bar",
     "numidium.ui.extensions_dock",
+    "numidium.ui.viewer",
 ]
 ignore_errors = false
