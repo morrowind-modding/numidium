@@ -2,7 +2,7 @@ from numidium import tes3
 
 
 def test_load() -> None:
-    plugin = tes3.Plugin.load("tests/assets/OAAB_Data.esm")
+    plugin = tes3.Plugin.load("numidium/tes3/tests/assets/OAAB_Data.esm")
     header = plugin.objects[0]
 
     assert type(header) is tes3.Header
