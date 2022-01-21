@@ -23,7 +23,6 @@ class AppSettings(QSettings):
     org_name = "Morrowind Modding Community"
     app_name = "Numidium"
 
-    active_file_changed = cast(SignalInstance, Signal(str))
     dock_index_changed = cast(SignalInstance, Signal(int))
     enable_dark_mode_changed = cast(SignalInstance, Signal(bool))
     recent_workspaces_changed = cast(SignalInstance, Signal(str))
@@ -41,7 +40,6 @@ class AppSettings(QSettings):
         try:
             logger.info("Workspace: {}", obj.workspace)
             logger.info("Dock Index: {}", obj.dock_index)
-            logger.info("Active File: {}", obj.active_file)
             logger.info("Recent Workspaces: {}", obj.recent_workspaces)
             logger.info("Show Welcome Window: {}", obj.show_welcome_window)
             logger.info("Setup Completed: {}", obj.setup_completed)
@@ -83,15 +81,6 @@ class AppSettings(QSettings):
     def enable_dark_mode(self, enable: bool) -> None:
         self.setValue("enable_dark_mode", enable)
         self.enable_dark_mode_changed.emit(enable)
-
-    @property
-    def active_file(self) -> str:
-        return self.get_value("active_file", "")
-
-    @active_file.setter
-    def active_file(self, file: str) -> None:
-        self.setValue("active_file", file)
-        self.active_file_changed.emit(file)
 
     @property
     def show_welcome_window(self) -> bool:
