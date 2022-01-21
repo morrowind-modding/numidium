@@ -15,9 +15,11 @@ def exec() -> None:
     app.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
     app.setWindowIcon(QIcon("icons:icon.ico"))
 
+    # TODO: persistent window geometry
+
     window = ManagerWindow()
     window.setWindowTitle("Numidium")
-    window.resize(window.screen().availableGeometry().size() / 1.25)  # TODO: persistent window geometry
+    window.resize(window.screen().availableGeometry().size() / 1.25)  # type: ignore
     window.show()
 
     sys.exit(app.exec())

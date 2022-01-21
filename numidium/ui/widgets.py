@@ -1,6 +1,14 @@
 import operator
+from typing import Any, cast
 
-from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal
+from PySide6.QtCore import (
+    QAbstractTableModel,
+    QModelIndex,
+    QPersistentModelIndex,
+    Qt,
+    Signal,
+    SignalInstance,
+)
 from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import (
     QFileDialog,
@@ -31,7 +39,7 @@ class TextBlockLabel(QLabel):
     Subclasses `QLabel` and sets properties to allow for auto-expanding long text blocks.
     """
 
-    def __init__(self, text) -> None:
+    def __init__(self, text: str) -> None:
         super().__init__(text)
         self.setWordWrap(True)
         self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
@@ -43,7 +51,7 @@ class TitleLabel(QLabel):
     Subclasses `QLabel` and sets properties for text type 'Title.'
     """
 
-    def __init__(self, text) -> None:
+    def __init__(self, text: str) -> None:
         super().__init__(text)
         font = self.font()
         font.setPointSize(36)
@@ -57,7 +65,7 @@ class SubtitleLabel(QLabel):
     Subclasses `QLabel` and sets properties for text type 'Subtitle.'
     """
 
-    def __init__(self, text) -> None:
+    def __init__(self, text: str) -> None:
         super().__init__(text)
         font = self.font()
         font.setPointSize(16)
@@ -71,12 +79,12 @@ class OpenWorkspaceObject(QWidget):
     Base object that provides an 'open workspace' shared event handler for subclassing classes. Event handler selects Directory using a file dialog and updates application state.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent=parent)
 
     def _handle_open_workspace(self) -> None:
         workspace = QFileDialog.getExistingDirectory(
-            self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog
+            self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog  # type: ignore[arg-type]
         )
         if workspace != "":
             AppSettings().workspace = workspace
@@ -88,11 +96,9 @@ class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
     `QAction` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
 
-    def __init__(self, parent=None) -> None:
-        super().__init__(
-            parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace", shortcut="Ctrl+Shift+O"
-        )
-
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace")
+        self.setShortcut("Ctrl+Shift+O")
         self.triggered.connect(self._handle_open_workspace)
 
 
@@ -102,7 +108,7 @@ class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
     `QPushButton` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
 
         self.setCheckable(True)
@@ -116,14 +122,14 @@ class OpenGithubButton(QPushButton):
     `QPushButton` with default text, icon, that opens the project source code on GitHub when clicked.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent=parent, text="Open Source Code")
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.clicked.connect(self._handle_open_github)
 
-    def _handle_open_github(self):
+    def _handle_open_github(self) -> None:
         QDesktopServices.openUrl("https://github.com/morrowind-modding/numidium")
 
 
@@ -133,7 +139,7 @@ class ChangeDarkModeButton(QPushButton):
     `QPushButton` with default text, icon, that updates Dark Mode setting in application state when clicked.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(text="Dark Mode", parent=parent)
         self.setIcon(QIcon("icons:contrast_24dp.svg"))
         self.setCheckable(True)
@@ -161,7 +167,7 @@ class DockToolbar(QToolBar):
     action_open_workspace: OpenWorkspaceAction
     button_dark_mode: ChangeDarkModeButton
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent: QWidget) -> None:
         super().__init__(parent=parent)
 
         # Setup Widgets
@@ -197,7 +203,7 @@ class StepperItem(QWidget):
         The current validation message.
     """
 
-    valid_changed = Signal(bool)
+    valid_changed = cast(SignalInstance, Signal(bool))
     valid: bool
     validation_message: str
 
@@ -206,7 +212,7 @@ class StepperItem(QWidget):
         self.valid = False
         self.validation_message = ""
 
-    def set_valid(self, valid=True, validation_message=""):
+    def set_valid(self, valid: bool = True, validation_message: str = "") -> None:
         self.valid = valid
         self.validation_message = validation_message
         self.valid_changed.emit(self.valid)
@@ -227,7 +233,7 @@ class Stepper(QWidget):
         The currently shown stepper item.
     """
 
-    stepper_finish_clicked = Signal()
+    stepper_finish_clicked = cast(SignalInstance, Signal())
 
     items: list[StepperItem]
     active_item: StepperItem
@@ -263,10 +269,10 @@ class Stepper(QWidget):
         self._update_active_step()
         self._layout.addWidget(self._container_stepper)
 
-    def _setup_stepper(self):
+    def _setup_stepper(self) -> None:
         self._container_stepper = QWidget()
         layout = QHBoxLayout()
-        layout.setAlignment(Qt.AlignRight)
+        layout.setAlignment(Qt.AlignRight)  # type: ignore[call-overload]
 
         self._label_validation_message = TextBlockLabel("")
         font = self._label_validation_message.font()
@@ -288,27 +294,27 @@ class Stepper(QWidget):
         self._button_right.clicked.connect(self._handle_open_next_step)
         self._button_finish.clicked.connect(self._handle_complete_stepper)
 
-    def _handle_item_valid_changed(self, valid):
+    def _handle_item_valid_changed(self, valid: bool) -> None:
         if self._current_step == self._last_step:
             self._button_finish.setEnabled(valid)
         else:
             self._button_right.setEnabled(valid)
         self._update_active_step()
 
-    def _handle_open_previous_step(self):
+    def _handle_open_previous_step(self) -> None:
         if self._current_step > 1:
             self._current_step -= 1
             self._update_active_step()
 
-    def _handle_open_next_step(self):
+    def _handle_open_next_step(self) -> None:
         if self._current_step < self._last_step:
             self._current_step += 1
             self._update_active_step()
 
-    def _handle_complete_stepper(self):
+    def _handle_complete_stepper(self) -> None:
         self.stepper_finish_clicked.emit()
 
-    def _update_stepper(self):
+    def _update_stepper(self) -> None:
         if self._current_step == 1:
             self._button_left.setEnabled(False)
         else:
@@ -323,7 +329,7 @@ class Stepper(QWidget):
             self._button_finish.setVisible(False)
             self._button_right.setEnabled(self.active_item.valid)
 
-    def _update_active_step(self):
+    def _update_active_step(self) -> None:
         layout = self._container_layout
         for i in range(layout.count()):
             layout.itemAt(i).widget().setVisible(False)
@@ -341,36 +347,39 @@ class Stepper(QWidget):
 class ObjectTableModel(QAbstractTableModel):
     """Convienence class for `QAbstractTableModel` that allows for managing data with an `QTableView` object."""
 
-    def __init__(self, parent, list, header, *args):
-        QAbstractTableModel.__init__(self, parent, *args)
-        self.list = list
+    _list: list[Any]
+    header: list[str]
+
+    def __init__(self, parent: QWidget, items: list[Any], header: list[str]) -> None:
+        QAbstractTableModel.__init__(self, parent)
+        self._list = items
         self.header = header
 
-    def rowCount(self, parent):
-        return len(self.list)
+    def rowCount(self, parent: QModelIndex | QPersistentModelIndex = QPersistentModelIndex()) -> int:
+        return len(self._list)
 
-    def columnCount(self, parent):
-        if self.list:
-            return len(self.list[0])
+    def columnCount(self, parent: QModelIndex | QPersistentModelIndex = QPersistentModelIndex()) -> int:
+        if self._list:
+            return len(self._list[0])
         else:
             return 0
 
-    def data(self, index, role):
+    def data(self, index: QModelIndex | QPersistentModelIndex, role: int = 0) -> Any:
         if not index.isValid():
             return None
-        elif role != Qt.DisplayRole:
+        elif role != Qt.DisplayRole:  # type: ignore[comparison-overlap]
             return None
-        return self.list[index.row()][index.column()]
+        return self._list[index.row()][index.column()]
 
-    def headerData(self, col, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self.header[col]
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = 0) -> Any:
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:  # type: ignore[comparison-overlap]
+            return self.header[section]
         return None
 
-    def sort(self, col, order):
+    def sort(self, col: int, order: Qt.SortOrder = Qt.SortOrder.AscendingOrder) -> None:
         """sort table by given column number col"""
-        if col < len(self.list):
-            self.list = sorted(self.list, key=operator.itemgetter(col))
+        if col < len(self._list):
+            self._list = sorted(self._list, key=operator.itemgetter(col))
             if order == Qt.DescendingOrder:
-                self.list.reverse()
+                self._list.reverse()
             self.dataChanged.emit(QModelIndex(), QModelIndex())

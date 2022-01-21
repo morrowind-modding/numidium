@@ -88,16 +88,10 @@ error_summary = true # default: true
 show_absolute_path = true # default: false
 
 [[tool.mypy.overrides]]
-module = ["numidium.ui.*"]
-ignore_errors = true
-
-[[tool.mypy.overrides]]
 module = [
-    "numidium.ui.state",
+    "numidium.ui.content_browser_dock",
+    "numidium.ui.settings_dock",
+    "numidium.ui.windows.*",
     "numidium.ui.explorer",
-    "numidium.ui.windows.manager",
-    "numidium.ui.activity_bar",
-    "numidium.ui.extensions_dock",
-    "numidium.ui.viewer",
 ]
-ignore_errors = false
+ignore_errors = true

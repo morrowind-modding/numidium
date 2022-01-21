@@ -40,13 +40,13 @@ class AbstractMainWindow(QMainWindow):
     def _setup_actions(self):
         self.action_open_workspace = OpenWorkspaceAction(parent=self)
 
-        self.action_about = QAction(parent=self, text="About")
+        self.action_about = QAction(text="About")
         self.action_about.triggered.connect(self._handle_show_about_window)
 
-        self.action_debug = QAction(parent=self, text="Debug", shortcut="Ctrl+Shift+D")
+        self.action_debug = QAction(text="Debug", shortcut="Ctrl+Shift+D")
         self.action_debug.triggered.connect(self._handle_show_debug_window)
 
-        self.action_exit = QAction(parent=self, text="E&xit", shortcut="Ctrl+Q")
+        self.action_exit = QAction(text="E&xit", shortcut="Ctrl+Q")
         self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
 
     def _setup_menu_bar(self):

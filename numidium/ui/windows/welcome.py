@@ -2,11 +2,10 @@ from datetime import datetime
 from pathlib import Path
 
 from PySide6.QtCore import QSettings, Qt
-from PySide6.QtGui import QIcon, QImage, QPixmap
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
-    QFormLayout,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -15,7 +14,6 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
-    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
@@ -200,8 +198,8 @@ class StartupWidget(QWidget):
         layout.setAlignment(Qt.AlignTop)
 
         subtitle_label = SubtitleLabel("Getting Started")
-        self.open_workspace_button = OpenWorkspaceButton()
-        self.open_github_button = OpenGithubButton()
+        self.open_workspace_button = OpenWorkspaceButton(parent=self)
+        self.open_github_button = OpenGithubButton(parent=self)
         self.open_welcome_on_startup_checkbox = QCheckBox("Show Welcome on Startup")
 
         layout.addWidget(subtitle_label)

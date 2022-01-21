@@ -21,8 +21,8 @@ from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 class ModsDockToolbar(DockToolbar):
     """Convenience class for the toolbar used on the Mods Dock. Contains custom actions and event handlers."""
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent)
 
 
 # TODO: Connect to real data. Implement literally any part of it.
@@ -36,7 +36,7 @@ class InstallersFrame(QFrame):
         super().__init__()
         self.setFrameShadow(QFrame.Shadow.Plain)
         container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignLeft)
+        container_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)  # type: ignore[call-overload]
 
         self._table_installers = QTableView()
         self._table_installers.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -105,7 +105,7 @@ class TabsFrame(QFrame):
         self.setFrameShadow(QFrame.Shadow.Plain)
 
         container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignLeft)
+        container_layout.setAlignment(Qt.AlignLeft)  # type: ignore[call-overload]
 
         # TODO: Implement handling for game engine launcher change.
         self.launcher = Launcher()
@@ -135,7 +135,7 @@ class ModsDock(QMainWindow):
 
         self._container = QWidget()
         self._layout = QHBoxLayout()
-        self._layout.setAlignment(Qt.AlignHCenter)
+        self._layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
 
         # Configure left panel - installers.
         self._installers_frame = InstallersFrame()
@@ -158,16 +158,16 @@ class ModsDock(QMainWindow):
         self._setup_toolbar()
         self._setup_bottom_dock()
 
-    def _setup_toolbar(self):
-        self._toolbar = ModsDockToolbar()
+    def _setup_toolbar(self) -> None:
+        self._toolbar = ModsDockToolbar(parent=self)
         self.addToolBar(self._toolbar)
 
-    def _setup_bottom_dock(self):
+    def _setup_bottom_dock(self) -> None:
         # Dock Widgets
         self._bottom_dock = QDockWidget("Bottom dock")
         self._bottom_dock.setWidget(QTextEdit("This is the bottom widget. -- NI"))
         self._bottom_dock.setAllowedAreas(
-            Qt.DockWidgetArea.LeftDockWidgetArea
+            Qt.DockWidgetArea.LeftDockWidgetArea  # type: ignore[operator]
             | Qt.DockWidgetArea.RightDockWidgetArea
             | Qt.DockWidgetArea.BottomDockWidgetArea
             | Qt.DockWidgetArea.TopDockWidgetArea

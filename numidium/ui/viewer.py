@@ -28,6 +28,7 @@ from numidium.ui.widgets import ObjectTableModel
 class ViewerItem(QWidget):
     name: str = "Unknown"
     filepath: str
+
     def __init__(self, filepath: str) -> None:
         super().__init__()
         self.filepath = filepath
@@ -36,6 +37,7 @@ class ViewerItem(QWidget):
     def get_supported_file_types(cls) -> list[str]:
         logger.error("Method should be overriden.")
         raise NotImplementedError()
+
 
 class TextFileViewer(ViewerItem):
     name: str = "Text Viewer"
@@ -276,6 +278,7 @@ TABLE_INFO = {
 }
 # fmt: on
 
+
 class PluginViewer(ViewerItem):
     name: str = "Plugin Viewer"
 
@@ -290,7 +293,7 @@ class PluginViewer(ViewerItem):
         self.object_type_list = QListWidget()
         self.object_type_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
         self.object_type_list.setSelectionBehavior(QListWidget.SelectionBehavior.SelectRows)
-        self.object_type_list.addItems(TABLE_INFO.keys()) # type: ignore
+        self.object_type_list.addItems(TABLE_INFO.keys())  # type: ignore
 
         self.object_type_list.setCurrentRow(0)
         self.object_type_list.setMaximumWidth(self.object_type_list.sizeHintForColumn(0) + 15)
@@ -335,7 +338,7 @@ class PluginViewer(ViewerItem):
                 object_type_info.get_field_values(obj) for obj in self.plugin.objects if obj.type_name == object_type
             ]
 
-        self.model = ObjectTableModel(self, values, header) # type: ignore
+        self.model = ObjectTableModel(self, values, header)
         self.object_table.setModel(self.model)
         self.object_table.setSortingEnabled(True)
 
@@ -343,18 +346,20 @@ class PluginViewer(ViewerItem):
     def get_supported_file_types(cls) -> list[str]:
         return [".esm", ".esp"]
 
+
 # TODO: Implement auto-scaling of image.
 class ImageViewer(ViewerItem):
     name: str = "Image Viewer"
+
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
 
         self.label = QLabel()
-        self.pixmap = QPixmap(filepath).scaled(QSize(1000,1000), Qt.KeepAspectRatio, Qt.FastTransformation)
+        self.pixmap = QPixmap(filepath).scaled(QSize(1000, 1000), Qt.KeepAspectRatio, Qt.FastTransformation)
         self.label.setPixmap(self.pixmap)
 
         layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignHCenter) # type: ignore[call-overload]
+        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
         layout.addWidget(self.label)
         self.setLayout(layout)
 
@@ -363,14 +368,17 @@ class ImageViewer(ViewerItem):
         # Accepted files taken from: https://doc.qt.io/qt-5/qpixmap.html
         return [".jpg", ".png", ".gif", ".bmp", ".jpeg", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm"]
 
+
 class UnsupportedFileViewer(ViewerItem):
     name: str = "Unsupported File"
+
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
         layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignHCenter) # type: ignore[call-overload]
+        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
         layout.addWidget(QLabel("This file type is not currently supported."))
         self.setLayout(layout)
+
 
 # TODO: Allow extensions to register their own viewers.
 class Viewer(QWidget):
@@ -387,7 +395,7 @@ class Viewer(QWidget):
                 logger.error("Invalid type. Object must subclass ViewerItem.")
                 raise TypeError(viewer_item)
 
-            suffix:str
+            suffix: str
             for suffix in viewer_item.get_supported_file_types():
                 if suffix not in self.type_list:
                     self.type_list[suffix] = []
