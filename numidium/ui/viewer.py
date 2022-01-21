@@ -341,6 +341,7 @@ class PluginViewer(ViewerItem):
     def get_supported_file_types(cls) -> list[str]:
         return [".esm", ".esp"]
 
+# TODO: Implement auto-scaling of image.
 class ImageViewer(ViewerItem):
     def __init__(self, filepath: str) -> None:
         super().__init__("Image Viewer", filepath)
