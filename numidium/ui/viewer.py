@@ -26,11 +26,10 @@ from numidium.ui.widgets import ObjectTableModel
 
 
 class ViewerItem(QWidget):
-    name: str
+    name: str = "Unknown"
     filepath: str
-    def __init__(self, name: str, filepath: str) -> None:
+    def __init__(self, filepath: str) -> None:
         super().__init__()
-        self.name = name or "Unknown"
         self.filepath = filepath
 
     @classmethod
@@ -39,10 +38,11 @@ class ViewerItem(QWidget):
         raise NotImplementedError()
 
 class TextFileViewer(ViewerItem):
+    name: str = "Text Viewer"
     editor: QTextEdit
 
     def __init__(self, filepath: str) -> None:
-        super().__init__("Text Viewer", filepath)
+        super().__init__(filepath)
         self.filepath = filepath
         layout = QVBoxLayout(self)
 
@@ -277,13 +277,15 @@ TABLE_INFO = {
 # fmt: on
 
 class PluginViewer(ViewerItem):
+    name: str = "Plugin Viewer"
+
     object_type_list: QListWidget
     object_table: QTableView
 
     plugin: Plugin
 
     def __init__(self, filepath: str) -> None:
-        super().__init__("Plugin Viewer", filepath)
+        super().__init__(filepath)
         # Setup Object Type List
         self.object_type_list = QListWidget()
         self.object_type_list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
@@ -343,8 +345,9 @@ class PluginViewer(ViewerItem):
 
 # TODO: Implement auto-scaling of image.
 class ImageViewer(ViewerItem):
+    name: str = "Image Viewer"
     def __init__(self, filepath: str) -> None:
-        super().__init__("Image Viewer", filepath)
+        super().__init__(filepath)
 
         self.label = QLabel()
         self.pixmap = QPixmap(filepath).scaled(QSize(1000,1000), Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -361,8 +364,9 @@ class ImageViewer(ViewerItem):
         return [".jpg", ".png", ".gif", ".bmp", ".jpeg", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm"]
 
 class UnsupportedFileViewer(ViewerItem):
+    name: str = "Unsupported File"
     def __init__(self, filepath: str) -> None:
-        super().__init__("Unsupported File", filepath)
+        super().__init__(filepath)
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignHCenter) # type: ignore[call-overload]
         layout.addWidget(QLabel("This file type is not currently supported."))
