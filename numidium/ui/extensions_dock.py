@@ -1,9 +1,9 @@
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QModelIndex, Qt
+from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
     QHBoxLayout,
-    QListWidget,
-    QListWidgetItem,
+    QLabel,
+    QListView,
     QSizePolicy,
     QTextEdit,
     QWidget,
@@ -13,7 +13,7 @@ from numidium.core.extensions import Extension, available_extensions
 from numidium.logger import logger
 
 
-class ExtensionsListItem(QListWidgetItem):
+class ExtensionsListItem(QStandardItem):
     """A custom widget that can be added to the extensions dock list."""
 
     extension: Extension
@@ -22,39 +22,67 @@ class ExtensionsListItem(QListWidgetItem):
         super().__init__()
         self.extension = extension
         self.setText(extension.name)
-        self.setIcon(QIcon("icons:settings_24dp.svg"))
+        self.setIcon(QIcon(extension.icon))
+        self.setCheckable(True)
 
 
 class ExtensionsDock(QWidget):
 
-    _list: QListWidget
-    _text: QTextEdit
+    extension_list: QListView
+    extension_info: QTextEdit
 
     def __init__(self) -> None:
         super().__init__()
 
-        self._list = QListWidget()
-        self._list.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self._list.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-        self._list.currentItemChanged.connect(self.set_current_item)
+        self.extension_list = QListView()
+        self.extension_list.setUniformItemSizes(True)
+        self.extension_list.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.extension_list.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.extension_list.pressed.connect(self._handle_item_clicked)
+        self.extension_list.entered.connect(self._handle_item_mouse_over)
 
-        self._text = QTextEdit()
-        self._text.setReadOnly(True)
-        self._text.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.extension_info = QTextEdit()
+        self.extension_info.setReadOnly(True)
+        self.extension_info.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+        model = QStandardItemModel()
+        model.itemChanged.connect(self._handle_item_changed)
+        self.extension_list.setModel(model)
 
         layout = QHBoxLayout(self)
-        layout.addWidget(self._list)
-        layout.addWidget(self._text)
+        layout.addWidget(self.extension_list)
+        layout.addWidget(self.extension_info)
 
         for extension in available_extensions():
             self.add_item(ExtensionsListItem(extension))
 
+        self.set_current_row(0)  # default to first item
+
     def add_item(self, item: ExtensionsListItem) -> None:
-        self._list.addItem(item)
+        self.extension_list.model().appendRow(item)
 
-    def set_current_item(self, item: ExtensionsListItem) -> None:
+    def set_current_row(self, row: int) -> None:
+        index = self.extension_list.model().index(row, 0)
+        self.extension_list.setCurrentIndex(index)
+        self._handle_item_clicked(index)
+
+    def _handle_item_changed(self, item: ExtensionsListItem) -> None:
+        is_checked = item.checkState() == Qt.Checked
+        is_extension_active = item.extension.active
+
+        if is_checked and not is_extension_active:
+            item.extension.register()
+        elif is_extension_active and not is_checked:
+            item.extension.unregister()
+
+    def _handle_item_mouse_over(self, index: QModelIndex) -> None:
+        pass
+
+    def _handle_item_clicked(self, index: QModelIndex) -> None:
+        model = self.extension_list.model()
+        item = model.itemFromIndex(index)
+
         readme_path = item.extension.path / "README.md"
-
         try:
             readme_text = readme_path.read_text()
         except (OSError, UnicodeDecodeError) as e:
@@ -62,4 +90,4 @@ class ExtensionsDock(QWidget):
             logger.error("Invalid 'README.md' for extension: {}", item.extension.name)
             logger.error(e)
 
-        self._text.setMarkdown(readme_text)
+        self.extension_info.setMarkdown(readme_text)

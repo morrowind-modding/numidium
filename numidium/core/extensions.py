@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import importlib
+import sys
 from dataclasses import dataclass
 from operator import itemgetter
 from pathlib import Path
-from types import ModuleType
-from typing import Iterator, Protocol
+from typing import Iterator, Protocol, cast
 
 import tomlkit
 
@@ -55,8 +56,22 @@ class Extension:
     description: str
     authors: list[str]
 
+    icon: str = "icons:icon.ico"
+
     active: bool = False
     module: ExtensionProtocol | None = None
+
+    def register(self) -> None:
+        logger.info("Registering extension: {}", self.name)
+        self.module = import_module(self.path.stem)
+        self.active = True
+        self.module.register()
+
+    def unregister(self) -> None:
+        logger.info("Unregistering extension: {}", self.name)
+        self.active = False
+        if self.module:
+            self.module.unregister()
 
     @staticmethod
     def from_path(path: Path) -> Extension | None:
@@ -108,3 +123,20 @@ def available_extensions() -> Iterator[Extension]:
     for path in EXTENSIONS_DIR.iterdir():
         if extension := Extension.from_path(path):
             yield extension
+
+
+def import_module(path: str) -> ExtensionProtocol:
+    importlib.invalidate_caches()
+
+    module_name = f"numidium.extensions.{path}"  # TODO: dynamic packages
+    try:
+        module = sys.modules[module_name]
+    except KeyError:
+        module = importlib.import_module(f"numidium.extensions.{path}")
+    else:
+        importlib.reload(module)
+
+    assert callable(module.register)
+    assert callable(module.unregister)
+
+    return cast(ExtensionProtocol, module)

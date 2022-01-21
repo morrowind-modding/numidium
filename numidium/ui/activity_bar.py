@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import cast
+from functools import cache
+from typing import ClassVar, cast
 
 from PySide6.QtCore import QSize, Qt, Signal, SignalInstance
 from PySide6.QtGui import QAction, QFont, QIcon
@@ -64,6 +65,9 @@ class ActivityBar(QDockWidget):
     # Container for associated view widgets.
     _view: QStackedWidget
 
+    # Global instance
+    _instance: ClassVar[ActivityBar]
+
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
 
@@ -113,6 +117,11 @@ class ActivityBar(QDockWidget):
             )
         )
 
+        # Public API Instance Access
+        # TODO: Find a better way.
+
+        type(self)._instance = self
+
     def add_item(self, item: ActivityBarItem) -> None:
         self._list.addItem(item)
         self._view.addWidget(item._widget)
@@ -128,3 +137,7 @@ class ActivityBar(QDockWidget):
         if i != -1:
             self._list.setCurrentRow(i)
             self._view.setCurrentIndex(i)
+
+    @classmethod
+    def instance(cls) -> ActivityBar:
+        return cls._instance

@@ -1,9 +1,15 @@
-import numidium
+from PySide6.QtWidgets import QLabel
+
+from numidium.ui.activity_bar import ActivityBar, ActivityBarItem
+
+item = ActivityBarItem(
+    widget=QLabel("Hello World!"), icon="icons:circle_24dp.svg", text="Custom Activity"
+)
 
 
 def register() -> None:
-    pass
+    ActivityBar.instance().add_item(item)
 
 
 def unregister() -> None:
-    pass
+    ActivityBar.instance().remove_item(item)
