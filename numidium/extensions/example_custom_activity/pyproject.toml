@@ -1,0 +1,5 @@
+[tool.numidium]
+name = "Custom Activity Example"
+version = "0.1.0"
+description = "Add a new item to the activity bar."
+authors = ["Greatness7 <Greatness7@gmail.com>"]
