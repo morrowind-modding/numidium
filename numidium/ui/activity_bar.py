@@ -9,7 +9,6 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QStackedWidget,
-    QToolButton,
     QWidget,
 )
 
@@ -27,7 +26,6 @@ class ActivityBarItem(QListWidgetItem):
     triggered = cast(SignalInstance, Signal())
 
     _action: QAction
-    _button: QToolButton
     _widget: QWidget
 
     def __init__(self, widget: QWidget, icon: QIcon | str, text: str):
@@ -51,11 +49,6 @@ class ActivityBarItem(QListWidgetItem):
         self._action.toggled.connect(self.toggled.emit)
         self._action.triggered.connect(self.triggered.emit)
 
-        # Add the tool button to the activity bar. This lets us show the text within the bar.
-        self._button = QToolButton()
-        self._button.setDefaultAction(self._action)
-        self._button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-
 
 class ActivityBar(QDockWidget):
     """The application's activity bar.
@@ -78,6 +71,7 @@ class ActivityBar(QDockWidget):
 
         self._list = QListWidget(parent=self)
         self._list.setIconSize(QSize(28, 28))
+        self._list.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self._list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self._list.currentItemChanged.connect(self.set_current_item)
 
