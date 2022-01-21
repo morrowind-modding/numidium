@@ -16,8 +16,8 @@ def exec() -> None:
     app.setWindowIcon(QIcon("icons:icon.ico"))
 
     window = ManagerWindow()
-    window.resize(window.screen().availableGeometry().size() / 1.25)
-    window.show()
     window.setWindowTitle("Numidium")
+    window.resize(window.screen().availableGeometry().size() / 1.25)  # TODO: persistent window geometry
+    window.show()
 
     sys.exit(app.exec())
