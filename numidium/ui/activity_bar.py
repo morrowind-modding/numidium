@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 
 from numidium.ui.content_browser_dock import ContentBrowserDock
 from numidium.ui.extensions_dock import ExtensionsDock
-from numidium.ui.modsdock import ModsDock
+from numidium.ui.mods_dock import ModsDock
 from numidium.ui.settings_dock import SettingsDock
 
 
