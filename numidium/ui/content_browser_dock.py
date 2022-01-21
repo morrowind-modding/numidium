@@ -36,12 +36,17 @@ class ContentBrowserDock(QWidget):
                 | Qt.DockWidgetArea.TopDockWidgetArea
             )
 
+        self.viewer = Viewer()
+
         # Layout
         main_win = QMainWindow()
-        main_win.setCentralWidget(Viewer())
+        main_win.setCentralWidget(self.viewer)
         main_win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.left_dock)
         main_win.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.bottom_dock)
 
         layout = QVBoxLayout(self)
         layout.addWidget(main_win)
         layout.setContentsMargins(0, 0, 0, 0)
+
+        # Connect signals.
+        self.explorer.selected_filepath_changed.connect(self.viewer.handle_update_filepath)

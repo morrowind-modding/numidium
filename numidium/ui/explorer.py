@@ -1,6 +1,6 @@
 from functools import partial
 
-from PySide6.QtCore import QPoint, Qt
+from PySide6.QtCore import QPoint, Qt, Signal
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QFileSystemModel,
@@ -19,11 +19,15 @@ class Explorer(QWidget):
     """
     A file explorer widget for the current workspace, including an extensible context menu.
     """
+    selected_filepath_changed = Signal(str)
 
     os_utility: OperatingSystemUtility
     filesystem: QFileSystemModel
     treeview: QTreeView
     message: QLabel
+
+    selected_filepath: str
+    context_filepath: str
 
     def __init__(self) -> None:
         super().__init__()
@@ -49,44 +53,65 @@ class Explorer(QWidget):
         if not index:
             return
 
-        filepath = self.filesystem.filePath(index)
+        self.filepath = self.filesystem.filePath(index)
 
         menu = QMenu()
 
         # Application actions.
         action_view = QAction("View", self)
         menu.addAction(action_view)
-
-        action_view.triggered.connect(partial(self._handle_context_view, filepath))
+        action_view.triggered.connect(self._handle_context_view)
 
         menu.addSeparator()
 
-        # System actions.
+        # System Open actions.
         action_open_os_default = QAction("Open with System...", self)
         menu.addAction(action_open_os_default)
+        action_open_os_default.triggered.connect(self._handle_context_open_filepath)
+
         action_open_os_explorer = QAction("Reveal in System Explorer", self)
         menu.addAction(action_open_os_explorer)
+        action_open_os_explorer.triggered.connect(self._handle_context_open_explorer)
 
-        action_open_os_default.triggered.connect(partial(self._handle_context_open_filepath, filepath))
-        action_open_os_explorer.triggered.connect(partial(self._handle_context_open_explorer, filepath))
+        menu.addSeparator()
+
+        # System Cut/Copy actions.
+        action_cut = QAction("Cut", self)
+        menu.addAction(action_cut)
+        action_copy = QAction("Copy", self)
+        menu.addAction(action_copy)
+        action_copy_path = QAction("Copy Path", self)
+        menu.addAction(action_copy_path)
+        action_copy_relative_path = QAction("Copy Relative Path", self)
+        menu.addAction(action_copy_relative_path)
+
+        menu.addSeparator()
+
+        # System dangerous actions: rename, delete. Requires confirmations.
+        action_rename = QAction("Rename", self)
+        menu.addAction(action_rename)
+        action_delete = QAction("Delete", self)
+        menu.addAction(action_delete)
+
 
         menu.exec_(self.treeview.viewport().mapToGlobal(position))
 
     def _handle_context_view(self, filepath: str) -> None:
-        AppSettings().active_file = filepath
+        self.context_filepath = filepath
 
-    def _handle_context_open_filepath(self, filepath: str) -> None:
-        self.os_utility.open_filepath_with_default_application(filepath)
+    def _handle_context_open_filepath(self) -> None:
+        self.os_utility.open_filepath_with_default_application(self.context_filepath)
 
-    def _handle_context_open_explorer(self, filepath: str) -> None:
-        self.os_utility.open_filepath_with_explorer(filepath)
+    def _handle_context_open_explorer(self) -> None:
+        self.os_utility.open_filepath_with_explorer(self.context_filepath)
 
     def _handle_update_workspace(self, workspace: str) -> None:
         self.update_ui(workspace)
 
-    def _handle_select_file(self, item: str) -> None:
+    def _handle_select_file(self) -> None:
         index = self.treeview.selectedIndexes()[0]
-        AppSettings().active_file = self.filesystem.filePath(index)  # type: ignore[arg-type]
+        self.selected_filepath = self.filesystem.filePath(index)  # type: ignore[arg-type]
+        self.selected_filepath_changed.emit(self.selected_filepath)
 
     def update_ui(self, workspace: str) -> None:
         layout = self.layout()
