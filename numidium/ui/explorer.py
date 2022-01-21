@@ -65,7 +65,7 @@ class Explorer(QWidget):
         menu.addSeparator()
 
         # System Open actions.
-        action_open_os_default = QAction("Open with System...", self)
+        action_open_os_default = QAction("Open with Default Application", self)
         menu.addAction(action_open_os_default)
         action_open_os_default.triggered.connect(self._handle_context_open_filepath)
 
