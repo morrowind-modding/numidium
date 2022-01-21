@@ -132,7 +132,7 @@ def import_module(path: str) -> ExtensionProtocol:
     try:
         module = sys.modules[module_name]
     except KeyError:
-        module = importlib.import_module(f"numidium.extensions.{path}")
+        module = importlib.import_module(module_name)
     else:
         importlib.reload(module)
 
