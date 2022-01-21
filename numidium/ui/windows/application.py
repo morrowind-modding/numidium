@@ -13,7 +13,7 @@ class ApplicationWindow(AbstractMainWindow):
         super().__init__(*args, **kwargs)
 
         # Setup activity bar
-        self.activity_bar = ActivityBar(parent=self)
+        self.activity_bar = ActivityBar()
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.activity_bar)
         self.central_window.setCentralWidget(self.activity_bar._view)
 

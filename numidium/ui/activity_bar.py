@@ -68,8 +68,8 @@ class ActivityBar(QDockWidget):
     # Global instance
     _instance: ClassVar[ActivityBar]
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
+    def __init__(self) -> None:
+        super().__init__()
 
         self._list = QListWidget()
         self._list.setIconSize(QSize(28, 28))
