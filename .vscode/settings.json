@@ -4,9 +4,10 @@
     "python.formatting.provider": "black",
     "python.linting.enabled": true,
     "python.linting.lintOnSave": true,
-    "python.linting.ignorePatterns": [
-        "**/site-packages/**/*.py",
-        "numidium/ui/**/*.py",
+    "python.linting.mypyArgs": [
+        "--config-file=${workspaceFolder}/pyproject.toml",
+        "--follow-imports=silent",
+        "--no-pretty"
     ],
     "python.linting.mypyEnabled": true,
     "[python]": {
