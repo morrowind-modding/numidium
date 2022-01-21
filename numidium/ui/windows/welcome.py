@@ -198,8 +198,8 @@ class StartupWidget(QWidget):
         layout.setAlignment(Qt.AlignTop)
 
         subtitle_label = SubtitleLabel("Getting Started")
-        self.open_workspace_button = OpenWorkspaceButton(parent=self)
-        self.open_github_button = OpenGithubButton(parent=self)
+        self.open_workspace_button = OpenWorkspaceButton()
+        self.open_github_button = OpenGithubButton()
         self.open_welcome_on_startup_checkbox = QCheckBox("Show Welcome on Startup")
 
         layout.addWidget(subtitle_label)
@@ -267,7 +267,7 @@ class WelcomeWindow(AbstractMainWindow):
         This requires multiple layers of layout nesting and adjustments to work with the panel border.
         """
         # Create outermost layout with vertical and horizontal center.
-        container = QWidget(parent=self)
+        container = QWidget()
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignHCenter)
 

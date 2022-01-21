@@ -79,8 +79,8 @@ class OpenWorkspaceObject(QWidget):
     Base object that provides an 'open workspace' shared event handler for subclassing classes. Event handler selects Directory using a file dialog and updates application state.
     """
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent=parent)
+    def __init__(self) -> None:
+        super().__init__()
 
     def _handle_open_workspace(self) -> None:
         workspace = QFileDialog.getExistingDirectory(
@@ -96,8 +96,8 @@ class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
     `QAction` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace")
+    def __init__(self) -> None:
+        super().__init__(icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace")
         self.setShortcut("Ctrl+Shift+O")
         self.triggered.connect(self._handle_open_workspace)
 
@@ -108,8 +108,8 @@ class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
     `QPushButton` with default text, icon, shortcut, that implements `OpenWorkspaceObject` event handler.
     """
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent=parent, icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
+    def __init__(self) -> None:
+        super().__init__(icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
@@ -122,8 +122,8 @@ class OpenGithubButton(QPushButton):
     `QPushButton` with default text, icon, that opens the project source code on GitHub when clicked.
     """
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent=parent, text="Open Source Code")
+    def __init__(self) -> None:
+        super().__init__(text="Open Source Code")
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
@@ -139,8 +139,8 @@ class ChangeDarkModeButton(QPushButton):
     `QPushButton` with default text, icon, that updates Dark Mode setting in application state when clicked.
     """
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(text="Dark Mode", parent=parent)
+    def __init__(self) -> None:
+        super().__init__(text="Dark Mode")
         self.setIcon(QIcon("icons:contrast_24dp.svg"))
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
@@ -167,24 +167,24 @@ class DockToolbar(QToolBar):
     action_open_workspace: OpenWorkspaceAction
     button_dark_mode: ChangeDarkModeButton
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent=parent)
+    def __init__(self) -> None:
+        super().__init__()
 
         # Setup Widgets
-        self.action_open_workspace = OpenWorkspaceAction(parent=self)
+        self.action_open_workspace = OpenWorkspaceAction()
         self.addAction(self.action_open_workspace)
         self.addSeparator()
 
         # TODO: Implement ability to add custom actions and widgets here.
 
         # Fill the rest with a spacer.
-        spacer = QToolButton(parent=self)
+        spacer = QToolButton()
         spacer.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         spacer.setEnabled(False)
         self.addWidget(spacer)
 
         # Add dark mode toggle at the end.
-        self.button_dark_mode = ChangeDarkModeButton(parent=self)
+        self.button_dark_mode = ChangeDarkModeButton()
         self.addWidget(self.button_dark_mode)
 
 
@@ -351,7 +351,7 @@ class ObjectTableModel(QAbstractTableModel):
     header: list[str]
 
     def __init__(self, parent: QWidget, items: list[Any], header: list[str]) -> None:
-        QAbstractTableModel.__init__(self, parent)
+        super().__init__(parent)
         self._list = items
         self.header = header
 

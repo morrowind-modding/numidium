@@ -21,8 +21,8 @@ from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 class ModsDockToolbar(DockToolbar):
     """Convenience class for the toolbar used on the Mods Dock. Contains custom actions and event handlers."""
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
+    def __init__(self) -> None:
+        super().__init__()
 
 
 # TODO: Connect to real data. Implement literally any part of it.
@@ -159,7 +159,7 @@ class ModsDock(QMainWindow):
         self._setup_bottom_dock()
 
     def _setup_toolbar(self) -> None:
-        self._toolbar = ModsDockToolbar(parent=self)
+        self._toolbar = ModsDockToolbar()
         self.addToolBar(self._toolbar)
 
     def _setup_bottom_dock(self) -> None:

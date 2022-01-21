@@ -38,7 +38,7 @@ class AbstractMainWindow(QMainWindow):
         self._load_state()
 
     def _setup_actions(self):
-        self.action_open_workspace = OpenWorkspaceAction(parent=self)
+        self.action_open_workspace = OpenWorkspaceAction()
 
         self.action_about = QAction(text="About")
         self.action_about.triggered.connect(self._handle_show_about_window)
@@ -50,7 +50,7 @@ class AbstractMainWindow(QMainWindow):
         self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
 
     def _setup_menu_bar(self):
-        self.menu_bar = QMenuBar(parent=self)
+        self.menu_bar = QMenuBar()
 
         # File Menu
         menu_file = self.menu_bar.addMenu("&File")
@@ -68,7 +68,7 @@ class AbstractMainWindow(QMainWindow):
         self.setMenuBar(self.menu_bar)
 
     def _setup_status_bar(self):
-        self.status_bar = QStatusBar(parent=self)
+        self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
     def _load_state(self):
@@ -81,7 +81,7 @@ class AbstractMainWindow(QMainWindow):
     def _load_state_recent_workspaces(self):
         self.menu_bar_recent_workspaces.clear()
         for recent_workspace in AppSettings().recent_workspaces:
-            action = QAction(text=recent_workspace, parent=self)
+            action = QAction(text=recent_workspace)
             action.triggered.connect(self._handle_change_workspace)
             self.menu_bar_recent_workspaces.addAction(action)
 
