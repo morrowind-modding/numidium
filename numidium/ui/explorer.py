@@ -78,20 +78,30 @@ class Explorer(QWidget):
         # System Cut/Copy actions.
         action_cut = QAction("Cut", self)
         menu.addAction(action_cut)
+        action_cut.setEnabled(False)
+
         action_copy = QAction("Copy", self)
         menu.addAction(action_copy)
+        action_copy.setEnabled(False)
+
         action_copy_path = QAction("Copy Path", self)
         menu.addAction(action_copy_path)
+        action_copy_path.setEnabled(False)
+
         action_copy_relative_path = QAction("Copy Relative Path", self)
         menu.addAction(action_copy_relative_path)
+        action_copy_relative_path.setEnabled(False)
 
         menu.addSeparator()
 
         # System dangerous actions: rename, delete. Requires confirmations.
         action_rename = QAction("Rename", self)
         menu.addAction(action_rename)
+        action_rename.setEnabled(False)
+
         action_delete = QAction("Delete", self)
         menu.addAction(action_delete)
+        action_delete.setEnabled(False)
 
 
         menu.exec_(self.treeview.viewport().mapToGlobal(position))
