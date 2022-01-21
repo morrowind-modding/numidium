@@ -155,7 +155,7 @@ class MorrowindIni(IniFile):
         super().save(writer)
 
     def _sync_archives(self) -> None:
-        """Synchronize the 'Archives' section with the `archives` list."""
+        """Synchronize the 'Archives' section with our `archives` list."""
         section = self.sections["Archives"]
         values = self._get_commented_values(section)
         section.lines = [
@@ -164,7 +164,7 @@ class MorrowindIni(IniFile):
         ]
 
     def _sync_game_files(self) -> None:
-        """Synchronize the 'Game Files' section with the `game_files` list."""
+        """Synchronize the 'Game Files' section with our `game_files` list."""
         section = self.sections["Game Files"]
         values = self._get_commented_values(section)
         section.lines = [

@@ -67,13 +67,13 @@ class ActivityBar(QDockWidget):
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
 
-        self._view = QStackedWidget(parent=self)
-
-        self._list = QListWidget(parent=self)
+        self._list = QListWidget()
         self._list.setIconSize(QSize(28, 28))
         self._list.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self._list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self._list.currentItemChanged.connect(self.set_current_item)
+
+        self._view = QStackedWidget()
 
         # Customize Look
 

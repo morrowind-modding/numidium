@@ -25,7 +25,6 @@ class PlaceholderWidget(QWidget):
         self.setLayout(layout)
 
 
-
 class TextBlockLabel(QLabel):
     """Convenience subclass for `QLabel`.
 
