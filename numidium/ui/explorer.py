@@ -1,16 +1,22 @@
-from functools import partial
+from os import path
+from pathlib import Path
 
-from PySide6.QtCore import QPoint, Qt, Signal
-from PySide6.QtGui import QAction
+from PySide6.QtCore import QFile, QPoint, Qt, Signal
+from PySide6.QtGui import QAction, QClipboard, QGuiApplication
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QFileSystemModel,
+    QInputDialog,
     QLabel,
+    QLineEdit,
     QMenu,
+    QMessageBox,
     QTreeView,
     QVBoxLayout,
     QWidget,
 )
 
+from numidium.logger import logger
 from numidium.ui.state import AppSettings
 from numidium.ui.utility import OperatingSystemUtility
 
@@ -36,6 +42,13 @@ class Explorer(QWidget):
         self.os_utility = OperatingSystemUtility()
         self.filesystem = QFileSystemModel()
         self.treeview = QTreeView()
+        self.filesystem.setReadOnly(False)
+        self.treeview.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.treeview.setDragEnabled(True)
+        self.treeview.setDropIndicatorShown(True)
+        self.treeview.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
+        self.treeview.setAcceptDrops(True)
+
         self.message = QLabel("Open a workspace to begin.")
 
         self.update_ui(AppSettings().workspace)
@@ -53,7 +66,7 @@ class Explorer(QWidget):
         if not index:
             return
 
-        self.filepath = self.filesystem.filePath(index)
+        self.context_filepath = self.filesystem.filePath(index)
 
         menu = QMenu()
 
@@ -86,34 +99,80 @@ class Explorer(QWidget):
 
         action_copy_path = QAction("Copy Path", self)
         menu.addAction(action_copy_path)
-        action_copy_path.setEnabled(False)
+        action_copy_path.triggered.connect(self._handle_context_copy_path)
 
         action_copy_relative_path = QAction("Copy Relative Path", self)
         menu.addAction(action_copy_relative_path)
-        action_copy_relative_path.setEnabled(False)
+        action_copy_relative_path.triggered.connect(self._handle_context_copy_relative_path)
 
         menu.addSeparator()
 
         # System dangerous actions: rename, delete. Requires confirmations.
         action_rename = QAction("Rename", self)
         menu.addAction(action_rename)
-        action_rename.setEnabled(False)
+        action_rename.triggered.connect(self._handle_context_rename)
 
         action_delete = QAction("Delete", self)
         menu.addAction(action_delete)
-        action_delete.setEnabled(False)
+        action_delete.triggered.connect(self._handle_context_delete)
 
 
         menu.exec_(self.treeview.viewport().mapToGlobal(position))
 
-    def _handle_context_view(self, filepath: str) -> None:
-        self.context_filepath = filepath
+    def _handle_context_view(self) -> None:
+        self._handle_select_file()
 
     def _handle_context_open_filepath(self) -> None:
         self.os_utility.open_filepath_with_default_application(self.context_filepath)
 
     def _handle_context_open_explorer(self) -> None:
         self.os_utility.open_filepath_with_explorer(self.context_filepath)
+
+    def _handle_context_copy_path(self) -> None:
+        clipboard: QClipboard = QGuiApplication.clipboard()
+        clipboard.setText(self.context_filepath)
+
+    # TODO: Replace os.path with something else?
+    def _handle_context_copy_relative_path(self) -> None:
+        clipboard: QClipboard = QGuiApplication.clipboard()
+        workspace: str = AppSettings().workspace
+        relative_filepath: str = path.relpath(self.context_filepath, workspace)
+        clipboard.setText(relative_filepath)
+
+    def _handle_context_rename(self) -> None:
+        path: Path = Path(self.context_filepath)
+        name: str = path.name
+        directory: str = path.parent
+        text, ok = QInputDialog.getText(self, "Rename File", "Enter a new file name:", QLineEdit.EchoMode.Normal, name)
+        if ok:
+            new_path: Path = Path.joinpath(directory, text)
+            path.rename(new_path)
+            logger.debug("Renamed {path} to {new_path}", path=self.context_filepath, new_path = new_path)
+
+
+    def _handle_context_delete(self) -> None:
+        msgBox = QMessageBox()
+        msgBox.setText("Are you sure you want to delete this file? It will be placed in your system recycling bin.")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Cancel)
+        result: int = msgBox.exec()
+
+        match result:
+            case QMessageBox.Yes:
+                # Save was clicked. Commit the action.
+                file: QFile = QFile(self.context_filepath)
+                trashed: bool = file.moveToTrash()
+                if not trashed:
+                    logger.error("Unable to delete file: {file}", file=self.context_filepath)
+                else:
+                    logger.debug("Deleted file: {path}", path=self.context_filepath)
+
+            case QMessageBox.Cancel:
+                # Cancel was clicked. Return.
+                return
+            case _:
+                # should never be reached
+                raise Exception("Invalid message box result when deleting file.")
 
     def _handle_update_workspace(self, workspace: str) -> None:
         self.update_ui(workspace)
