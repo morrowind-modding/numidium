@@ -61,6 +61,16 @@
                 "clear": true,
                 "focus": true
             }
-        }
+        },
+        {
+            "label": "docs",
+            "type": "shell",
+            "command": "poetry run mkdocs build; poetry run mkdocs serve",
+            "presentation": {
+                "showReuseMessage": false,
+                "clear": true,
+                "focus": true
+            }
+        },
     ]
 }

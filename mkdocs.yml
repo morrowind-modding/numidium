@@ -1,0 +1,10 @@
+site_name: Numidium
+theme:
+  name: material
+  features:
+    - navigation.instant
+    # - navigation.tabs
+plugins:
+  - search
+  - awesome-pages
+  - mkdocstrings

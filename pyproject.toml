@@ -14,9 +14,14 @@ tomlkit = "^0.8.0"
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
 isort = "^5.10.1"
+mkdocs = "^1.2.3"
+mkdocs-awesome-pages-plugin = "^2.6.1"
+mkdocs-material = "^8.1.7"
+mkdocstrings = "^0.17.0"
 mypy = "^0.931"
 pyinstaller = "^4.8"
 pytest = "^6.2.5"
+pytkdocs = { git = "https://github.com/Greatness7/pytkdocs.git" }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
