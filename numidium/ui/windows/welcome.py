@@ -44,6 +44,7 @@ class ConfigurationStepOneWidget(StepperItem):
         self.label_description = TextBlockLabel(
             "Welcome to Numidium! This multi-tool offers the ability to manage and edit your Morrowind mods, while remaining highly extensible through plugins and user settings. To get started, open a workspace! Workspaces represent a particular install of Morrowind. Simply navigate to the folder that contains your Morrowind.exe file and choose open directory. Note: After setting up your first workspace, you will be able to open and manage multiple workspaces."
         )
+        self.label_description.adjustSize()
 
         workspace_container = QWidget()
         workspace_container_layout = QHBoxLayout()
@@ -272,7 +273,7 @@ class WelcomeWindow(AbstractMainWindow):
         layout.setAlignment(Qt.AlignHCenter)
 
         # Create panel widget box & layout with fixed size (relative to screen size)
-        panel_height = 500
+        panel_height = 600
         panel_width = 800
         spacer_height = container.height() / 2 - panel_height
         central_widget = QWidget()
