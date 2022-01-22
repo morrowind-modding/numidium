@@ -117,22 +117,24 @@ class ActivityBar(QDockWidget):
             )
         )
 
-        # Public API Instance Access
-        # TODO: Find a better way.
-
-        type(self)._instance = self
+        # Make accessible to extensions.
+        # TODO: Figure out a proper api.
+        type(self)._instance = getattr(self, "_instance", self)  # type: ignore
 
     def add_item(self, item: ActivityBarItem) -> None:
+        """Add a new item to the activity bar."""
         self._list.addItem(item)
         self._view.addWidget(item._widget)
 
     def remove_item(self, item: ActivityBarItem) -> None:
+        """Remove an item from the activity bar."""
         i = self._list.indexFromItem(item).row()
         if i != -1:
             self._list.takeItem(i)
             self._view.removeWidget(item._widget)
 
     def set_current_item(self, item: ActivityBarItem) -> None:
+        """Set the currently active item in the activity bar."""
         i = self._list.indexFromItem(item).row()
         if i != -1:
             self._list.setCurrentRow(i)
@@ -140,4 +142,5 @@ class ActivityBar(QDockWidget):
 
     @classmethod
     def instance(cls) -> ActivityBar:
+        """Get the main application's ActivityBar instance."""
         return cls._instance
