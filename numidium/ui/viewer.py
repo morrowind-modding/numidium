@@ -401,12 +401,9 @@ class Viewer(QWidget):
                     self.type_list[suffix] = []
                 self.type_list[suffix].append(viewer_item)
 
-        self.update_ui(AppSettings().active_file)
         self.setLayout(layout)
 
-        AppSettings().active_file_changed.connect(self._handle_update_active_file)
-
-    def _handle_update_active_file(self, filepath: str) -> None:
+    def handle_update_filepath(self, filepath: str) -> None:
         self.update_ui(filepath)
 
     def update_ui(self, filepath: str) -> None:

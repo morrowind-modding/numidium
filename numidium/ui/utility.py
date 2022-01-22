@@ -13,8 +13,8 @@ class OperatingSystemUtility:
         self._open_filepath_with_os(filepath)
 
     def open_filepath_with_explorer(self, filepath: str) -> None:
-        directory = Path(filepath).parent
-        self._open_filepath_with_os(str(directory))
+        directory: str = Path(filepath).parent
+        self._open_filepath_with_os(directory)
 
     def _open_filepath_with_os(self, filepath: str) -> None:
         if platform.system() == "Darwin":  # macOS
