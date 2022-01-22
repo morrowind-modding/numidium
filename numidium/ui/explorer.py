@@ -25,6 +25,7 @@ class Explorer(QWidget):
     """
     A file explorer widget for the current workspace, including an extensible context menu.
     """
+
     selected_filepath_changed = Signal(str)
 
     os_utility: OperatingSystemUtility
@@ -116,7 +117,6 @@ class Explorer(QWidget):
         menu.addAction(action_delete)
         action_delete.triggered.connect(self._handle_context_delete)
 
-
         menu.exec_(self.treeview.viewport().mapToGlobal(position))
 
     def _handle_context_view(self) -> None:
@@ -147,8 +147,7 @@ class Explorer(QWidget):
         if ok:
             new_path: Path = Path.joinpath(directory, text)
             path.rename(new_path)
-            logger.debug("Renamed {path} to {new_path}", path=self.context_filepath, new_path = new_path)
-
+            logger.debug("Renamed {path} to {new_path}", path=self.context_filepath, new_path=new_path)
 
     def _handle_context_delete(self) -> None:
         msgBox = QMessageBox()
@@ -157,22 +156,20 @@ class Explorer(QWidget):
         msgBox.setDefaultButton(QMessageBox.Cancel)
         result: int = msgBox.exec()
 
-        match result:
-            case QMessageBox.Yes:
-                # Save was clicked. Commit the action.
-                file: QFile = QFile(self.context_filepath)
-                trashed: bool = file.moveToTrash()
-                if not trashed:
-                    logger.error("Unable to delete file: {file}", file=self.context_filepath)
-                else:
-                    logger.debug("Deleted file: {path}", path=self.context_filepath)
-
-            case QMessageBox.Cancel:
-                # Cancel was clicked. Return.
-                return
-            case _:
-                # should never be reached
-                raise Exception("Invalid message box result when deleting file.")
+        if result == QMessageBox.Yes:
+            # Save was clicked. Commit the action.
+            file: QFile = QFile(self.context_filepath)
+            trashed: bool = file.moveToTrash()
+            if not trashed:
+                logger.error("Unable to delete file: {file}", file=self.context_filepath)
+            else:
+                logger.debug("Deleted file: {path}", path=self.context_filepath)
+        elif result == QMessageBox.Cancel:
+            # Cancel was clicked. Return.
+            return
+        else:
+            # should never be reached
+            raise Exception("Invalid message box result when deleting file.")
 
     def _handle_update_workspace(self, workspace: str) -> None:
         self.update_ui(workspace)
