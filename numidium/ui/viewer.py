@@ -3,14 +3,12 @@ from pathlib import Path
 from typing import Any
 
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QImage, QImageReader, QPixmap
 from PySide6.QtWidgets import (
-    QDockWidget,
     QHBoxLayout,
     QHeaderView,
     QLabel,
     QListWidget,
-    QMainWindow,
     QTableView,
     QTabWidget,
     QTextEdit,
@@ -19,7 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from numidium.logger import logger
-from numidium.tes3 import Plugin
+from numidium.tes3 import Plugin, dds
 from numidium.tes3.esp.object import TES3Object
 from numidium.ui.state import AppSettings
 from numidium.ui.widgets import ObjectTableModel
@@ -34,7 +32,7 @@ class ViewerItem(QWidget):
         self.filepath = filepath
 
     @classmethod
-    def get_supported_file_types(cls) -> list[str]:
+    def get_supported_file_types(cls) -> tuple[str, ...]:
         logger.error("Method should be overriden.")
         raise NotImplementedError()
 
@@ -81,8 +79,8 @@ class TextFileViewer(ViewerItem):
         self.editor.update()
 
     @classmethod
-    def get_supported_file_types(cls) -> list[str]:
-        return [".txt", ".log", ".md"]
+    def get_supported_file_types(cls) -> tuple[str, ...]:
+        return (".txt", ".log", ".md")
 
 
 class TableInfo:
@@ -343,8 +341,8 @@ class PluginViewer(ViewerItem):
         self.object_table.setSortingEnabled(True)
 
     @classmethod
-    def get_supported_file_types(cls) -> list[str]:
-        return [".esm", ".esp"]
+    def get_supported_file_types(cls) -> tuple[str, ...]:
+        return (".esm", ".esp")
 
 
 # TODO: Implement auto-scaling of image.
@@ -354,8 +352,17 @@ class ImageViewer(ViewerItem):
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
 
+        if Path(filepath).suffix.lower() == ".dds":
+            self.pixmap = self._load_dds(filepath)
+        else:
+            self.pixmap = QPixmap(filepath)
+
+        size = self.pixmap.size()
+        if size.width() > 768:
+            size = QSize(768, size.height())
+            self.pixmap = self.pixmap.scaled(size, Qt.KeepAspectRatio, Qt.FastTransformation)
+
         self.label = QLabel()
-        self.pixmap = QPixmap(filepath).scaled(QSize(1000, 1000), Qt.KeepAspectRatio, Qt.FastTransformation)
         self.label.setPixmap(self.pixmap)
 
         layout = QVBoxLayout(self)
@@ -364,9 +371,17 @@ class ImageViewer(ViewerItem):
         self.setLayout(layout)
 
     @classmethod
-    def get_supported_file_types(cls) -> list[str]:
+    def get_supported_file_types(cls) -> tuple[str, ...]:
         # Accepted files taken from: https://doc.qt.io/qt-5/qpixmap.html
-        return [".jpg", ".png", ".gif", ".bmp", ".jpeg", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm"]
+        # + dds
+        return (".jpg", ".png", ".gif", ".bmp", ".jpeg", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm", ".dds")
+
+    @staticmethod
+    def _load_dds(filepath: str) -> QPixmap:
+        data, width, height = dds.decompress(filepath)
+        image = QImage(data, width, height, QImage.Format.Format_ARGB32)
+        image.rgbSwapped_inplace()
+        return QPixmap.fromImage(image)
 
 
 class UnsupportedFileViewer(ViewerItem):
