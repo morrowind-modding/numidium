@@ -348,13 +348,14 @@ class PluginViewer(ViewerItem):
     def get_supported_file_types(cls) -> tuple[str, ...]:
         return (".esm", ".esp")
 
-
+# TODO: Fix default size.
 class ImageViewport(QGraphicsView):
     """An image viewer that supports panning and zooming."""
 
     item: QGraphicsPixmapItem
     zoom: int = 0
 
+    # TODO: Use or remove.
     supported_formats: list[str] = [fmt.data().decode() for fmt in QImageReader().supportedImageFormats()]
     supported_formats += ["dds"]
 

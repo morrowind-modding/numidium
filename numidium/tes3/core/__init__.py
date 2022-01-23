@@ -8,6 +8,7 @@ from numidium.tes3.ini import MorrowindIni
 __all__ = ["MorrowindInstall"]
 
 
+# TODO: Add unit tests.
 class MorrowindInstall:
     """An in-memory representation of a Morrowind install.
 
