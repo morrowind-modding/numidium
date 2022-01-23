@@ -3,8 +3,12 @@ from pathlib import Path
 from typing import Any
 
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QImage, QImageReader, QPixmap
+from PySide6.QtGui import QImage, QImageReader, QPixmap, QWheelEvent
 from PySide6.QtWidgets import (
+    QFrame,
+    QGraphicsPixmapItem,
+    QGraphicsScene,
+    QGraphicsView,
     QHBoxLayout,
     QHeaderView,
     QLabel,
@@ -344,30 +348,65 @@ class PluginViewer(ViewerItem):
     def get_supported_file_types(cls) -> tuple[str, ...]:
         return (".esm", ".esp")
 
+class ImageViewport(QGraphicsView):
+    """An image viewer that supports panning and zooming."""
 
-# TODO: Implement auto-scaling of image.
+    item: QGraphicsPixmapItem
+    zoom: int = 0
+
+    supported_formats: list[str] = [fmt.data().decode() for fmt in QImageReader().supportedImageFormats()]
+    supported_formats += ["dds"]
+
+    def __init__(self, parent) -> None:
+        super().__init__(parent)
+
+        self.item = QGraphicsPixmapItem()
+        self.zoom = 0
+
+        self.setScene(QGraphicsScene())
+        self.scene().addItem(self.item)
+
+        self.setFrameShape(QFrame.NoFrame)
+        self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def setPixmap(self, pixmap: QPixmap | None = None) -> None:
+        self.zoom = 0
+        if pixmap and not pixmap.isNull():
+            self.setDragMode(QGraphicsView.ScrollHandDrag)
+            self.item.setPixmap(pixmap)
+            self.setSceneRect(pixmap.rect())
+            if not self.parent().rect().contains(pixmap.rect()):
+                self.fitInView(self.item, Qt.AspectRatioMode.KeepAspectRatio)
+        else:
+            self.setDragMode(QGraphicsView.NoDrag)
+            self.item.setPixmap(QPixmap())
+
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        if not self.item.pixmap().isNull():
+            if event.angleDelta().y() > 0:
+                self.zoom += 1
+                self.scale(1.20, 1.20)
+            else:
+                self.zoom -= 1
+                self.scale(0.80, 0.80)
+
 class ImageViewer(ViewerItem):
     name: str = "Image Viewer"
 
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
+        layout = QVBoxLayout()
 
-        if Path(filepath).suffix.lower() == ".dds":
-            self.pixmap = self._load_dds(filepath)
+        self.viewer = ImageViewport(parent=self)
+        if filepath.lower().endswith(".dds"):
+            self.viewer.setPixmap(self._load_dds(filepath))
         else:
-            self.pixmap = QPixmap(filepath)
+            self.viewer.setPixmap(QPixmap(filepath))
 
-        size = self.pixmap.size()
-        if size.width() > 768:
-            size = QSize(768, size.height())
-            self.pixmap = self.pixmap.scaled(size, Qt.KeepAspectRatio, Qt.FastTransformation)
-
-        self.label = QLabel()
-        self.label.setPixmap(self.pixmap)
-
-        layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
-        layout.addWidget(self.label)
+        layout.addWidget(self.viewer)
         self.setLayout(layout)
 
     @classmethod
