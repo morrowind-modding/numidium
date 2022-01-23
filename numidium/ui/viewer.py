@@ -386,22 +386,14 @@ class Viewer(QWidget):
 
     def __init__(self) -> None:
         super().__init__()
-        layout = QVBoxLayout(self)
         self.type_list = {}
+        self.setLayout(QVBoxLayout(self))
 
-        viewer_item: type[object]
-        for viewer_item in (PluginViewer, TextFileViewer, ImageViewer):
-            if not issubclass(viewer_item, ViewerItem):
-                logger.error("Invalid type. Object must subclass ViewerItem.")
-                raise TypeError(viewer_item)
+        viewer_items: tuple[type[ViewerItem], ...] = (PluginViewer, TextFileViewer, ImageViewer)
 
-            suffix: str
+        for viewer_item in viewer_items:
             for suffix in viewer_item.get_supported_file_types():
-                if suffix not in self.type_list:
-                    self.type_list[suffix] = []
-                self.type_list[suffix].append(viewer_item)
-
-        self.setLayout(layout)
+                self.type_list.setdefault(suffix, []).append(viewer_item)
 
     def handle_update_filepath(self, filepath: str) -> None:
         self.update_ui(filepath)
