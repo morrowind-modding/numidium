@@ -175,4 +175,4 @@ __all__ = [
     "WeaponType",
     "WeatherChances",
     "WorldMapData",
-]  # fmt: skip
+]
