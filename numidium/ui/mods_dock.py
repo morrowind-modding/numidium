@@ -73,6 +73,7 @@ class Launcher(QWidget):
         container_layout.addWidget(button_launch)
         self.setLayout(container_layout)
 
+
 # TODO: Improve layout. Perhaps some gallery style widget.
 class ScreenshotTab(QWidget):
     """Widget that shows the screenshots folder for the current workspace, with the ability to select and view a screenshot."""
