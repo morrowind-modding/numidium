@@ -77,32 +77,6 @@ class Launcher(QWidget):
         self.setLayout(container_layout)
 
 
-# TODO: Improve layout. Perhaps some gallery style widget.
-class ScreenshotTab(QWidget):
-    """Widget that shows the screenshots folder for the current workspace."""
-
-    _viewer: Viewer
-    _explorer: Explorer
-
-    def __init__(self) -> None:
-        super().__init__()
-        self._viewer = Viewer()
-        self._explorer = Explorer()
-        self._explorer.set_advanced_view(True)
-        self._explorer.setMaximumHeight(200)
-
-        container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # type: ignore[call-overload]
-        container_layout.addWidget(self._explorer)
-        container_layout.addWidget(self._viewer)
-        self.setLayout(container_layout)
-
-        # Connect widgets together.
-        self._explorer.selected_filepath_changed.connect(self._viewer.handle_update_filepath)
-
-    def load_screenshots_directory(self, directory: Path) -> None:
-        self._explorer.update_ui(str(directory))
-
 
 # TODO: Replace tab contents with implementations.
 # TODO: Connect to extensions system, possibly.
@@ -128,20 +102,12 @@ class Tabs(QTabWidget):
         self._saves_tab = PlaceholderWidget()
         self.addTab(self._saves_tab, "  Saves  ")
 
-        # Add Screenshots tab.
-        self._screenshots_tab = ScreenshotTab()
-        self.addTab(self._screenshots_tab, "  Screenshots  ")
-
     def load_workspace(self, install: MorrowindInstall) -> None:
-        # TODO: Update other tabs.
-        self._screenshots_tab.load_screenshots_directory(install.screenshots_path)
+        # TODO: Update tabs.
+        print("Load tabs")
 
 
 class TabsFrame(QFrame):
-    """Widget that builds and shows the workspace's mod management options.
-
-    Mod management options are shown in a `QTabWidget` depending on the selected game engine.
-    """
 
     def __init__(self) -> None:
         super().__init__()
