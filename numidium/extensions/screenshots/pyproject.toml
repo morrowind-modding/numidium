@@ -1,0 +1,5 @@
+[tool.numidium]
+name = "Screenshots"
+version = "0.1.0"
+description = "Browser your Morrowind installation's screenshots."
+authors = ["OperatorJack <thepaladinof@gmail.com>"]
