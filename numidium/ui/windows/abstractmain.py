@@ -80,8 +80,8 @@ class AbstractMainWindow(QMainWindow):
 
     def _load_state_recent_workspaces(self):
         self.menu_bar_recent_workspaces.clear()
-        for recent_workspace in AppSettings().recent_workspaces:
-            action = QAction(text=recent_workspace)
+        for recent_workspace, timestamp in AppSettings().recent_workspaces.items():
+            action = QAction(text=recent_workspace, parent=self.menu_bar_recent_workspaces)
             action.triggered.connect(self._handle_change_workspace)
             self.menu_bar_recent_workspaces.addAction(action)
 
