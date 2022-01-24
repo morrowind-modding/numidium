@@ -360,8 +360,8 @@ class ImageViewport(QGraphicsView):
     supported_formats: list[str] = [fmt.data().decode() for fmt in QImageReader().supportedImageFormats()]
     supported_formats += ["dds"]
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
+    def __init__(self) -> None:
+        super().__init__()
 
         self.item = QGraphicsPixmapItem()
         self.zoom = 0
@@ -381,7 +381,7 @@ class ImageViewport(QGraphicsView):
             self.setDragMode(QGraphicsView.ScrollHandDrag)
             self.item.setPixmap(pixmap)
             self.setSceneRect(pixmap.rect())
-            if not self.parent().rect().contains(pixmap.rect()):
+            if not self.rect().contains(pixmap.rect()):
                 self.fitInView(self.item, Qt.AspectRatioMode.KeepAspectRatio)
         else:
             self.setDragMode(QGraphicsView.NoDrag)
@@ -404,7 +404,7 @@ class ImageViewer(ViewerItem):
         super().__init__(filepath)
         layout = QVBoxLayout()
 
-        self.viewer = ImageViewport(parent=self)
+        self.viewer = ImageViewport()
         if filepath.lower().endswith(".dds"):
             self.viewer.setPixmap(self._load_dds(filepath))
         else:
