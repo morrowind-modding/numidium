@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
+from typing import cast
 
-from PySide6.QtCore import QFile, QPoint, Qt, Signal
+from PySide6.QtCore import QFile, QPoint, Qt, Signal, SignalInstance
 from PySide6.QtGui import QAction, QClipboard, QGuiApplication
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -26,7 +27,7 @@ class Explorer(QWidget):
     A file explorer widget for the current workspace, including an extensible context menu.
     """
 
-    selected_filepath_changed = Signal(str)
+    selected_filepath_changed = cast(SignalInstance, Signal(str))
 
     os_utility: OperatingSystemUtility
     filesystem: QFileSystemModel
