@@ -36,26 +36,12 @@ class Config:
 
     def load(self, reader: TextIO) -> None:
         """Update this config with the contents of the given reader."""
-        try:
-            contents = json.load(reader)
-        except json.JSONDecodeError as e:
-            logger.warning("Failed to load config: {}", reader)
-            logger.warning("\t{}", e)
-            raise e
-
-        try:
-            type(self).__init__(self, **contents)
-        except TypeError as e:
-            logger.warning("Invalid config contents: {}", contents)
-            logger.warning(e)
+        for k, v in json.load(reader).items():
+            setattr(self, k, v)
 
     def save(self, writer: TextIO) -> None:
         """Save the config contents to the given writer."""
-        try:
-            json.dump(asdict(self), writer, separators=(",", ":"))
-        except OSError as e:
-            logger.warning("Failed to save config: {}", writer)
-            logger.warning("\t{}", e)
+        json.dump(asdict(self), writer, separators=(",", ":"))
 
     def load_path(self, path: AnyPath = CONFIG_PATH) -> None:
         """Update this config with the contents of the given path."""
@@ -68,10 +54,14 @@ class Config:
         renamed with a ".backup.json" suffix.
         """
         logger.info("Saving config: {}", path)
+        self.create_backup(path)
+        self.save(open(path, mode="w"))
 
+    @staticmethod
+    def create_backup(path: AnyPath) -> None:
         path = Path(path)
         if path.exists():
-            backup_path = path.with_suffix(".backup.json")
+            backup_path = path.with_suffix(".backup" + path.suffix)
             backup_path.unlink(missing_ok=True)
             try:
                 path.rename(backup_path)
@@ -79,8 +69,6 @@ class Config:
                 logger.warning("Failed to create backup: {} -> {}", path, backup_path)
                 logger.warning("\t{}", e)
                 raise e
-
-        self.save(open(path, mode="w"))
 
 
 config = Config()
