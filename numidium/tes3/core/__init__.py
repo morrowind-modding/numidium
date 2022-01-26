@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from numidium.config import config
 from numidium.logger import logger
 from numidium.tes3.ini import MorrowindIni
 
@@ -16,38 +17,35 @@ class MorrowindInstall:
     ----------
     """
 
-    workspace: str
-
-    path_morrowind_executable: Path
-    path_morrowind_ini: Path
-
-    directory_datafiles: Path
-    directory_saves: Path
-    directory_screenshots: Path
-
+    workspace: Path
     ini: MorrowindIni
 
     def load(self, workspace: str) -> None:
-        """Loads the Morrowind install within a given workspace into memory."""
-        self.workspace = workspace
-
-        # Load relative file paths.
-        self.path_morrowind_executable = Path(self.workspace).joinpath("Morrowind").with_suffix(".exe")
-        self.path_morrowind_ini = Path(self.workspace).joinpath("Morrowind").with_suffix(".ini")
-        self.directory_datafiles = Path(self.workspace).joinpath("Data Files")
-        self.directory_saves = Path(self.workspace).joinpath("Saves")
-        self.directory_screenshots = Path(self.workspace).joinpath("Screenshots")
-
-        # Check existence of files.
-        for path in (self.path_morrowind_executable, self.path_morrowind_ini):
-            if not path.exists():
-                logger.error("File not found when loading Morrowind Install: %s", str(path))
-                raise FileNotFoundError(path)
-        logger.debug("Loaded Morrowind install filepaths and verified existence.")
-
-        # Load INI file
+        # """Loads the Morrowind install within a given workspace into memory."""
+        self.workspace = Path(workspace)
         self.ini = MorrowindIni()
-        self.ini.load_path(self.path_morrowind_ini)
-        logger.debug("Loaded Morrowind INI into memory.")
+        try:
+            self.ini.load_path(self.ini_path)
+        except Exception as e:
+            logger.error("Morrowind.ini does not exist: %s", self.ini_path)
+            raise e
 
-        # TODO: Load other things
+    @property
+    def exe_path(self) -> Path:
+        return self.workspace / "Morrowind.exe"
+
+    @property
+    def ini_path(self) -> Path:
+        return self.workspace / "Morrowind.ini"
+
+    @property
+    def data_files_path(self) -> Path:
+        return self.workspace / "Data Files"
+
+    @property
+    def saves_path(self) -> Path:
+        return self.workspace / "Saves"
+
+    @property
+    def screenshots_path(self) -> Path:
+        return self.workspace / "Screenshots"

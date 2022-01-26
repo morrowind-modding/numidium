@@ -11,9 +11,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.config import config
 from numidium.tes3 import dds
 from numidium.ui.activity_bar import ActivityBar, ActivityBarItem
-from numidium.ui.state import AppSettings
 
 
 class ImageViewer(QGraphicsView):
@@ -85,7 +85,7 @@ class Container(QWidget):
     def load_image(self) -> None:
         workspace, _ = QFileDialog().getOpenFileName(
             parent=self,
-            dir=AppSettings().workspace,
+            dir=config.active_workspace,
             caption="Load Image",
             filter=" *.".join(self.viewer.supported_formats),
             options=QFileDialog.Option.DontUseNativeDialog,  # type: ignore[arg-type]

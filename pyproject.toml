@@ -97,7 +97,9 @@ show_absolute_path = true # default: false
 module = [
     "numidium.ui.content_browser_dock",
     "numidium.ui.settings_dock",
-    "numidium.ui.windows.*",
+    "numidium.ui.windows.about",
+    "numidium.ui.windows.abstractmain",
+    "numidium.ui.windows.debug",
     "numidium.ui.explorer",
 ]
 ignore_errors = true

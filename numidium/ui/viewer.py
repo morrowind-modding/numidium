@@ -23,7 +23,6 @@ from PySide6.QtWidgets import (
 from numidium.logger import logger
 from numidium.tes3 import Plugin, dds
 from numidium.tes3.esp.object import TES3Object
-from numidium.ui.state import AppSettings
 from numidium.ui.widgets import ObjectTableModel
 
 

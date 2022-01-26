@@ -1,5 +1,5 @@
 import operator
-from typing import Any, cast
+from typing import Any
 
 from PySide6.QtCore import (
     QAbstractTableModel,
@@ -22,7 +22,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from numidium.ui.state import AppSettings
+from numidium.config import config
+from numidium.ui.application import Numidium
 
 
 class PlaceholderWidget(QWidget):
@@ -86,8 +87,8 @@ class OpenWorkspaceObject(QWidget):
         workspace = QFileDialog.getExistingDirectory(
             self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog  # type: ignore[arg-type]
         )
-        if workspace != "":
-            AppSettings().workspace = workspace
+        if workspace:
+            Numidium.workspace_changed.emit(workspace)
 
 
 class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
@@ -133,24 +134,6 @@ class OpenGithubButton(QPushButton):
         QDesktopServices.openUrl("https://github.com/morrowind-modding/numidium")
 
 
-class ChangeDarkModeButton(QPushButton):
-    """Convenience subclass for `QPushButton` for the Change Dark Mode button.
-
-    `QPushButton` with default text, icon, that updates Dark Mode setting in application state when clicked.
-    """
-
-    def __init__(self) -> None:
-        super().__init__(text="Dark Mode")
-        self.setIcon(QIcon("icons:contrast_24dp.svg"))
-        self.setCheckable(True)
-        self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.clicked.connect(self._handle_change_theme)
-        self.setChecked(AppSettings().enable_dark_mode)
-
-    def _handle_change_theme(self) -> None:
-        AppSettings().enable_dark_mode = self.sender().isChecked()
-
-
 class DockToolbar(QToolBar):
     """Convenience subclass for `QToolBar` for the Dock toolbars.
 
@@ -160,12 +143,9 @@ class DockToolbar(QToolBar):
     ----------
     action_open_workspace : OpenWorkspaceAction
         An action for opening a workspace.
-    button_dark_mode : ChangeDarkModeButton
-        A button for changing current dark mode setting.
     """
 
     action_open_workspace: OpenWorkspaceAction
-    button_dark_mode: ChangeDarkModeButton
 
     def __init__(self) -> None:
         super().__init__()
@@ -183,10 +163,6 @@ class DockToolbar(QToolBar):
         spacer.setEnabled(False)
         self.addWidget(spacer)
 
-        # Add dark mode toggle at the end.
-        self.button_dark_mode = ChangeDarkModeButton()
-        self.addWidget(self.button_dark_mode)
-
 
 class StepperItem(QWidget):
     """Convenience subclass for use in conjunction with `Stepper`. Represents a step in a multi-step widget.
@@ -203,7 +179,7 @@ class StepperItem(QWidget):
         The current validation message.
     """
 
-    valid_changed = cast(SignalInstance, Signal(bool))
+    valid_changed: SignalInstance = Signal(bool)  # type: ignore[assignment]
     valid: bool
     validation_message: str
 
@@ -221,7 +197,8 @@ class StepperItem(QWidget):
 class Stepper(QWidget):
     """Convenience subclass for use in conjunction with `Stepper`. Represents a step in a multi-step widget.
 
-    Subclassing objects should manage step validity through attributes or class methods, so that `Stepper` can update accordingly.
+    Subclassing objects should manage step validity through attributes or class
+    methods, so that `Stepper` can update accordingly.
 
     Attributes
     ----------
@@ -233,7 +210,7 @@ class Stepper(QWidget):
         The currently shown stepper item.
     """
 
-    stepper_finish_clicked = cast(SignalInstance, Signal())
+    stepper_finish_clicked: SignalInstance = Signal()  # type: ignore[assignment]
 
     items: list[StepperItem]
     active_item: StepperItem

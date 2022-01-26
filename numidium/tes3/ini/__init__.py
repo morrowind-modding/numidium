@@ -110,7 +110,7 @@ class IniFile:
             try:
                 yield match.group(1).decode("cp1252")
             except UnicodeDecodeError as e:
-                print(e)
+                raise e
 
     def _get_last_section(self) -> IniSection | None:
         """Get the last valid section in the file."""

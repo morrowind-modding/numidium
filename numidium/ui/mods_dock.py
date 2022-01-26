@@ -16,9 +16,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.config import config
+from numidium.logger import logger
 from numidium.tes3.core import MorrowindInstall
 from numidium.ui.explorer import Explorer
-from numidium.ui.state import AppSettings
 from numidium.ui.viewer import Viewer
 from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
@@ -131,7 +132,7 @@ class Tabs(QTabWidget):
 
     def load_workspace(self, install: MorrowindInstall) -> None:
         # TODO: Update other tabs.
-        self._screenshots_tab.load_screenshots_directory(install.directory_screenshots)
+        self._screenshots_tab.load_screenshots_directory(install.screenshots_path)
 
 
 class TabsFrame(QFrame):
@@ -200,8 +201,7 @@ class ModsDock(QMainWindow):
 
         # Load up Morrowind directory files.
         self.morrowind_install = MorrowindInstall()
-        self.load_workspace(AppSettings().workspace)
-        AppSettings().workspace_changed.connect(self._handle_workspace_changed)
+        self.load_workspace(config.active_workspace)
 
         # Wrap up with toolbar and bottom dock.
         self._setup_toolbar()

@@ -4,7 +4,7 @@ import json
 from dataclasses import asdict, dataclass, field
 from os import PathLike
 from pathlib import Path
-from typing import TextIO
+from typing import Any, TextIO
 
 from platformdirs import user_config_dir
 
@@ -34,14 +34,19 @@ class Config:
 
     active_extensions: list[str] = field(default_factory=list)
 
+    active_workspace: str = ""
+    recent_workspaces: dict[str, int] = field(default_factory=dict)
+
+    show_welcome: bool = True
+    setup_completed: bool = False
+
     def load(self, reader: TextIO) -> None:
         """Update this config with the contents of the given reader."""
-        for k, v in json.load(reader).items():
-            setattr(self, k, v)
+        self.update(**json.load(reader))
 
     def save(self, writer: TextIO) -> None:
         """Save the config contents to the given writer."""
-        json.dump(asdict(self), writer, separators=(",", ":"))
+        json.dump(asdict(self), writer, indent=4)
 
     def load_path(self, path: AnyPath = CONFIG_PATH) -> None:
         """Update this config with the contents of the given path."""
@@ -56,6 +61,13 @@ class Config:
         logger.info("Saving config: {}", path)
         self.create_backup(path)
         self.save(open(path, mode="w"))
+
+    def update(self, **kwargs: Any) -> None:
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+    def reset(self) -> None:
+        self.update(**asdict(Config()))
 
     @staticmethod
     def create_backup(path: AnyPath) -> None:

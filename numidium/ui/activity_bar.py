@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from functools import cache
-from typing import ClassVar, cast
+from typing import ClassVar
 
 from PySide6.QtCore import QSize, Qt, Signal, SignalInstance
 from PySide6.QtGui import QAction, QFont, QIcon
@@ -23,9 +22,9 @@ from numidium.ui.settings_dock import SettingsDock
 class ActivityBarItem(QListWidgetItem):
     """A custom widget that can be added to the application activity bar."""
 
-    hovered = cast(SignalInstance, Signal())
-    toggled = cast(SignalInstance, Signal(bool))
-    triggered = cast(SignalInstance, Signal())
+    hovered: SignalInstance = Signal()  # type: ignore[assignment]
+    toggled: SignalInstance = Signal(bool)  # type: ignore[assignment]
+    triggered: SignalInstance = Signal()  # type: ignore[assignment]
 
     _action: QAction
     _widget: QWidget

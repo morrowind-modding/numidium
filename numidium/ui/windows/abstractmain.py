@@ -1,7 +1,8 @@
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow, QMenu, QMenuBar, QStatusBar
 
-from numidium.ui.state import AppSettings
+from numidium.config import config
+from numidium.ui.application import Numidium
 from numidium.ui.widgets import OpenWorkspaceAction
 from numidium.ui.windows.about import AboutWindow
 from numidium.ui.windows.debug import DebugWindow
@@ -12,7 +13,7 @@ class AbstractMainWindow(QMainWindow):
     about_window: AboutWindow
     debug_window: DebugWindow
 
-    action_open_workspace: QAction
+    action_open: QAction
     action_about: QAction
     action_debug: QAction
     action_exit: QAction
@@ -35,16 +36,14 @@ class AbstractMainWindow(QMainWindow):
         self._setup_menu_bar()
         self._setup_status_bar()
 
-        self._load_state()
-
     def _setup_actions(self):
-        self.action_open_workspace = OpenWorkspaceAction()
+        self.action_open = OpenWorkspaceAction()
 
         self.action_about = QAction(text="About")
-        self.action_about.triggered.connect(self._handle_show_about_window)
+        self.action_about.triggered.connect(self.about_window.show)
 
         self.action_debug = QAction(text="Debug", shortcut="Ctrl+Shift+D")
-        self.action_debug.triggered.connect(self._handle_show_debug_window)
+        self.action_debug.triggered.connect(self.debug_window.show)
 
         self.action_exit = QAction(text="E&xit", shortcut="Ctrl+Q")
         self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
@@ -54,7 +53,7 @@ class AbstractMainWindow(QMainWindow):
 
         # File Menu
         menu_file = self.menu_bar.addMenu("&File")
-        menu_file.addAction(self.action_open_workspace)
+        menu_file.addAction(self.action_open)
         self.menu_bar_recent_workspaces = menu_file.addMenu(QIcon("icons:crop_din_24dp.svg"), "Recent Workspaces...")
         menu_file.addSeparator()
         menu_file.addAction(self.action_exit)
@@ -67,37 +66,18 @@ class AbstractMainWindow(QMainWindow):
         # Finished
         self.setMenuBar(self.menu_bar)
 
+        self.rebuild_recent_workspaces()
+
     def _setup_status_bar(self):
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
-    def _load_state(self):
-        # Build recent workspaces menu for first time. Can be refreshed later.
-        self._load_state_recent_workspaces()
-
-        # Connect to State signals to handle changes. Only connect once.
-        AppSettings().recent_workspaces_changed.connect(self._handle_recent_workspaces_changed)
-
-    def _load_state_recent_workspaces(self):
+    def rebuild_recent_workspaces(self):
         self.menu_bar_recent_workspaces.clear()
-        for recent_workspace, timestamp in AppSettings().recent_workspaces.items():
+        for recent_workspace in config.recent_workspaces:
             action = QAction(text=recent_workspace, parent=self.menu_bar_recent_workspaces)
             action.triggered.connect(self._handle_change_workspace)
             self.menu_bar_recent_workspaces.addAction(action)
 
-    def _handle_recent_workspaces_changed(self, workspace) -> None:
-        self._load_state_recent_workspaces()
-
     def _handle_change_workspace(self) -> None:
-        path = self.sender().text()
-        AppSettings().workspace = path
-
-    def _handle_show_about_window(self) -> None:
-        if self.about_window is None:
-            self.about_window = AboutWindow()
-        self.about_window.show()
-
-    def _handle_show_debug_window(self) -> None:
-        if self.debug_window is None:
-            self.debug_window = DebugWindow()
-        self.debug_window.show()
+        Numidium.workspace_changed.emit(self.sender().text())

@@ -8,8 +8,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.config import config
 from numidium.logger import logger
-from numidium.ui.state import AppSettings
 from numidium.ui.widgets import TextBlockLabel
 
 
@@ -42,7 +42,8 @@ class DebugWindow(QWidget):
         self._action_clear_settings.clicked.connect(self._handle_clear_settings)
 
     def _handle_clear_settings(self):
-        AppSettings().clear()
+        config.reset()
+        config.save_path()
         logger.info("Cleared applicatioon settings! Attempting restart.")
         ret = QMessageBox.warning(
             self.parent(),

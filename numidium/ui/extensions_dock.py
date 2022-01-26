@@ -24,11 +24,15 @@ class ExtensionsListItem(QStandardItem):
 
 class ExtensionsDock(QWidget):
 
-    extension_list: QListView
     extension_info: QTextEdit
+    extension_list: QListView
 
     def __init__(self) -> None:
         super().__init__()
+
+        self.extension_info = QTextEdit()
+        self.extension_info.setReadOnly(True)
+        self.extension_info.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
         self.extension_list = QListView()
         self.extension_list.setUniformItemSizes(True)
@@ -37,13 +41,8 @@ class ExtensionsDock(QWidget):
         self.extension_list.pressed.connect(self._handle_item_clicked)
         self.extension_list.entered.connect(self._handle_item_mouse_over)
 
-        self.extension_info = QTextEdit()
-        self.extension_info.setReadOnly(True)
-        self.extension_info.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-        model = QStandardItemModel()
-        model.itemChanged.connect(self._handle_item_changed)
-        self.extension_list.setModel(model)
+        self.extension_list.setModel(QStandardItemModel())
+        self.extension_list.model().itemChanged.connect(self._handle_item_changed)
 
         layout = QHBoxLayout(self)
         layout.addWidget(self.extension_list)

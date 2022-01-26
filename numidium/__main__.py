@@ -1,13 +1,11 @@
-import sys
-
-from numidium.logger import logger
-
 if __name__ == "__main__":
-    logger.info(f"{sys.argv=}")
+    import sys
 
-    if "--headless" in sys.argv:
-        print("Headless Mode!")
-    else:
-        from numidium import ui
+    if "--headless" not in sys.argv:
+        from numidium.ui.application import Numidium
+        from numidium.ui.windows.manager import ManagerWindow
 
-        ui.exec()
+        application = Numidium()
+        window = ManagerWindow()
+        window.show()
+        sys.exit(application.exec())

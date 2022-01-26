@@ -10,9 +10,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.config import config
 from numidium.logger import logger
 from numidium.ui.explorer import Explorer
-from numidium.ui.state import AppSettings
 from numidium.ui.viewer import Viewer
 
 
@@ -26,7 +26,7 @@ class ContentBrowserDock(QWidget):
 
         # Setup widgets
         self.explorer = Explorer()
-        self.explorer.update_ui(AppSettings().workspace)
+        self.explorer.update_ui(config.active_workspace)
         self.left_dock.setWidget(self.explorer)
 
         self.bottom_dock.setWidget(QTextEdit("This is the bottom editor widget. -- NI"))
@@ -51,5 +51,5 @@ class ContentBrowserDock(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
 
         # Connect signals.
-        AppSettings().workspace_changed.connect(self.explorer.update_ui)
+        # config.active_workspace_changed.connect(self.explorer.update_ui)
         self.explorer.selected_filepath_changed.connect(self.viewer.handle_update_filepath)

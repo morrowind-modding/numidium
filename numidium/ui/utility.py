@@ -2,6 +2,7 @@ import os
 import platform
 import subprocess
 from pathlib import Path
+from typing import Any, Callable, Generic, TypeVar
 
 
 class OperatingSystemUtility:
@@ -23,3 +24,16 @@ class OperatingSystemUtility:
             os.startfile(filepath)
         else:  # linux variants
             subprocess.call(("xdg-open", filepath))
+
+
+T = TypeVar("T")
+
+
+class staticproperty(Generic[T]):
+    __slots__ = ("func",)
+
+    def __init__(self, func: Callable[[], T]) -> None:
+        self.func = func
+
+    def __get__(self, _obj: Any, _type: Any) -> T:
+        return self.func()
