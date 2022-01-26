@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from numidium.core.extensions import reload_active_extensions
 from numidium.ui.content_browser_dock import ContentBrowserDock
 from numidium.ui.extensions_dock import ExtensionsDock
 from numidium.ui.mods_dock import ModsDock
@@ -119,7 +120,9 @@ class ActivityBar(QDockWidget):
 
         # Make accessible to extensions.
         # TODO: Figure out a proper api.
-        type(self)._instance = getattr(self, "_instance", self)  # type: ignore
+        if not hasattr(self, "_instance"):
+            type(self)._instance = self
+            reload_active_extensions()
 
     def add_item(self, item: ActivityBarItem) -> None:
         """Add a new item to the activity bar."""

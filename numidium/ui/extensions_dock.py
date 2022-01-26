@@ -1,14 +1,8 @@
 from PySide6.QtCore import QModelIndex, Qt
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QListView,
-    QSizePolicy,
-    QTextEdit,
-    QWidget,
-)
+from PySide6.QtWidgets import QHBoxLayout, QListView, QSizePolicy, QTextEdit, QWidget
 
+from numidium.config import config
 from numidium.core.extensions import Extension, available_extensions
 from numidium.logger import logger
 
@@ -24,6 +18,8 @@ class ExtensionsListItem(QStandardItem):
         self.setText(extension.name)
         self.setIcon(QIcon(extension.icon))
         self.setCheckable(True)
+        if extension.name in config.active_extensions:
+            self.setCheckState(Qt.CheckState.Checked)
 
 
 class ExtensionsDock(QWidget):
@@ -68,11 +64,11 @@ class ExtensionsDock(QWidget):
 
     def _handle_item_changed(self, item: ExtensionsListItem) -> None:
         is_checked = item.checkState() == Qt.Checked
-        is_extension_active = item.extension.active
+        is_registered = item.extension.module
 
-        if is_checked and not is_extension_active:
+        if is_checked and not is_registered:
             item.extension.register()
-        elif is_extension_active and not is_checked:
+        elif is_registered and not is_checked:
             item.extension.unregister()
 
     def _handle_item_mouse_over(self, index: QModelIndex) -> None:
