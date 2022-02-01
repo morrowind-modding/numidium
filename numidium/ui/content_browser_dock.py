@@ -1,22 +1,17 @@
-from pathlib import Path
-
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDockWidget,
-    QLabel,
-    QMainWindow,
-    QTextEdit,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDockWidget, QMainWindow, QTextEdit, QVBoxLayout, QWidget
 
 from numidium.config import config
-from numidium.logger import logger
 from numidium.ui.explorer import Explorer
 from numidium.ui.viewer import Viewer
 
 
 class ContentBrowserDock(QWidget):
+    left_dock: QDockWidget
+    bottom_dock: QDockWidget
+    explorer: Explorer
+    viewer: Viewer
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -32,7 +27,7 @@ class ContentBrowserDock(QWidget):
         self.bottom_dock.setWidget(QTextEdit("This is the bottom editor widget. -- NI"))
         for dock in (self.left_dock, self.bottom_dock):
             dock.setAllowedAreas(
-                Qt.DockWidgetArea.LeftDockWidgetArea
+                Qt.DockWidgetArea.LeftDockWidgetArea  # type:ignore[operator]
                 | Qt.DockWidgetArea.RightDockWidgetArea
                 | Qt.DockWidgetArea.BottomDockWidgetArea
                 | Qt.DockWidgetArea.TopDockWidgetArea
