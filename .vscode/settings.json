@@ -7,12 +7,16 @@
     ],
     "python.linting.enabled": true,
     "python.linting.lintOnSave": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--config=${workspaceFolder}/.flake8"
+    ],
+    "python.linting.mypyEnabled": true,
     "python.linting.mypyArgs": [
         "--config-file=${workspaceFolder}/pyproject.toml",
         "--follow-imports=silent",
         "--no-pretty"
     ],
-    "python.linting.mypyEnabled": true,
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": true

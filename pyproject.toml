@@ -28,6 +28,8 @@ mypy = "^0.931"
 pyinstaller = "^4.8"
 pytest = "^6.2.5"
 pytkdocs = { git = "https://github.com/Greatness7/pytkdocs.git" }
+flake8 = "^4.0.1"
+flake8-docstrings = "^1.6.0"
 
 [tool.isort]
 profile = "black"

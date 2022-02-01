@@ -81,6 +81,16 @@
                 "clear": true,
                 "focus": true
             }
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "poetry run flake8 numidium",
+            "presentation": {
+                "showReuseMessage": false,
+                "clear": true,
+                "focus": true
+            }
         }
     ]
 }

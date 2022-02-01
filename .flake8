@@ -1,0 +1,15 @@
+[flake8]
+ignore =
+    F403 ; star imports
+    F405 ; star imports
+    W503 ; line break before binary operator
+    E203 ; whitespace before ':'
+    E501 ; line too long
+    D100 ; Missing docstring in public module
+    D101 ; Missing docstring in public class
+    D102 ; Missing docstring in public method
+    D103 ; Missing docstring in public function
+    D104 ; Missing docstring in public package
+    D105 ; Missing docstring in magic method
+max-line-length = 120
+docstring-convention = numpy

@@ -18,7 +18,8 @@ class IniSection:
     Sections are the areas following a bracketed header. They include all
     the following lines until a new header is encountered or the file ends.
 
-    Example:
+    Examples
+    --------
     ```ini
         [Game Files]
         GameFile0=Morrowind.esm
