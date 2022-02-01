@@ -100,6 +100,5 @@ module = [
     "numidium.ui.windows.about",
     "numidium.ui.windows.abstractmain",
     "numidium.ui.windows.debug",
-    "numidium.ui.explorer",
 ]
 ignore_errors = true

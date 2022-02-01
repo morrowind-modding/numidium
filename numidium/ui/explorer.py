@@ -66,7 +66,7 @@ class Explorer(QWidget):
         if not index:
             return
 
-        self.context_filepath = self.filesystem.filePath(index)
+        self.context_filepath = self.filesystem.filePath(index)  # type: ignore[arg-type]
 
         menu = QMenu()
 
@@ -135,30 +135,29 @@ class Explorer(QWidget):
         clipboard.setText(relative_filepath)
 
     def _handle_context_rename(self) -> None:
-        path: Path = Path(self.context_filepath)
-        name: str = path.name
-        directory: str = path.parent
-        text, ok = QInputDialog.getText(self, "Rename File", "Enter a new file name:", QLineEdit.EchoMode.Normal, name)
+        path = Path(self.context_filepath)
+        text, ok = QInputDialog.getText(
+            self, "Rename File", "Enter a new file name:", QLineEdit.EchoMode.Normal, path.name
+        )
         if ok:
-            new_path: Path = Path.joinpath(directory, text)
+            new_path = path.parent / text
             path.rename(new_path)
-            logger.debug("Renamed {path} to {new_path}", path=self.context_filepath, new_path=new_path)
+            logger.debug("Renamed {} to {}", self.context_filepath, new_path)
 
     def _handle_context_delete(self) -> None:
-        msgBox = QMessageBox()
-        msgBox.setText("Are you sure you want to delete this file? It will be placed in your system recycling bin.")
-        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-        msgBox.setDefaultButton(QMessageBox.Cancel)
-        result: int = msgBox.exec()
+        msg_box = QMessageBox()
+        msg_box.setText("Are you sure you want to delete this file? It will be placed in your system recycling bin.")
+        msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        msg_box.setDefaultButton(QMessageBox.Cancel)
+        result = msg_box.exec()
 
         if result == QMessageBox.Yes:
             # Save was clicked. Commit the action.
-            file: QFile = QFile(self.context_filepath)
-            trashed: bool = file.moveToTrash()
-            if not trashed:
-                logger.error("Unable to delete file: {file}", file=self.context_filepath)
+            success, path_in_trash = QFile.moveToTrash(self.context_filepath)
+            if success:
+                logger.debug("File move to trash: {} -> {}", self.context_filepath, path_in_trash)
             else:
-                logger.debug("Deleted file: {path}", path=self.context_filepath)
+                logger.error("Unable move file to trash: {}", self.context_filepath)
         elif result == QMessageBox.Cancel:
             # Cancel was clicked. Return.
             return
