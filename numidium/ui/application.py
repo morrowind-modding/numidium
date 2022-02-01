@@ -3,7 +3,7 @@ from __future__ import annotations
 from PySide6.QtCore import QDir, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from qdarktheme import load_stylesheet  # type: ignore
+from qtvscodestyle import load_stylesheet  # type: ignore
 
 from numidium.ui.signals import Signals
 from numidium.ui.utility import staticproperty
@@ -21,7 +21,7 @@ class Numidium(QApplication):
 
         self.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
         self.setWindowIcon(QIcon("icons:icon.ico"))
-        self.setStyleSheet(load_stylesheet("dark"))
+        self.setStyleSheet(load_stylesheet())
 
     @staticproperty
     @staticmethod
