@@ -6,7 +6,6 @@
             "type": "shell",
             "command": "poetry run python numidium",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             },
@@ -17,7 +16,6 @@
             "type": "shell",
             "command": "poetry run black numidium",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             },
@@ -28,7 +26,6 @@
             "type": "shell",
             "command": "poetry run pytest",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
@@ -38,7 +35,6 @@
             "type": "shell",
             "command": "poetry install",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
@@ -57,7 +53,6 @@
             "type": "shell",
             "command": "poetry run pyinstaller numidium.spec --noconfirm --upx-dir tools",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
@@ -67,7 +62,6 @@
             "type": "shell",
             "command": "poetry run mkdocs build; poetry run mkdocs serve",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
@@ -77,7 +71,6 @@
             "type": "shell",
             "command": "poetry run docformatter numidium -r -i --wrap-summaries 120 --wrap-descriptions 120",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
@@ -87,7 +80,6 @@
             "type": "shell",
             "command": "poetry run flake8 numidium",
             "presentation": {
-                "showReuseMessage": false,
                 "clear": true,
                 "focus": true
             }
