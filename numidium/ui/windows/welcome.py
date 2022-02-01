@@ -132,6 +132,7 @@ class ConfigurationWidget(QWidget):
     def _handle_complete_steps(self) -> None:
         Numidium.signals.workspace_changed.emit(self.config_step_one.open_workspace_line.text())
         config.setup_completed = True
+        config.save_path()
 
 
 class StartupWidget(QWidget):
