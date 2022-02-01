@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox,
@@ -18,8 +16,6 @@ from PySide6.QtWidgets import (
 
 from numidium.config import config
 from numidium.tes3.core import MorrowindInstall
-from numidium.ui.explorer import Explorer
-from numidium.ui.viewer import Viewer
 from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
 

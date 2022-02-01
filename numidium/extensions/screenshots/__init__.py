@@ -8,7 +8,6 @@ from numidium.tes3.core import MorrowindInstall
 from numidium.ui.activity_bar import ActivityBar, ActivityBarItem
 from numidium.ui.application import Numidium
 from numidium.ui.explorer import Explorer
-from numidium.ui.signals import Signals
 from numidium.ui.viewer import Viewer
 
 
