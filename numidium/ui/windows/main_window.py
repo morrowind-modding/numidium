@@ -22,8 +22,7 @@ class MainWindow(AbstractMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.activity_bar)
 
         if config.show_welcome or not config.setup_completed:
-            self.activity_bar.hide()
-            self.setCentralWidget(WelcomeWindow())
+            self.show_welcome_window()
         else:
             self.show_activity_bar()
 
@@ -31,6 +30,11 @@ class MainWindow(AbstractMainWindow):
 
     def setup_signals(self) -> None:
         Numidium.signals.workspace_changed.connect(self.show_activity_bar)
+
+    def show_welcome_window(self) -> None:
+        if not isinstance(self.centralWidget(), WelcomeWindow):
+            self.activity_bar.hide()
+            self.setCentralWidget(WelcomeWindow())
 
     def show_activity_bar(self) -> None:
         if not self.activity_bar.isVisible():
