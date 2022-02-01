@@ -1,5 +1,12 @@
 from PySide6.QtGui import QAction, QIcon
-from PySide6.QtWidgets import QApplication, QMainWindow, QMenu, QMenuBar, QStatusBar
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QMenu,
+    QMenuBar,
+    QStatusBar,
+    QWidget,
+)
 
 from numidium.config import config
 from numidium.ui.application import Numidium
@@ -9,7 +16,7 @@ from numidium.ui.windows.debug import DebugWindow
 
 
 class AbstractMainWindow(QMainWindow):
-    central_window: QMainWindow
+    central_window: QWidget
     about_window: AboutWindow
     debug_window: DebugWindow
 
@@ -26,7 +33,7 @@ class AbstractMainWindow(QMainWindow):
 
         self.setWindowTitle("Numidium")
 
-        self.central_window = QMainWindow()
+        self.central_window = QWidget()
         self.about_window = AboutWindow()
         self.debug_window = DebugWindow()
 

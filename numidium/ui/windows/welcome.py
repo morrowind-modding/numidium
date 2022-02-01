@@ -28,7 +28,6 @@ from numidium.ui.widgets import (
     SubtitleLabel,
     TextBlockLabel,
 )
-from numidium.ui.windows.abstractmain import AbstractMainWindow
 
 
 class ConfigurationStepOneWidget(StepperItem):
@@ -222,69 +221,34 @@ class StartupWidget(QWidget):
         config.save_path()
 
 
-class WelcomeWindow(AbstractMainWindow):
+class WelcomeWindow(QWidget):
 
-    layout: QVBoxLayout
     widget: StartupWidget | ConfigurationWidget
 
     def __init__(self) -> None:
         super().__init__()
 
-        # Create actual layout to contain widgets, within frame.
-        self.layout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # type: ignore[call-overload]
+        # Make a 3x3 grid for us to center our container in.
+        layout = QGridLayout()
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(2, 1)
+        layout.setRowStretch(0, 1)
+        layout.setRowStretch(2, 1)
+        self.setLayout(layout)
 
-        self._setup_center_panel()
-        self._setup_title_panel()
-
-        if config.setup_completed:
-            self.widget = StartupWidget()
-        else:
-            self.widget = ConfigurationWidget()
-
-        self.layout.addWidget(self.widget)
-
-    def _setup_center_panel(self) -> None:
-        """Set up the center panel that is shown on the welcome screen.
-
-        This requires multiple layers of layout nesting and adjustments to work with the panel border.
-        """
-        # Create outermost layout with vertical and horizontal center.
         container = QWidget()
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)  # type: ignore[call-overload]
+        container.setLayout(QVBoxLayout())
+        layout.addWidget(container, 1, 1)
 
-        # Create panel widget box & layout with fixed size (relative to screen size)
-        panel_height = 600
-        panel_width = 800
-
-        spacer_height = container.height() // 2 - panel_height
-
-        central_widget = QWidget()
-        central_widget.setContentsMargins(10, spacer_height, 10, spacer_height)
-
-        central_widget.setFixedSize(panel_width, panel_height)
-        central_layout = QVBoxLayout()
-
-        # Create Frame container.
-        frame = QFrame()
-        frame.setFrameShadow(QFrame.Shadow.Plain)
-        frame.setLayout(self.layout)
-
-        central_layout.addWidget(frame)
-        central_widget.setLayout(central_layout)
-
-        layout.addWidget(central_widget)
-        container.setLayout(layout)
-        self.setCentralWidget(container)
-
-    def _setup_title_panel(self) -> None:
-        # Create banner
         banner = QLabel()
         banner.setPixmap(QPixmap("./numidium/ui/images/banner.png"))
-        self.layout.addWidget(banner)
+        container.layout().addWidget(banner)
 
-        # Create a horizontal divider line.
-        line = QFrame()
-        line.setFrameShape(QFrame.HLine)
-        self.layout.addWidget(line)
+        divider = QFrame()
+        divider.setFrameShape(QFrame.HLine)
+        container.layout().addWidget(divider)
+
+        if config.setup_completed:
+            container.layout().addWidget(StartupWidget())
+        else:
+            container.layout().addWidget(ConfigurationWidget())

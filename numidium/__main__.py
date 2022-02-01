@@ -3,9 +3,9 @@ if __name__ == "__main__":
 
     if "--headless" not in sys.argv:
         from numidium.ui.application import Numidium
-        from numidium.ui.windows.manager import ManagerWindow
+        from numidium.ui.windows.main_window import MainWindow
 
         application = Numidium()
-        window = ManagerWindow()
+        window = MainWindow()
         window.show()
         sys.exit(application.exec())
