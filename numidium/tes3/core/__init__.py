@@ -10,11 +10,7 @@ __all__ = ["MorrowindInstall"]
 
 # TODO: Add unit tests.
 class MorrowindInstall:
-    """An in-memory representation of a Morrowind install.
-
-    Attributes
-    ----------
-    """
+    """An in-memory representation of a Morrowind install."""
 
     workspace: Path
     ini: MorrowindIni

@@ -245,7 +245,7 @@ class WelcomeWindow(AbstractMainWindow):
         self.layout.addWidget(self.widget)
 
     def _setup_center_panel(self) -> None:
-        """Setup center panel that is shown on the welcome screen.
+        """Set up the center panel that is shown on the welcome screen.
 
         This requires multiple layers of layout nesting and adjustments to work with the panel border.
         """

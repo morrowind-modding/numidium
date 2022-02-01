@@ -21,9 +21,7 @@ from numidium.ui.utility import OperatingSystemUtility
 
 
 class Explorer(QWidget):
-    """
-    A file explorer widget for the current workspace, including an extensible context menu.
-    """
+    """A file explorer widget for the current workspace, including an extensible context menu."""
 
     selected_filepath_changed: SignalInstance = Signal(str)  # type: ignore[assignment]
 
@@ -171,7 +169,11 @@ class Explorer(QWidget):
         self.selected_filepath_changed.emit(self.selected_filepath)
 
     def set_advanced_view(self, enabled: bool, update_ui: bool = False) -> None:
-        """Enables 'advanced view' for the Explorer widget. This includes showing additional columns like file type and last modified date. Optional parameter also updates UI to reflect the change."""
+        """Enable 'advanced view' for the Explorer widget.
+
+        This includes showing additional columns like file type and last modified date. Optional parameter also updates
+        UI to reflect the change.
+        """
         self.show_advanced_view = enabled
         if update_ui:
             if self.show_advanced_view:
@@ -182,7 +184,7 @@ class Explorer(QWidget):
                     self.treeview.hideColumn(i)
 
     def update_ui(self, directory: str) -> None:
-        """Loads the given directory into the Explorer widget and refreshes the UI."""
+        """Load the given directory into the Explorer widget and refreshes the UI."""
         layout = self.layout()
         for i in range(layout.count()):
             layout.removeWidget(layout.itemAt(i).widget())

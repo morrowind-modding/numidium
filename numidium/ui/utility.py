@@ -6,8 +6,9 @@ from typing import Any, Callable, Generic, TypeVar
 
 
 class OperatingSystemUtility:
-    """
-    Convenience class for operating system methods, such as platform-agnostic system interactions: opening a file in default application, opening explorer, etc.
+    """Convenience class for operating system methods.
+
+    Such as platform- agnostic system interactions: opening a file in default application, opening explorer, etc.
     """
 
     def open_filepath_with_default_application(self, filepath: str) -> None:

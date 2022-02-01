@@ -76,7 +76,8 @@ class SubtitleLabel(QLabel):
 class OpenWorkspaceObject(QWidget):
     """Open Workspace base object.
 
-    Base object that provides an 'open workspace' shared event handler for subclassing classes. Event handler selects Directory using a file dialog and updates application state.
+    Base object that provides an 'open workspace' shared event handler for subclassing classes. Event handler selects
+    Directory using a file dialog and updates application state.
     """
 
     def __init__(self) -> None:
@@ -164,9 +165,12 @@ class DockToolbar(QToolBar):
 
 
 class StepperItem(QWidget):
-    """Convenience subclass for use in conjunction with `Stepper`. Represents a step in a multi-step widget.
+    """Convenience subclass for use in conjunction with `Stepper`.
 
-    Subclassing objects should manage step validity through attributes or class methods, so that `Stepper` can update accordingly.
+    Represents a step in a multi-step widget.
+
+    Subclassing objects should manage step validity through attributes or class methods, so that `Stepper` can update
+    accordingly.
 
     Attributes
     ----------
@@ -353,7 +357,7 @@ class ObjectTableModel(QAbstractTableModel):
         return None
 
     def sort(self, col: int, order: Qt.SortOrder = Qt.SortOrder.AscendingOrder) -> None:
-        """sort table by given column number col"""
+        """Sort the table by given column number col."""
         if col < len(self._list):
             self._list = sorted(self._list, key=operator.itemgetter(col))
             if order == Qt.DescendingOrder:

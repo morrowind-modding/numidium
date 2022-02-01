@@ -55,8 +55,7 @@ class Config:
     def save_path(self, path: AnyPath = CONFIG_PATH) -> None:
         """Save the contents of this config to the given path.
 
-        For safety, if a file already exists at the given path it will be
-        renamed with a ".backup.json" suffix.
+        For safety, if a file already exists at the given path it will be renamed with a ".backup.json" suffix.
         """
         logger.info("Saving config: {}", path)
         self.create_backup(path)

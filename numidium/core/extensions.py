@@ -18,7 +18,7 @@ GET_TOML_ITEMS = itemgetter("name", "version", "description", "authors")
 
 
 def available_extensions() -> Iterator[Extension]:
-    """Yields available extensions."""
+    """Yield available extensions."""
     for path in EXTENSIONS_DIR.iterdir():
         if extension := Extension.from_path(path):
             yield extension
@@ -100,10 +100,9 @@ class Extension:
     def unregister(self) -> None:
         """Unregister the extension.
 
-        This is equivilent to calling the extension module's `unregister`
-        function and then removing it from `sys.modules`. Future code will no
-        longer be able to import the module. Note that any existing references
-        to the module will not be automatically invalidated.
+        This is equivilent to calling the extension module's `unregister` function and then removing it from
+        `sys.modules`. Future code will no longer be able to import the module. Note that any existing references to the
+        module will not be automatically invalidated.
         """
         logger.debug("Unregistering extension: {}", self.name)
         if self.module:
@@ -115,14 +114,14 @@ class Extension:
 
     @property
     def module(self) -> ExtensionProtocol | None:
-        """The python module created from importing this extension."""
+        """Get the python module created from importing this extension."""
         if module := sys.modules.get(self.module_name):
             return cast(ExtensionProtocol, module)
         return None
 
     @cached_property
     def module_name(self) -> str:
-        """The name of the python module associated with this extension."""
+        """Get the name of the python module associated with this extension."""
         return f"numidium.extensions.{self.path.stem}"
 
     def import_module(self) -> ExtensionProtocol:

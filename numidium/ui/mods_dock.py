@@ -25,7 +25,10 @@ from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
 # TODO: Add custom actions.
 class ModsDockToolbar(DockToolbar):
-    """Convenience class for the toolbar used on the Mods Dock. Contains custom actions and event handlers."""
+    """Convenience class for the toolbar used on the Mods Dock.
+
+    Contains custom actions and event handlers.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -36,7 +39,7 @@ dummy_installer_data = [[1, "Morrowind"], [2, "Bloodmoon"]]
 
 
 class InstallersFrame(QFrame):
-    """Widget that builds and shows the workspace's installer files in a `QTableView`, as well as does formatting and event handling."""
+    """Widget that builds and shows the workspace's installer files."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -58,7 +61,7 @@ class InstallersFrame(QFrame):
 # TODO: Load default engine from settings.
 # TODO: Possibly allow user to add other programs, like Construction set or Mash.
 class Launcher(QWidget):
-    """Widget to allow user to select a game-engine or other executable from a dropdown and launch it for the current environment."""
+    """Widget to allow user to launch an executable for the current environment."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -76,7 +79,7 @@ class Launcher(QWidget):
 
 # TODO: Improve layout. Perhaps some gallery style widget.
 class ScreenshotTab(QWidget):
-    """Widget that shows the screenshots folder for the current workspace, with the ability to select and view a screenshot."""
+    """Widget that shows the screenshots folder for the current workspace."""
 
     _viewer: Viewer
     _explorer: Explorer
@@ -135,7 +138,10 @@ class Tabs(QTabWidget):
 
 
 class TabsFrame(QFrame):
-    """Widget that builds and shows the workspace's mod management options, including the current game engine. Mod management options are shown in a `QTabWidget` depending on the selected game engine."""
+    """Widget that builds and shows the workspace's mod management options.
+
+    Mod management options are shown in a `QTabWidget` depending on the selected game engine.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -160,7 +166,10 @@ class TabsFrame(QFrame):
 
 
 class ModsDock(QMainWindow):
-    """The Mods dock window. Contains tools for managing a mod installation."""
+    """The Mods dock window.
+
+    Contains tools for managing a mod installation.
+    """
 
     morrowind_install: MorrowindInstall
 
