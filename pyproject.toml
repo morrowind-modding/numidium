@@ -97,7 +97,5 @@ error_summary = true # default: true
 show_absolute_path = true # default: false
 
 [[tool.mypy.overrides]]
-module = [
-    "numidium.ui.settings_dock",
-]
+module = []
 ignore_errors = true

@@ -16,7 +16,6 @@ from numidium.core.extensions import reload_active_extensions
 from numidium.ui.content_browser_dock import ContentBrowserDock
 from numidium.ui.extensions_dock import ExtensionsDock
 from numidium.ui.mods_dock import ModsDock
-from numidium.ui.settings_dock import SettingsDock
 
 
 class ActivityBarItem(QListWidgetItem):
@@ -106,13 +105,6 @@ class ActivityBar(QDockWidget):
                 widget=ExtensionsDock(),
                 icon="icons:settings_24dp.svg",
                 text="Extensions",
-            )
-        )
-        self.add_item(
-            ActivityBarItem(
-                widget=SettingsDock(),
-                icon="icons:settings_24dp.svg",
-                text="Settings",
             )
         )
 
