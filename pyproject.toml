@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "numidium"
 version = "0.1.0"
@@ -5,11 +9,11 @@ description = ""
 authors = ["Greatness7 <Greatness7@gmail.com>", "OperatorJack <ThePaladinOf@gmail.com>"]
 
 [tool.poetry.dependencies]
+python = "~3.10"
 loguru = "^0.5.3"
 platformdirs = "^2.4.1"
 pyqtdarktheme = "^1.0.2"
 PySide6 = "^6.2.2"
-python = ">=3.10,<3.11"
 tomlkit = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
@@ -24,10 +28,6 @@ mypy = "^0.931"
 pyinstaller = "^4.8"
 pytest = "^6.2.5"
 pytkdocs = { git = "https://github.com/Greatness7/pytkdocs.git" }
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
