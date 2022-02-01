@@ -19,10 +19,15 @@ class DebugWindow(QWidget):
     A secondary window that exposes tools for troubleshooting the application.
     """
 
-    def __init__(self):
+    _label: QLabel
+    _description: TextBlockLabel
+    _action_clear_settings: QPushButton
+
+    def __init__(self) -> None:
         super().__init__()
+
         layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
 
         self._label = QLabel("Debug")
         self._description = TextBlockLabel(
@@ -41,14 +46,15 @@ class DebugWindow(QWidget):
 
         self._action_clear_settings.clicked.connect(self._handle_clear_settings)
 
-    def _handle_clear_settings(self):
+    def _handle_clear_settings(self) -> None:
         config.reset()
         config.save_path()
         logger.info("Cleared applicatioon settings! Attempting restart.")
-        ret = QMessageBox.warning(
+        QMessageBox.warning(
             self.parent(),
             "Restart Application",
             "To fully clear your settings, you must restart the application. A shutdown will be attempted after clicking 'OK.' Please ropen the application afterwards.",
             QMessageBox.Ok,
         )
-        QApplication.instance().exit()
+        if app := QApplication.instance():
+            app.exit()
