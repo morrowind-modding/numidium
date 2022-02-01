@@ -402,7 +402,7 @@ class ImageViewer(ViewerItem):
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
         layout = QVBoxLayout()
-        layout.setContentsMargins(0,0,0,0)
+        layout.setContentsMargins(0, 0, 0, 0)
 
         self.viewer = ImageViewport()
         if filepath.lower().endswith(".dds"):

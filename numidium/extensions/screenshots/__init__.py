@@ -31,7 +31,6 @@ class Container(QWidget):
         container_layout.addWidget(self._viewer)
         self.setLayout(container_layout)
 
-
         # TODO: REPLACE WITH CACHED VERSION
         self._install = MorrowindInstall()
         self._install.load(config.active_workspace)

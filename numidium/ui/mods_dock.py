@@ -77,7 +77,6 @@ class Launcher(QWidget):
         self.setLayout(container_layout)
 
 
-
 # TODO: Replace tab contents with implementations.
 # TODO: Connect to extensions system, possibly.
 class Tabs(QTabWidget):
@@ -108,7 +107,6 @@ class Tabs(QTabWidget):
 
 
 class TabsFrame(QFrame):
-
     def __init__(self) -> None:
         super().__init__()
         self.setFrameShadow(QFrame.Shadow.Plain)
