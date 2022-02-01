@@ -19,11 +19,11 @@ class MorrowindInstall:
         # """Loads the Morrowind install within a given workspace into memory."""
         self.workspace = Path(workspace)
         self.ini = MorrowindIni()
-        # try:
-        #     self.ini.load_path(self.ini_path)
-        # except Exception as e:
-        #     logger.error("Morrowind.ini does not exist: %s", self.ini_path)
-        #     raise e
+        try:
+            self.ini.load_path(self.ini_path)
+        except Exception as e:
+            logger.error("Morrowind.ini does not exist: %s", self.ini_path)
+            raise e
 
     @property
     def exe_path(self) -> Path:

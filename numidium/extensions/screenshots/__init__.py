@@ -3,10 +3,12 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QWidget
 
+from numidium.config import config
 from numidium.tes3.core import MorrowindInstall
 from numidium.ui.activity_bar import ActivityBar, ActivityBarItem
+from numidium.ui.application import Numidium
 from numidium.ui.explorer import Explorer
-from numidium.ui.state import AppSettings
+from numidium.ui.signals import Signals
 from numidium.ui.viewer import Viewer
 
 
@@ -32,16 +34,16 @@ class Container(QWidget):
 
         # TODO: REPLACE WITH CACHED VERSION
         self._install = MorrowindInstall()
-        self._install.load(AppSettings().workspace)
-        self._explorer.update_ui(str(self._install.directory_screenshots))
-        AppSettings().workspace_changed.connect(self._handle_workspace_changed)
+        self._install.load(config.active_workspace)
+        self._explorer.update_ui(str(self._install.screenshots_path))
+        Numidium.signals.workspace_changed.connect(self._handle_workspace_changed)
 
         # Connect widgets together.
         self._explorer.selected_filepath_changed.connect(self._viewer.handle_update_filepath)
 
     def _handle_workspace_changed(self, workspace: str) -> None:
         self._install.load(workspace)
-        self._explorer.update_ui(str(self._install.directory_screenshots))
+        self._explorer.update_ui(str(self._install.screenshots_path))
         self._viewer.clear()
 
     def load_screenshots_directory(self, directory: Path) -> None:
