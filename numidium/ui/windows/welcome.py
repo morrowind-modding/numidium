@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (
 )
 
 from numidium.config import config
-from numidium.logger import logger
 from numidium.ui.application import Numidium
 from numidium.ui.widgets import (
     OpenGithubButton,
@@ -69,7 +68,7 @@ class ConfigurationStepOneWidget(StepperItem):
     def _handle_workspace_selected(self) -> None:
         # Default to the value of Morrowind's registry entry for "Installed Path".
         # TODO: Move this stuff to dedicated class for handling Morrowind registry settings.
-        morrowind_registry = "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Bethesda Softworks\Morrowind"
+        morrowind_registry = "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Bethesda Softworks\Morrowind"  # noqa: W605
         morrowind_settings = QSettings(morrowind_registry, QSettings.Format.NativeFormat)
         morrowind_directory = morrowind_settings.value("Installed Path", "")
 

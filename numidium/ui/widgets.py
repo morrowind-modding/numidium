@@ -22,7 +22,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from numidium.config import config
 from numidium.ui.application import Numidium
 
 
@@ -313,7 +312,7 @@ class Stepper(QWidget):
 
         self.active_item = self._items[self._current_step - 1]
         self.active_item.setVisible(True)
-        if self.active_item.valid == False:
+        if not self.active_item.valid:
             self._label_validation_message.setText(self.active_item.validation_message)
         else:
             self._label_validation_message.setText("")

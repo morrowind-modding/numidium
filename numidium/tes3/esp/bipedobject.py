@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from ..typing import *
-from .object import TES3Object
 from .enums import BipedObjectType
+from .object import TES3Object
 
 
 class BipedObject(TES3Object):

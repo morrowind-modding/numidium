@@ -178,7 +178,7 @@ class Extension:
             return None
 
         for key in "name", "version", "description":
-            if not isinstance(value := table.get(key), str):
+            if not isinstance(table.get(key), str):
                 logger.warning("Invalid {} in `tool.numidium`: {}", key, toml_path)
                 return None
 

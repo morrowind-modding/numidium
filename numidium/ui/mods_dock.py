@@ -17,7 +17,6 @@ from PySide6.QtWidgets import (
 )
 
 from numidium.config import config
-from numidium.logger import logger
 from numidium.tes3.core import MorrowindInstall
 from numidium.ui.explorer import Explorer
 from numidium.ui.viewer import Viewer

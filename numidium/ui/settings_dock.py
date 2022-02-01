@@ -50,7 +50,7 @@ class SettingsTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        ####### General Settings
+        # General Settings
         name = SettingItem("Name:", "Test", SettingItemType.TEXT, {"max": 50})
         email = SettingItem("Email:", "Test@gmail.com", SettingItemType.TEXT, {"max": 150})
         age = SettingItem("Age:", 2, SettingItemType.NUMBER, {"max": 150, "min": 1})

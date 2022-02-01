@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from numidium.config import config
 from numidium.logger import logger
 from numidium.tes3.ini import MorrowindIni
 
