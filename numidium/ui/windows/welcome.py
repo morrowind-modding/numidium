@@ -228,27 +228,33 @@ class WelcomeWindow(QWidget):
     def __init__(self) -> None:
         super().__init__()
 
-        # Make a 3x3 grid for us to center our container in.
+        # Make a 3x3 grid for us to center our frame in.
         layout = QGridLayout()
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(2, 1)
-        layout.setRowStretch(0, 1)
+        layout.setColumnMinimumWidth(0, 40)
+        layout.setColumnMinimumWidth(2, 40)
+        layout.setRowStretch(0, 0)
         layout.setRowStretch(2, 1)
+        layout.setRowMinimumHeight(0, 40)
+        layout.setRowMinimumHeight(2, 40)
         self.setLayout(layout)
 
-        container = QWidget()
-        container.setLayout(QVBoxLayout())
-        layout.addWidget(container, 1, 1)
+        frame = QFrame()
+        frame.setFrameShape(QFrame.Box)
+        frame.setLayout(QVBoxLayout())
+        frame.setLineWidth(10)
+        layout.addWidget(frame, 1, 1)
 
         banner = QLabel()
         banner.setPixmap(QPixmap("./numidium/ui/images/banner.png"))
-        container.layout().addWidget(banner)
+        frame.layout().addWidget(banner)
 
         divider = QFrame()
         divider.setFrameShape(QFrame.HLine)
-        container.layout().addWidget(divider)
+        frame.layout().addWidget(divider)
 
         if config.setup_completed:
-            container.layout().addWidget(StartupWidget())
+            frame.layout().addWidget(StartupWidget())
         else:
-            container.layout().addWidget(ConfigurationWidget())
+            frame.layout().addWidget(ConfigurationWidget())
