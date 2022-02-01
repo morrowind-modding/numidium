@@ -96,6 +96,5 @@ show_absolute_path = true # default: false
 [[tool.mypy.overrides]]
 module = [
     "numidium.ui.settings_dock",
-    "numidium.ui.windows.abstractmain",
 ]
 ignore_errors = true

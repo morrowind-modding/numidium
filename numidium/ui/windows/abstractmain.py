@@ -36,19 +36,19 @@ class AbstractMainWindow(QMainWindow):
         self._setup_menu_bar()
         self._setup_status_bar()
 
-    def _setup_actions(self):
+    def _setup_actions(self) -> None:
         self.action_open = OpenWorkspaceAction()
 
         self.action_about = QAction(text="About")
         self.action_about.triggered.connect(self.about_window.show)
 
-        self.action_debug = QAction(text="Debug", shortcut="Ctrl+Shift+D")
+        self.action_debug = QAction(text="Debug", shortcut="Ctrl+Shift+D")  # type:ignore[call-overload]
         self.action_debug.triggered.connect(self.debug_window.show)
 
-        self.action_exit = QAction(text="E&xit", shortcut="Ctrl+Q")
-        self.action_exit.triggered.connect(lambda _: QApplication.instance().quit())
+        self.action_exit = QAction(text="E&xit", shortcut="Ctrl+Q")  # type:ignore[call-overload]
+        self.action_exit.triggered.connect(lambda _: app.quit() if (app := QApplication.instance()) else None)
 
-    def _setup_menu_bar(self):
+    def _setup_menu_bar(self) -> None:
         self.menu_bar = QMenuBar()
 
         # File Menu
@@ -68,11 +68,11 @@ class AbstractMainWindow(QMainWindow):
 
         self.rebuild_recent_workspaces()
 
-    def _setup_status_bar(self):
+    def _setup_status_bar(self) -> None:
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
 
-    def rebuild_recent_workspaces(self):
+    def rebuild_recent_workspaces(self) -> None:
         self.menu_bar_recent_workspaces.clear()
         for recent_workspace in config.recent_workspaces:
             action = QAction(text=recent_workspace, parent=self.menu_bar_recent_workspaces)
