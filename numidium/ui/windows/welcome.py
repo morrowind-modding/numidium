@@ -130,7 +130,7 @@ class ConfigurationWidget(QWidget):
         self.setLayout(layout)
 
     def _handle_complete_steps(self) -> None:
-        Numidium.workspace_changed.emit(self.config_step_one.open_workspace_line.text())
+        Numidium.signals.workspace_changed.emit(self.config_step_one.open_workspace_line.text())
         config.setup_completed = True
 
 
@@ -214,7 +214,7 @@ class StartupWidget(QWidget):
 
     def _handle_welcome_screen_select_workspace(self, current: QListWidgetItem) -> None:
         data = current.data(Qt.ItemDataRole.UserRole)  # type: ignore[arg-type]
-        Numidium.workspace_changed.emit(data)
+        Numidium.signals.workspace_changed.emit(data)
 
     def _handle_welcome_screen_startup_checked(self) -> None:
         checked = self.sender().isChecked()

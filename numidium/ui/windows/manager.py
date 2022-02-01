@@ -22,7 +22,7 @@ class ManagerWindow(QMainWindow):
         else:
             self.widget = ApplicationWindow()
 
-        Numidium.workspace_changed.connect(self.handle_workspace_changed)
+        Numidium.signals.workspace_changed.connect(self.handle_workspace_changed)
 
         self.setCentralWidget(self.widget)
 

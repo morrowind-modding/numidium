@@ -80,4 +80,4 @@ class AbstractMainWindow(QMainWindow):
             self.menu_bar_recent_workspaces.addAction(action)
 
     def _handle_change_workspace(self) -> None:
-        Numidium.workspace_changed.emit(self.sender().text())
+        Numidium.signals.workspace_changed.emit(self.sender().text())

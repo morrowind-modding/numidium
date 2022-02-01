@@ -88,7 +88,7 @@ class OpenWorkspaceObject(QWidget):
             self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog  # type: ignore[arg-type]
         )
         if workspace:
-            Numidium.workspace_changed.emit(workspace)
+            Numidium.signals.workspace_changed.emit(workspace)
 
 
 class OpenWorkspaceAction(QAction, OpenWorkspaceObject):

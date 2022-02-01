@@ -35,5 +35,5 @@ class staticproperty(Generic[T]):
     def __init__(self, func: Callable[[], T]) -> None:
         self.func = func
 
-    def __get__(self, _obj: Any, _type: Any) -> T:
+    def __get__(self, instance: Any, owner: Any) -> T:
         return self.func()
