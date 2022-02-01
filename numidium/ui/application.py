@@ -14,8 +14,8 @@ QDir.addSearchPath("icons", "numidium/ui/icons")
 class Numidium(QApplication):
     _signals: Signals
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, argv: list[str]) -> None:
+        super().__init__(argv)
 
         self._signals = Signals()
 
