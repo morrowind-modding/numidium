@@ -15,6 +15,8 @@ AnyPath = str | PathLike[str]
 CONFIG_ROOT = Path(user_config_dir("numidium", appauthor=False))
 CONFIG_PATH = CONFIG_ROOT / "config.json"
 
+CONFIG_ROOT.mkdir(parents=True, exist_ok=True)
+
 logger.info("CONFIG_ROOT: {}", CONFIG_ROOT)
 logger.info("CONFIG_PATH: {}", CONFIG_PATH)
 
@@ -86,4 +88,4 @@ config = Config()
 try:
     config.load_path(CONFIG_PATH)
 except FileNotFoundError:
-    pass  # using default config
+    config.save_path(CONFIG_PATH)

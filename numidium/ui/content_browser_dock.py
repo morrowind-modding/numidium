@@ -2,6 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDockWidget, QMainWindow, QTextEdit, QVBoxLayout, QWidget
 
 from numidium.config import config
+from numidium.ui.application import Numidium
 from numidium.ui.explorer import Explorer
 from numidium.ui.viewer import Viewer
 
@@ -46,5 +47,5 @@ class ContentBrowserDock(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
 
         # Connect signals.
-        # config.active_workspace_changed.connect(self.explorer.update_ui)
+        Numidium.signals.workspace_changed.connect(self.explorer.update_ui)
         self.explorer.selected_filepath_changed.connect(self.viewer.handle_update_filepath)
