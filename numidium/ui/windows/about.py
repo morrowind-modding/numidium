@@ -17,7 +17,7 @@ class AboutWindow(QWidget):
         self.button_open_source_code = OpenGithubButton()
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
         layout.addWidget(self.label_description)
         layout.addWidget(self.button_open_source_code)
 
