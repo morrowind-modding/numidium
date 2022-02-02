@@ -1,5 +1,0 @@
-[tool.numidium]
-name = "Image Viewer"
-version = "0.1.0"
-description = "A basic image viewer."
-authors = ["Greatness7 <Greatness7@gmail.com>"]

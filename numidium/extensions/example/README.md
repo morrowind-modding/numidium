@@ -1,5 +1,5 @@
 <!-- ![Numidium](numidium/ui/images/banner.png) -->
-<img src="numidium/ui/images/banner.png" width="640"/>
+![banner](numidium/ui/images/banner.png)
 
 <!-- This is a comment -->
 <!-- The following line is an HTML non-breaking space-->
