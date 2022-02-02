@@ -27,7 +27,7 @@ class MainWindow(AbstractMainWindow):
         self.console = Console()
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.console)
 
-        if config.show_welcome or not config.setup_completed:
+        if config.show_welcome or not config.recent_workspaces:
             self.show_welcome_window()
         else:
             self.show_default_window()

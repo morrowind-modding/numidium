@@ -130,8 +130,6 @@ class ConfigurationWidget(QWidget):
 
     def _handle_complete_steps(self) -> None:
         Numidium.signals.workspace_changed.emit(self.config_step_one.open_workspace_line.text())
-        config.setup_completed = True
-        config.save_path()
 
 
 class StartupWidget(QWidget):
@@ -255,7 +253,7 @@ class WelcomeWindow(QWidget):
         divider.setFrameShape(QFrame.HLine)
         frame.layout().addWidget(divider)
 
-        if config.setup_completed:
+        if config.recent_workspaces:
             frame.layout().addWidget(StartupWidget())
         else:
             frame.layout().addWidget(ConfigurationWidget())
