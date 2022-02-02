@@ -10,7 +10,6 @@ from PySide6.QtWidgets import (
     QPushButton,
     QTableView,
     QTabWidget,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -174,7 +173,6 @@ class ModsDock(QMainWindow):
 
         # Wrap up with toolbar and bottom dock.
         self._setup_toolbar()
-        self._setup_bottom_dock()
 
     def _handle_workspace_changed(self, workspace: str) -> None:
         self.load_workspace(workspace)
@@ -190,17 +188,3 @@ class ModsDock(QMainWindow):
     def _setup_toolbar(self) -> None:
         self._toolbar = ModsDockToolbar()
         self.addToolBar(self._toolbar)
-
-    def _setup_bottom_dock(self) -> None:
-        # Dock Widgets
-        self._bottom_dock = QDockWidget("Bottom dock")
-        self._bottom_dock.setWidget(QTextEdit("This is the bottom widget. -- NI"))
-        self._bottom_dock.setAllowedAreas(
-            Qt.DockWidgetArea.LeftDockWidgetArea  # type: ignore[operator]
-            | Qt.DockWidgetArea.RightDockWidgetArea
-            | Qt.DockWidgetArea.BottomDockWidgetArea
-            | Qt.DockWidgetArea.TopDockWidgetArea
-        )
-        self._bottom_dock.setFeatures(QDockWidget.DockWidgetClosable.DockWidgetMovable)
-
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self._bottom_dock)
