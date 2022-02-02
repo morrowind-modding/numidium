@@ -24,7 +24,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "poetry run pytest -rP",
+            "command": "poetry run pytest -rA",
             "presentation": {
                 "clear": true,
                 "focus": true
