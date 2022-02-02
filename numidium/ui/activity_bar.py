@@ -33,7 +33,7 @@ class ActivityBarItem(QListWidgetItem, QObject):
         super().__init__()
 
         self.setIcon(QIcon(icon) if isinstance(icon, str) else icon)
-        self.setText(text)
+        self.setText(text.upper())
 
         font = self.font()
         font.setPointSize(10)
