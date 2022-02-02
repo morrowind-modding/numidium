@@ -8,9 +8,7 @@ from PySide6.QtWidgets import (
     QDockWidget,
     QListWidget,
     QListWidgetItem,
-    QMainWindow,
     QStackedWidget,
-    QTextEdit,
     QWidget,
 )
 
@@ -52,35 +50,6 @@ class ActivityBarItem(QListWidgetItem):
         self._action.triggered.connect(self.triggered.emit)
 
 
-class ActivityView(QMainWindow):
-    """A wrapper object for the active stack item in an `ActivityBar`.
-
-    This object allows for adding global docks or other application-wide items to all main window viewports.
-    """
-
-    # The associated stack widget. Stack is managed by parent object.
-    _stacked_widget: QStackedWidget
-
-    def __init__(self, stacked_widget: QStackedWidget) -> None:
-        super().__init__()
-        self._stacked_widget = stacked_widget
-        self.setCentralWidget(self._stacked_widget)
-        self._setup_bottom_dock()
-
-    def _setup_bottom_dock(self) -> None:
-        # Dock Widgets
-        self._bottom_dock = QDockWidget("Bottom dock")
-        self._bottom_dock.setWidget(QTextEdit("This is the bottom widget. -- NI"))
-        self._bottom_dock.setAllowedAreas(
-            Qt.DockWidgetArea.LeftDockWidgetArea  # type: ignore[operator]
-            | Qt.DockWidgetArea.RightDockWidgetArea
-            | Qt.DockWidgetArea.BottomDockWidgetArea
-            | Qt.DockWidgetArea.TopDockWidgetArea
-        )
-        self._bottom_dock.setFeatures(QDockWidget.DockWidgetClosable.DockWidgetMovable)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self._bottom_dock)
-
-
 class ActivityBar(QDockWidget):
     """The application's activity bar.
 
@@ -92,10 +61,7 @@ class ActivityBar(QDockWidget):
     _list: QListWidget
 
     # Container for associated view widgets.
-    _stack: QStackedWidget
-
-    # Wrapper around container, allows for custom docks or other viewport widgets.
-    _view: ActivityView
+    _view: QStackedWidget
 
     # Global instance
     _instance: ClassVar[ActivityBar]
@@ -109,9 +75,7 @@ class ActivityBar(QDockWidget):
         self._list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self._list.currentItemChanged.connect(self.set_current_item)
 
-        self._stack = QStackedWidget()
-
-        self._view = ActivityView(self._stack)
+        self._view = QStackedWidget()
 
         # Customize Look
 
@@ -153,21 +117,21 @@ class ActivityBar(QDockWidget):
     def add_item(self, item: ActivityBarItem) -> None:
         """Add a new item to the activity bar."""
         self._list.addItem(item)
-        self._stack.addWidget(item._widget)
+        self._view.addWidget(item._widget)
 
     def remove_item(self, item: ActivityBarItem) -> None:
         """Remove an item from the activity bar."""
         i = self._list.indexFromItem(item).row()
         if i != -1:
             self._list.takeItem(i)
-            self._stack.removeWidget(item._widget)
+            self._view.removeWidget(item._widget)
 
     def set_current_item(self, item: ActivityBarItem) -> None:
         """Set the currently active item in the activity bar."""
         i = self._list.indexFromItem(item).row()
         if i != -1:
             self._list.setCurrentRow(i)
-            self._stack.setCurrentIndex(i)
+            self._view.setCurrentIndex(i)
 
     @classmethod
     def instance(cls) -> ActivityBar:

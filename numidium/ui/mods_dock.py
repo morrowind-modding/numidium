@@ -2,7 +2,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QComboBox,
-    QDockWidget,
     QFrame,
     QHBoxLayout,
     QHeaderView,
@@ -140,8 +139,6 @@ class ModsDock(QMainWindow):
     _installers_frame: InstallersFrame
     _tabs_frame: TabsFrame
 
-    _bottom_dock: QDockWidget
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -171,7 +168,7 @@ class ModsDock(QMainWindow):
         self.morrowind_install = MorrowindInstall()
         self.load_workspace(config.active_workspace)
 
-        # Wrap up with toolbar and bottom dock.
+        # Wrap up with toolbar.
         self._setup_toolbar()
 
     def _handle_workspace_changed(self, workspace: str) -> None:

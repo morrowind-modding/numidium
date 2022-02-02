@@ -22,12 +22,6 @@ class ContentBrowserDock(QWidget):
         self.explorer = Explorer()
         self.explorer.update_ui(config.active_workspace)
         self.left_dock.setWidget(self.explorer)
-        self.left_dock.setAllowedAreas(
-            Qt.DockWidgetArea.LeftDockWidgetArea  # type:ignore[operator]
-            | Qt.DockWidgetArea.RightDockWidgetArea
-            | Qt.DockWidgetArea.BottomDockWidgetArea
-            | Qt.DockWidgetArea.TopDockWidgetArea
-        )
 
         self.viewer = Viewer()
 
