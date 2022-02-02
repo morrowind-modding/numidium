@@ -28,6 +28,7 @@ class Container(QWidget):
         container_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)  # type: ignore[call-overload]
         container_layout.addWidget(self._explorer)
         container_layout.addWidget(self._viewer)
+        container_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(container_layout)
 
         # TODO: REPLACE WITH CACHED VERSION
