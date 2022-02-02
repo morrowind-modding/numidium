@@ -40,7 +40,7 @@ class InstallersFrame(QFrame):
         super().__init__()
         self.setFrameShadow(QFrame.Shadow.Plain)
         container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)  # type: ignore[call-overload]
+        container_layout.setAlignment(Qt.AlignLeft)  # type: ignore[call-overload]
 
         self._table_installers = QTableView()
         self._table_installers.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)

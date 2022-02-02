@@ -38,7 +38,7 @@ class ConfigurationStepOneWidget(StepperItem):
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)  # type: ignore[call-overload]
+        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
 
         self.description_label = TextBlockLabel(
             "Welcome to Numidium! This multi-tool offers the ability to manage and edit your Morrowind mods, while remaining highly extensible through plugins and user settings. To get started, open a workspace! Workspaces represent a particular install of Morrowind. Simply navigate to the folder that contains your Morrowind.exe file and choose open directory. Note: After setting up your first workspace, you will be able to open and manage multiple workspaces."
@@ -98,7 +98,7 @@ class ConfigurationStepTwoWidget(StepperItem):
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)  # type: ignore[call-overload]
+        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
 
         self.label_description = TextBlockLabel(
             "That's it, for now! Your workspace is successfully configured. Click Finish to continue into the application."
@@ -192,7 +192,7 @@ class StartupWidget(QWidget):
     def _setup_getting_started(self) -> None:
         self.container_getting_started = QWidget()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # type: ignore[call-overload]
+        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
 
         subtitle_label = SubtitleLabel("Getting Started")
         self.open_workspace_button = OpenWorkspaceButton()
