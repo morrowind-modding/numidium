@@ -1,4 +1,3 @@
-from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QComboBox,
@@ -15,6 +14,7 @@ from PySide6.QtWidgets import (
 
 from numidium.config import config
 from numidium.tes3.core import MorrowindInstall
+from numidium.ui.enums import AlignmentFlag
 from numidium.ui.widgets import DockToolbar, ObjectTableModel, PlaceholderWidget
 
 
@@ -40,7 +40,7 @@ class InstallersFrame(QFrame):
         super().__init__()
         self.setFrameShadow(QFrame.Shadow.Plain)
         container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignLeft)  # type: ignore[call-overload]
+        container_layout.setAlignment(AlignmentFlag.AlignLeft)
 
         self._table_installers = QTableView()
         self._table_installers.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
@@ -107,7 +107,7 @@ class TabsFrame(QFrame):
         self.setFrameShadow(QFrame.Shadow.Plain)
 
         container_layout = QVBoxLayout()
-        container_layout.setAlignment(Qt.AlignLeft)  # type: ignore[call-overload]
+        container_layout.setAlignment(AlignmentFlag.AlignLeft)
 
         # TODO: Implement handling for game engine launcher change.
         self.launcher = Launcher()
@@ -145,7 +145,7 @@ class ModsDock(QMainWindow):
         # Configure UI
         self._container = QWidget()
         self._layout = QHBoxLayout()
-        self._layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
+        self._layout.setAlignment(AlignmentFlag.AlignHCenter)
 
         # Configure left panel - installers.
         self._installers_frame = InstallersFrame()

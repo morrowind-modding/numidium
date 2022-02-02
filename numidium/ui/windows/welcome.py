@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import QSettings, Qt
+from PySide6.QtCore import QSettings
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 
 from numidium.config import config
 from numidium.ui.application import Numidium
+from numidium.ui.enums import AlignmentFlag, ItemDataRole
 from numidium.ui.widgets import (
     OpenGithubButton,
     OpenWorkspaceButton,
@@ -38,7 +39,7 @@ class ConfigurationStepOneWidget(StepperItem):
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignHCenter)
 
         self.description_label = TextBlockLabel(
             "Welcome to Numidium! This multi-tool offers the ability to manage and edit your Morrowind mods, while remaining highly extensible through plugins and user settings. To get started, open a workspace! Workspaces represent a particular install of Morrowind. Simply navigate to the folder that contains your Morrowind.exe file and choose open directory. Note: After setting up your first workspace, you will be able to open and manage multiple workspaces."
@@ -48,7 +49,7 @@ class ConfigurationStepOneWidget(StepperItem):
         workspace_container = QWidget()
         workspace_container_layout = QHBoxLayout()
 
-        self.open_workspace_button = QPushButton(icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
+        self.open_workspace_button = QPushButton(icon=QIcon("icons:folder_24dp.svg"), text="Open Workspace ")
         self.open_workspace_line = QLineEdit()
         self.open_workspace_line.setReadOnly(True)
 
@@ -98,7 +99,7 @@ class ConfigurationStepTwoWidget(StepperItem):
     def __init__(self) -> None:
         super().__init__()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignHCenter)
 
         self.label_description = TextBlockLabel(
             "That's it, for now! Your workspace is successfully configured. Click Finish to continue into the application."
@@ -182,7 +183,7 @@ class StartupWidget(QWidget):
 
             item_layout.setSizeConstraint(QVBoxLayout.SetFixedSize)
             item.setSizeHint(item_container.sizeHint())
-            item.setData(Qt.ItemDataRole.UserRole, workspace)  # type:ignore[arg-type]
+            item.setData(ItemDataRole.UserRole, workspace)
             self.list.addItem(item)
             self.list.setItemWidget(item, item_container)
 
@@ -192,7 +193,7 @@ class StartupWidget(QWidget):
     def _setup_getting_started(self) -> None:
         self.container_getting_started = QWidget()
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignTop)
 
         subtitle_label = SubtitleLabel("Getting Started")
         self.open_workspace_button = OpenWorkspaceButton()
@@ -212,7 +213,7 @@ class StartupWidget(QWidget):
         self.open_welcome_on_startup_checkbox.stateChanged.connect(self._handle_welcome_screen_startup_checked)
 
     def _handle_welcome_screen_select_workspace(self, current: QListWidgetItem) -> None:
-        data = current.data(Qt.ItemDataRole.UserRole)  # type: ignore[arg-type]
+        data = current.data(ItemDataRole.UserRole)
         Numidium.signals.workspace_changed.emit(data)
 
     def _handle_welcome_screen_startup_checked(self) -> None:

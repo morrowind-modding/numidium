@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
 )
 
 from numidium.ui.application import Numidium
+from numidium.ui.enums import AlignmentFlag, ItemDataRole
 
 
 class PlaceholderWidget(QWidget):
@@ -249,7 +250,7 @@ class Stepper(QWidget):
     def _setup_stepper(self) -> None:
         self._container_stepper = QWidget()
         layout = QHBoxLayout()
-        layout.setAlignment(Qt.AlignRight)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignRight)
 
         self._label_validation_message = TextBlockLabel("")
         font = self._label_validation_message.font()
@@ -344,12 +345,12 @@ class ObjectTableModel(QAbstractTableModel):
     def data(self, index: QModelIndex | QPersistentModelIndex, role: int = 0) -> Any:
         if not index.isValid():
             return None
-        elif role != Qt.DisplayRole:  # type: ignore[comparison-overlap]
+        elif role != ItemDataRole.DisplayRole:
             return None
         return self._list[index.row()][index.column()]
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = 0) -> Any:
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:  # type: ignore[comparison-overlap]
+        if orientation == Qt.Horizontal and role == ItemDataRole.DisplayRole:
             return self.header[section]
         return None
 

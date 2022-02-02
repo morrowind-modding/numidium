@@ -1,6 +1,6 @@
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 
+from numidium.ui.enums import AlignmentFlag
 from numidium.ui.widgets import OpenGithubButton, TextBlockLabel
 
 
@@ -17,7 +17,7 @@ class AboutWindow(QWidget):
         self.button_open_source_code = OpenGithubButton()
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignTop)
         layout.addWidget(self.label_description)
         layout.addWidget(self.button_open_source_code)
 

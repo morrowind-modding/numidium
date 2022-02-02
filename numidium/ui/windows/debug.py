@@ -1,4 +1,3 @@
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -10,6 +9,7 @@ from PySide6.QtWidgets import (
 
 from numidium.config import config
 from numidium.logger import logger
+from numidium.ui.enums import AlignmentFlag
 from numidium.ui.widgets import TextBlockLabel
 
 
@@ -27,7 +27,7 @@ class DebugWindow(QWidget):
         super().__init__()
 
         layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignTop)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignTop)
 
         self._label = QLabel("Debug")
         self._description = TextBlockLabel(

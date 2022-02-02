@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
 from numidium.logger import logger
 from numidium.tes3 import Plugin, dds
 from numidium.tes3.esp.object import TES3Object
+from numidium.ui.enums import AlignmentFlag
 from numidium.ui.widgets import ObjectTableModel
 
 
@@ -433,7 +434,7 @@ class UnsupportedFileViewer(ViewerItem):
     def __init__(self, filepath: str) -> None:
         super().__init__(filepath)
         layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignHCenter)  # type: ignore[call-overload]
+        layout.setAlignment(AlignmentFlag.AlignHCenter)
         layout.addWidget(QLabel("This file type is not currently supported."))
         self.setLayout(layout)
 
