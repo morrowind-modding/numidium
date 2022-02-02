@@ -9,7 +9,8 @@
     "python.linting.lintOnSave": true,
     "python.linting.flake8Enabled": true,
     "python.linting.flake8Args": [
-        "--config=${workspaceFolder}/.flake8"
+        "--config=${workspaceFolder}/.flake8",
+        "--exlude=.venv"
     ],
     "python.linting.mypyEnabled": true,
     "python.linting.mypyArgs": [
