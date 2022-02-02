@@ -178,6 +178,9 @@ class ModsDock(QMainWindow):
         self.load_workspace(workspace)
 
     def load_workspace(self, workspace: str) -> None:
+        if not workspace:
+            return
+
         # Reload directory information.
         self.morrowind_install.load(workspace)
 
