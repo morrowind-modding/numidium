@@ -19,7 +19,7 @@ class MainWindow(AbstractMainWindow):
         super().__init__()
 
         self.setWindowTitle("Numidium")
-        self.resize(self.screen().availableGeometry().size() / 1.25)  # type: ignore[call-overload]
+        self.resize(self.screen().availableGeometry().size() * 0.8)
 
         self.activity_bar = ActivityBar()
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.activity_bar)
