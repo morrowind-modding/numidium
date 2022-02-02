@@ -1,7 +1,7 @@
 import sys
 from typing import Any
 
-from PySide6.QtCore import QObject, Qt, Signal, SignalInstance
+from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QDockWidget, QPlainTextEdit
 
@@ -10,7 +10,7 @@ from numidium.logger import logger
 
 
 class StdoutWrapper(QObject):
-    text_written: SignalInstance = Signal(str)  # type: ignore[assignment]
+    text_written = Signal(str)
 
     def write(self, text: str) -> None:
         self.text_written.emit(text)

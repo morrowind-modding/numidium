@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from PySide6.QtCore import QObject, QSize, Qt, Signal, SignalInstance
+from PySide6.QtCore import QObject, QSize, Qt, Signal
 from PySide6.QtGui import QAction, QFont, QIcon
 from PySide6.QtWidgets import (
     QDockWidget,
@@ -21,9 +21,9 @@ from numidium.ui.mods_dock import ModsDock
 class ActivityBarItem(QListWidgetItem, QObject):
     """A custom widget that can be added to the application activity bar."""
 
-    hovered: SignalInstance = Signal()  # type: ignore[assignment]
-    toggled: SignalInstance = Signal(bool)  # type: ignore[assignment]
-    triggered: SignalInstance = Signal()  # type: ignore[assignment]
+    hovered = Signal()
+    toggled = Signal(bool)
+    triggered = Signal()
 
     _action: QAction
     _widget: QWidget

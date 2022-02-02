@@ -7,7 +7,6 @@ from PySide6.QtCore import (
     QPersistentModelIndex,
     Qt,
     Signal,
-    SignalInstance,
 )
 from PySide6.QtGui import QAction, QDesktopServices, QIcon
 from PySide6.QtWidgets import (
@@ -182,7 +181,7 @@ class StepperItem(QWidget):
         The current validation message.
     """
 
-    valid_changed: SignalInstance = Signal(bool)  # type: ignore[assignment]
+    valid_changed = Signal(bool)
     valid: bool
     validation_message: str
 
@@ -213,7 +212,7 @@ class Stepper(QWidget):
         The currently shown stepper item.
     """
 
-    stepper_finish_clicked: SignalInstance = Signal()  # type: ignore[assignment]
+    stepper_finish_clicked = Signal()
 
     items: list[StepperItem]
     active_item: StepperItem

@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from PySide6.QtCore import QFile, QPoint, Qt, Signal, SignalInstance
+from PySide6.QtCore import QFile, QPoint, Qt, Signal
 from PySide6.QtGui import QAction, QClipboard, QGuiApplication
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -23,7 +23,7 @@ from numidium.ui.utility import OperatingSystemUtility
 class Explorer(QWidget):
     """A file explorer widget for the current workspace, including an extensible context menu."""
 
-    selected_filepath_changed: SignalInstance = Signal(str)  # type: ignore[assignment]
+    selected_filepath_changed = Signal(str)
 
     os_utility: OperatingSystemUtility
     filesystem: QFileSystemModel

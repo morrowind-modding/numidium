@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from PySide6.QtCore import QObject, Signal, SignalInstance
+from PySide6.QtCore import QObject, Signal
 
 from numidium.config import config
 
 
 class Signals(QObject):
-    workspace_changed: SignalInstance = Signal(str)  # type: ignore[assignment]
+    workspace_changed = Signal(str)
 
     def __init__(self) -> None:
         super().__init__()
