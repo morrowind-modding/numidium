@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Iterator
 
 from PySide6.QtCore import QFile, QModelIndex, QPoint, Qt, Signal
 from PySide6.QtGui import QAction, QClipboard, QGuiApplication
