@@ -98,7 +98,7 @@ class Tabs(QTabWidget):
 
     def load_workspace(self, install: MorrowindInstall) -> None:
         # TODO: Update tabs.
-        print("Load tabs")
+        pass
 
 
 class TabsFrame(QFrame):
