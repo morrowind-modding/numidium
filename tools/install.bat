@@ -1,3 +1,3 @@
 cd /d ..
-poetry install
+poetry install --no-dev
 pause
