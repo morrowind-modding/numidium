@@ -5,7 +5,7 @@ from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QDockWidget, QPlainTextEdit
 
-from numidium.config import config
+from numidium.config import CONFIG_PATH, config
 from numidium.logger import logger
 
 
@@ -42,6 +42,7 @@ class Console(QDockWidget):
         sys.stdout = StdoutWrapper()
         sys.stdout.text_written.connect(text_edit.insertPlainText)
 
-        logger.add(sys.stdout, format="{time:HH:mm:ss.SSS}  |  {level:<8}  |  {message}", colorize=False)
-        logger.info(f"{config.active_workspace=}")
-        logger.info(f"{config.active_extensions=}")
+        logger.add(sys.stdout, format="{time:HH:mm:ss.SSS} | {level:^.6} | {message}", colorize=False)
+        logger.info("Config Path: {}", CONFIG_PATH)
+        logger.info("Active Workspace: {}", config.active_workspace)
+        logger.info("Active Extensions: {}", config.active_extensions)
