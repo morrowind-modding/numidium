@@ -69,13 +69,13 @@ class ConfigurationStepOneWidget(StepperItem):
         # TODO: Move this stuff to dedicated class for handling Morrowind registry settings.
         morrowind_registry = "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Bethesda Softworks\Morrowind"  # noqa: W605
         morrowind_settings = QSettings(morrowind_registry, QSettings.Format.NativeFormat)
-        morrowind_directory = morrowind_settings.value("Installed Path", "")
+        morrowind_directory = str(morrowind_settings.value("Installed Path", ""))
 
         # First, open a supposed workspace.
-        workspace = QFileDialog(directory=morrowind_directory).getExistingDirectory(  # type: ignore[call-overload]
+        workspace = QFileDialog().getExistingDirectory(
             parent=self,
-            caption="Open Directory",
-            options=QFileDialog.Option.DontUseNativeDialog,
+            dir=morrowind_directory,
+            options=QFileDialog.DontUseNativeDialog,
         )
         if workspace:
             # Confirm that Morrowind.ini exists in the folder - otherwise it is invalid.

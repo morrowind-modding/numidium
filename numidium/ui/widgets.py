@@ -83,9 +83,7 @@ class OpenWorkspaceObject(QWidget):
         super().__init__()
 
     def _handle_open_workspace(self) -> None:
-        workspace = QFileDialog.getExistingDirectory(
-            self.parent(), "Open Directory", options=QFileDialog.Option.DontUseNativeDialog  # type: ignore[arg-type]
-        )
+        workspace = QFileDialog.getExistingDirectory(parent=self.parent(), options=QFileDialog.DontUseNativeDialog)
         if workspace:
             Numidium.signals.workspace_changed.emit(workspace)
 

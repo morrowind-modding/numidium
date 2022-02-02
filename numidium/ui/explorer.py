@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
+from typing import Iterator
 
-from PySide6.QtCore import QFile, QPoint, Qt, Signal
+from PySide6.QtCore import QFile, QModelIndex, QPoint, Qt, Signal
 from PySide6.QtGui import QAction, QClipboard, QGuiApplication
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -60,11 +61,7 @@ class Explorer(QWidget):
         self.treeview.customContextMenuRequested.connect(self._handle_custom_context_menu)
 
     def _handle_custom_context_menu(self, position: QPoint) -> None:
-        index = self.treeview.selectedIndexes()[0]
-        if not index:
-            return
-
-        self.context_filepath = self.filesystem.filePath(index)  # type: ignore[arg-type]
+        self.context_filepath = self.filesystem.filePath(self.selected_index)
 
         menu = QMenu()
 
@@ -164,8 +161,7 @@ class Explorer(QWidget):
             raise Exception("Invalid message box result when deleting file.")
 
     def _handle_select_file(self) -> None:
-        index = self.treeview.selectedIndexes()[0]
-        self.selected_filepath = self.filesystem.filePath(index)  # type: ignore[arg-type]
+        self.selected_filepath = self.filesystem.filePath(self.selected_index)
         self.selected_filepath_changed.emit(self.selected_filepath)
 
     def set_advanced_view(self, enabled: bool, update_ui: bool = False) -> None:
@@ -198,3 +194,10 @@ class Explorer(QWidget):
             layout.addWidget(self.treeview)
         else:
             layout.addWidget(self.message)
+
+    @property
+    def selected_index(self) -> QModelIndex:
+        for index in self.treeview.selectedIndexes():
+            if isinstance(index, QModelIndex):
+                return index
+        raise IndexError("No indices are selected.")
