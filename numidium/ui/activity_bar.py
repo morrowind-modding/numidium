@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QStackedWidget,
     QWidget,
 )
+from qtvscodestyle import Vsc, theme_icon  # type: ignore
 
 from numidium.core.extensions import reload_active_extensions
 from numidium.ui.content_browser_dock import ContentBrowserDock
@@ -89,21 +90,21 @@ class ActivityBar(QDockWidget):
         self.add_item(
             ActivityBarItem(
                 widget=ModsDock(),
-                icon="icons:dashboard_24dp.svg",
+                icon=theme_icon(Vsc.PACKAGE),
                 text="Mods",
             )
         )
         self.add_item(
             ActivityBarItem(
                 widget=ContentBrowserDock(),
-                icon="icons:preview_24dp.svg",
+                icon=theme_icon(Vsc.BROWSER),
                 text="Content Browser",
             )
         )
         self.add_item(
             ActivityBarItem(
                 widget=ExtensionsDock(),
-                icon="icons:settings_24dp.svg",
+                icon=theme_icon(Vsc.EXTENSIONS),
                 text="Extensions",
             )
         )

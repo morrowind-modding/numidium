@@ -2,6 +2,7 @@ from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QWidget
+from qtvscodestyle import Vsc, theme_icon  # type: ignore
 
 from numidium.config import config
 from numidium.tes3.core import MorrowindInstall
@@ -49,7 +50,7 @@ class Container(QWidget):
         self._explorer.update_ui(str(directory))
 
 
-item = ActivityBarItem(widget=Container(), icon="icons:collections_24dp.svg", text="Screenshots")
+item = ActivityBarItem(widget=Container(), icon=theme_icon(Vsc.FILE_MEDIA), text="Screenshots")
 
 
 def register() -> None:
