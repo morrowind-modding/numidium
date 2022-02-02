@@ -98,7 +98,7 @@ class OpenWorkspaceAction(QAction, OpenWorkspaceObject):
     """
 
     def __init__(self) -> None:
-        super().__init__(icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace")
+        super().__init__(icon=QIcon("icons:folder_24dp.svg"), text="Open Workspace")
         self.setShortcut("Ctrl+Shift+O")
         self.triggered.connect(self._handle_open_workspace)
 
@@ -110,7 +110,7 @@ class OpenWorkspaceButton(QPushButton, OpenWorkspaceObject):
     """
 
     def __init__(self) -> None:
-        super().__init__(icon=QIcon("icons:folder_open_24dp.svg"), text="Open Workspace ")
+        super().__init__(icon=QIcon("icons:folder_24dp.svg"), text="Open Workspace ")
 
         self.setCheckable(True)
         self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)

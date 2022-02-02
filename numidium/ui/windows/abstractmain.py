@@ -61,7 +61,7 @@ class AbstractMainWindow(QMainWindow):
         # File Menu
         menu_file = self.menu_bar.addMenu("&File")
         menu_file.addAction(self.action_open)
-        self.menu_bar_recent_workspaces = menu_file.addMenu(QIcon("icons:crop_din_24dp.svg"), "Recent Workspaces...")
+        self.menu_bar_recent_workspaces = menu_file.addMenu(QIcon("icons:folder_copy_24dp.svg"), "Recent Workspaces...")
         menu_file.addSeparator()
         menu_file.addAction(self.action_exit)
 

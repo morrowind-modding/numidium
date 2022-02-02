@@ -48,7 +48,7 @@ class Container(QWidget):
         self._explorer.update_ui(str(directory))
 
 
-item = ActivityBarItem(widget=Container(), icon="icons:palette_24dp.svg", text="Screenshots")
+item = ActivityBarItem(widget=Container(), icon="icons:collections_24dp.svg", text="Screenshots")
 
 
 def register() -> None:

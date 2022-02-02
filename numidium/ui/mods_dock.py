@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QComboBox,
     QDockWidget,
@@ -66,7 +67,7 @@ class Launcher(QWidget):
 
         combobox_engine = QComboBox()
         combobox_engine.addItems(["Morrowind.exe", "OpenMW"])
-        button_launch = QPushButton("Launch")
+        button_launch = QPushButton(QIcon("icons:start_24dp.svg"), "Launch")
 
         container_layout.addWidget(combobox_engine)
         container_layout.addWidget(button_launch)

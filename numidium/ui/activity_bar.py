@@ -89,14 +89,14 @@ class ActivityBar(QDockWidget):
         self.add_item(
             ActivityBarItem(
                 widget=ModsDock(),
-                icon="icons:widgets_24dp.svg",
+                icon="icons:dashboard_24dp.svg",
                 text="Mods",
             )
         )
         self.add_item(
             ActivityBarItem(
                 widget=ContentBrowserDock(),
-                icon="icons:flip_to_front_24dp.svg",
+                icon="icons:preview_24dp.svg",
                 text="Content Browser",
             )
         )

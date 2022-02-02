@@ -103,7 +103,7 @@ class Container(QWidget):
         return QPixmap.fromImage(image)
 
 
-item = ActivityBarItem(widget=Container(), icon="icons:circle_24dp.svg", text="Image Viewer")
+item = ActivityBarItem(widget=Container(), icon="icons:test_24dp.svg", text="Image Viewer")
 
 
 def register() -> None:
