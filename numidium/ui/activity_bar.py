@@ -3,7 +3,16 @@ from __future__ import annotations
 from typing import ClassVar
 
 from PySide6.QtCore import QObject, QSize, Qt, Signal
-from PySide6.QtGui import QAction, QFont, QIcon
+from PySide6.QtGui import (
+    QAction,
+    QBrush,
+    QColor,
+    QFont,
+    QIcon,
+    QLinearGradient,
+    QPainter,
+    QPixmap,
+)
 from PySide6.QtWidgets import (
     QDockWidget,
     QListWidget,
@@ -17,6 +26,11 @@ from numidium.core.extensions import reload_active_extensions
 from numidium.ui.content_browser_dock import ContentBrowserDock
 from numidium.ui.extensions_dock import ExtensionsDock
 from numidium.ui.mods_dock import ModsDock
+
+GRADIENT = QLinearGradient(0, 0, 128, 128)
+GRADIENT.setColorAt(0, QColor(242, 220, 134))
+GRADIENT.setColorAt(1, QColor(177, 128, 62))
+GRADIENT_BRUSH = QBrush(GRADIENT)
 
 
 class ActivityBarItem(QListWidgetItem, QObject):
@@ -32,23 +46,38 @@ class ActivityBarItem(QListWidgetItem, QObject):
     def __init__(self, widget: QWidget, icon: QIcon | str, text: str):
         super().__init__()
 
-        self.setIcon(QIcon(icon) if isinstance(icon, str) else icon)
-        self.setText(text.upper())
+        icon = self._create_icon(icon)
 
         font = self.font()
         font.setPointSize(10)
         font.setWeight(QFont.Weight.DemiBold)
+
+        self.setIcon(icon)
         self.setFont(font)
+        self.setText(text.upper())
 
         # The associated window that is visible while active.
         self._widget = widget
 
         # Make an action that forwards its events to the widget.
-        self._action = QAction(self.icon(), text)
-        self._action.setCheckable(True)
+        self._action = QAction(text)
         self._action.hovered.connect(self.hovered.emit)
         self._action.toggled.connect(self.toggled.emit)
         self._action.triggered.connect(self.triggered.emit)
+
+    @staticmethod
+    def _create_icon(icon: QIcon | str) -> QPixmap:
+        icon = QIcon(icon) if isinstance(icon, str) else icon
+
+        pixmap = icon.pixmap(128, 128)
+        mask = pixmap.mask()
+
+        painter = QPainter(pixmap)
+        painter.fillRect(pixmap.rect(), GRADIENT_BRUSH)
+        painter.end()
+
+        pixmap.setMask(mask)
+        return pixmap
 
 
 class ActivityBar(QDockWidget):
@@ -73,8 +102,14 @@ class ActivityBar(QDockWidget):
         self._list = QListWidget()
         self._list.setIconSize(QSize(28, 28))
         self._list.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self._list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self._list.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
         self._list.currentItemChanged.connect(self.set_current_item)
+        self._list.setStyleSheet(
+            """
+            QListWidget { background: #333333; }
+            QListWidget::item:selected { color: #F2DC86; background: #444444; }
+            """
+        )
 
         self._view = QStackedWidget()
 
