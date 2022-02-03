@@ -1,0 +1,5 @@
+[tool.numidium]
+name = "Debug Menu"
+version = "0.1.0"
+description = "Debugging Menu for Numidium."
+authors = ["OperatorJack <thepaladinof@gmail.com>"]
