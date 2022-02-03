@@ -11,7 +11,6 @@ from PySide6.QtGui import (
     QIcon,
     QLinearGradient,
     QPainter,
-    QPixmap,
 )
 from PySide6.QtWidgets import (
     QDockWidget,
@@ -66,7 +65,7 @@ class ActivityBarItem(QListWidgetItem, QObject):
         self._action.triggered.connect(self.triggered.emit)
 
     @staticmethod
-    def _create_icon(icon: QIcon | str) -> QPixmap:
+    def _create_icon(icon: QIcon | str) -> QIcon:
         icon = QIcon(icon) if isinstance(icon, str) else icon
 
         pixmap = icon.pixmap(128, 128)
@@ -77,7 +76,11 @@ class ActivityBarItem(QListWidgetItem, QObject):
         painter.end()
 
         pixmap.setMask(mask)
-        return pixmap
+
+        icon = QIcon(pixmap)
+        icon.addPixmap(pixmap, QIcon.Selected)
+
+        return icon
 
 
 class ActivityBar(QDockWidget):
