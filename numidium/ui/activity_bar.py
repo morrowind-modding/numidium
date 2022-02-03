@@ -110,7 +110,7 @@ class ActivityBar(QDockWidget):
         self._list.setStyleSheet(
             """
             QListWidget { background: #333333; }
-            QListWidget::item:selected { color: #F2DC86; background: #444444; }
+            QListWidget::item:selected { color: #D1AD61; background: #444444; }
             """
         )
 
