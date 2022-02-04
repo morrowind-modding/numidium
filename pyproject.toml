@@ -27,6 +27,7 @@ mkdocstrings = "^0.17.0"
 mypy = "^0.931"
 pyinstaller = "^4.8"
 pytest = "^6.2.5"
+pytest-qt = "^4.0.2"
 flake8 = "^4.0.1"
 flake8-docstrings = "^1.6.0"
 
