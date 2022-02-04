@@ -59,7 +59,9 @@ class MenuBar(QMenuBar):
         # File Menu
         menu_file = self.addMenu("&File")
         menu_file.addAction(self._action_open)
-        self._menu_bar_recent_workspaces = menu_file.addMenu(QIcon("icons:folder_copy_24dp.svg"), "Recent Workspaces...")
+        self._menu_bar_recent_workspaces = menu_file.addMenu(
+            QIcon("icons:folder_copy_24dp.svg"), "Recent Workspaces..."
+        )
         menu_file.addSeparator()
         menu_file.addAction(self._action_exit)
 
