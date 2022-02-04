@@ -1,4 +1,5 @@
-import sys
+# type: ignore
+
 from typing import Any
 
 import qtvscodestyle as qtvsc

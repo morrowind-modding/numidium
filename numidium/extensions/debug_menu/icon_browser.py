@@ -1,3 +1,5 @@
+# type: ignore
+
 import qtvscodestyle as qtvsc
 from PySide6.QtCore import (
     QObject,
@@ -200,7 +202,7 @@ class IconModel(QStringListModel):
         """
         if role == Qt.ItemDataRole.DecorationRole:
             icon_string: str = self.data(index, Qt.ItemDataRole.DisplayRole)
-            prefix, icon_name = icon_string.split(".")  # type: ignore
+            prefix, icon_name = icon_string.split(".")
             specifiers = {"vs": qtvsc.Vsc, "fa-r": qtvsc.FaRegular, "fa-b": qtvsc.FaBrands, "fa-s": qtvsc.FaSolid}
             specifier = specifiers[prefix]
             for specifier in specifiers[prefix]:

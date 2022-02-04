@@ -1,4 +1,4 @@
-from tkinter import Widget
+# type: ignore
 
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
