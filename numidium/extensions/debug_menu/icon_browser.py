@@ -75,19 +75,11 @@ class IconBrowser(QMainWindow):
         self._list_view.doubleClicked.connect(self._copy_icon_text)
 
         self._line_edit = QLineEdit(self)
-        self._line_edit.setAlignment(Qt.AlignCenter)
         self._line_edit.textChanged.connect(self._trigger_delayed_update)
         self._line_edit.returnPressed.connect(self._trigger_immediate_update)
 
-        self._theme_combobox = QComboBox(self)
-        self._theme_combobox.addItems([theme.value["name"] for theme in qtvsc.Theme])
-        self._theme_combobox.setCurrentText(qtvsc.Theme.DARK_VS.value["name"])
-        self._theme_combobox.currentTextChanged.connect(self._change_theme)
-        self._theme_combobox.setMinimumWidth(200)
-
         lyt = QHBoxLayout()
         lyt.setContentsMargins(0, 0, 0, 0)
-        lyt.addWidget(self._theme_combobox)
         lyt.addWidget(self._line_edit)
 
         searchbar_frame = QFrame(self)
@@ -144,11 +136,6 @@ class IconBrowser(QMainWindow):
 
         clipboard: QClipboard = QApplication.instance().clipboard()
         clipboard.setText(indexes[0].data())
-
-    def _change_theme(self, theme_name: str) -> None:
-        for theme in qtvsc.Theme:
-            if theme.value["name"] == theme_name:
-                QApplication.instance().setStyleSheet(qtvsc.load_stylesheet(theme))
 
 
 class IconListView(QListView):
