@@ -6,7 +6,6 @@ import qtvscodestyle as qtvsc
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 from PySide6.QtGui import QAction, QActionGroup, QTextOption
 from PySide6.QtWidgets import (
-    QApplication,
     QCheckBox,
     QColorDialog,
     QComboBox,
@@ -372,7 +371,6 @@ class UI:
         palette_icon = qtvsc.theme_icon(qtvsc.Vsc.SYMBOL_COLOR)
         circle_icon = qtvsc.theme_icon(qtvsc.Vsc.CIRCLE_LARGE_OUTLINE)
         clear_icon = qtvsc.theme_icon(qtvsc.Vsc.CLOSE)
-        theme_icon = qtvsc.theme_icon(qtvsc.Vsc.COLOR_MODE)
 
         # Actions
         self.action_change_home = QAction(home_icon, "Move to home")
@@ -381,7 +379,6 @@ class UI:
         self.action_open_color_dialog = QAction(palette_icon, "Open color dialog", main_win)
         self.action_enable = QAction(circle_icon, "Enable")
         self.action_disable = QAction(clear_icon, "Disable")
-        self.actions_theme = [QAction(theme.value["name"]) for theme in qtvsc.Theme]
 
         self.action_group_toolbar = QActionGroup(main_win)
 
@@ -396,7 +393,6 @@ class UI:
         tool_button_settings = QToolButton()
         tool_button_enable = QToolButton()
         tool_button_disable = QToolButton()
-        tool_button_theme = QToolButton()
 
         self.spacer = QToolButton()
 
@@ -420,12 +416,8 @@ class UI:
         tool_button_settings.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         tool_button_enable.setDefaultAction(self.action_enable)
         tool_button_disable.setDefaultAction(self.action_disable)
-        tool_button_theme.setIcon(theme_icon)
-        tool_button_theme.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
         toolbar.addActions([self.action_open_folder, self.action_open_color_dialog])
-        toolbar.addSeparator()
-        toolbar.addWidget(tool_button_theme)
 
         statusbar.addPermanentWidget(tool_button_enable)
         statusbar.addPermanentWidget(tool_button_disable)
@@ -433,13 +425,10 @@ class UI:
 
         menu_toggle = menubar.addMenu("&Toggle")
         menu_toggle.addActions([self.action_enable, self.action_disable])
-        menu_theme = menubar.addMenu("&Theme")
-        menu_theme.addActions(self.actions_theme)
         menu_dialog = menubar.addMenu("&Dialog")
         menu_dialog.addActions([self.action_open_folder, self.action_open_color_dialog])
 
         tool_button_settings.setMenu(menu_toggle)
-        tool_button_theme.setMenu(menu_theme)
 
         self.action_enable.setEnabled(False)
 
@@ -483,8 +472,6 @@ class WidgetGallery(QMainWindow):
         )
         self._ui.action_enable.triggered.connect(self._toggle_state)
         self._ui.action_disable.triggered.connect(self._toggle_state)
-        for action in self._ui.actions_theme:
-            action.triggered.connect(self._change_theme)
 
     def _change_page(self) -> None:
         action_name = self.sender().text()
@@ -496,9 +483,3 @@ class WidgetGallery(QMainWindow):
         self._ui.action_enable.setEnabled(state == "Disable")
         self._ui.action_disable.setEnabled(state == "Enable")
         self.statusBar().showMessage(state)
-
-    def _change_theme(self) -> None:
-        theme_name = self.sender().text()
-        for theme in qtvsc.Theme:
-            if theme.value["name"] == theme_name:
-                QApplication.instance().setStyleSheet(qtvsc.load_stylesheet(theme))
