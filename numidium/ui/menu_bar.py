@@ -29,7 +29,7 @@ class MenuBar(QMenuBar):
 
     _menu_bar_recent_workspaces: QMenu
 
-    _menu_extensions: QMenu
+    _menu_tools: QMenu
 
     # Global instance
     _instance: ClassVar[MenuBar]
@@ -66,7 +66,7 @@ class MenuBar(QMenuBar):
         menu_file.addAction(self._action_exit)
 
         # Extension Menu
-        self._menu_extensions = self.addMenu("&Extensions")
+        self._menu_tools = self.addMenu("&Tools")
 
         # About Menu
         menu_about = self.addMenu("&About")
@@ -86,11 +86,11 @@ class MenuBar(QMenuBar):
 
     def add_action(self, action: QAction) -> None:
         """Add a new action to the menu bar."""
-        self._menu_extensions.addAction(action)
+        self._menu_tools.addAction(action)
 
     def remove_action(self, action: QAction) -> None:
         """Remove an action from the menu bar."""
-        self._menu_extensions.removeAction(action)
+        self._menu_tools.removeAction(action)
 
     @classmethod
     def instance(cls) -> MenuBar:
