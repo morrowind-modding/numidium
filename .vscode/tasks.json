@@ -49,15 +49,6 @@
             }
         },
         {
-            "label": "build",
-            "type": "shell",
-            "command": "poetry run pyinstaller numidium.spec --noconfirm --upx-dir tools",
-            "presentation": {
-                "clear": true,
-                "focus": true
-            }
-        },
-        {
             "label": "docs",
             "type": "shell",
             "command": "poetry run mkdocs build; poetry run mkdocs serve",
